@@ -3,3 +3,6 @@ backup/
 site-copy/
 *.sql
 *.sql.gz
+
+# Propuesta comercial (privada: precio y datos del cliente)
+propuesta/
