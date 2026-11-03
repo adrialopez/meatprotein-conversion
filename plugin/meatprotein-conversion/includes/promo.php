@@ -31,9 +31,6 @@ function mpc_promo_html() {
 
 /* Betheme no llama a wp_body_open: la barra se imprime en una plantilla y se coloca al principio del <body>. */
 add_action( 'wp_footer', function () {
-	if ( is_checkout() && ! is_order_received_page() ) {
-		return;
-	}
 	$html = mpc_promo_html();
 	if ( '' === $html ) {
 		return;

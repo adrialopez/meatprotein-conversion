@@ -80,7 +80,7 @@ add_action( 'mfn_hook_content_before', function () {
 	<div class="mpc-strip-wrap"><ul class="mpc-strip">
 		<li><?php echo mpc_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>En 24-48 h</span></li>
 		<li><?php echo mpc_icon( 'shield' ); ?><span><strong>Reposición garantizada</strong>Si llega en mal estado</span></li>
-		<li><?php echo mpc_icon( 'ship' ); ?><span><strong>Envío gratis</strong>Desde <?php echo esc_html( $free ); ?> €</span></li>
+		<li><?php echo mpc_icon( 'ship' ); ?><span><strong>Envío gratis</strong>Con 10 bandejas o desde <?php echo esc_html( $free ); ?> €</span></li>
 		<li><?php echo mpc_icon( 'lab' ); ?><span><strong><?php echo $quality ? '<a href="' . esc_url( $quality ) . '">Controles de calidad</a>' : 'Controles de calidad'; ?></strong>En cada pedido</span></li>
 	</ul></div>
 	<?php
@@ -135,6 +135,13 @@ add_action( 'mfn_hook_content_after', function () {
 add_action( 'wp_footer', function () {
 	$url = mpc_page_url( 'packs' );
 	if ( $url ) {
-		echo '<script>window.mpcNav=' . wp_json_encode( array( 'packs' => $url ) ) . ';</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+		$phone = trim( (string) mpc_opt( 'phone' ) );
+		echo '<script>window.mpcNav=' . wp_json_encode( array(
+			'packs'     => $url,
+			'phone'     => $phone,
+			'phoneHref' => preg_replace( '/[^\d+]/', '', $phone ? ( 0 === strpos( $phone, '+' ) ? $phone : '+34' . $phone ) : '' ),
+			'free'      => 'Envío gratis con 10 bandejas o desde ' . (int) mpc_opt( 'free_min' ) . ' €',
+			'ship'      => mpc_page_url( 'envios-y-devoluciones' ),
+		) ) . ';</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 }, 5 );

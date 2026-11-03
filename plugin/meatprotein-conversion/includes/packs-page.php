@@ -77,7 +77,7 @@ add_shortcode( 'mpc_packs', function () {
 				<li><strong>10</strong><span>bandejas</span></li>
 				<li><strong>40</strong><span>hamburguesas</span></li>
 				<?php if ( $maxprot ) : ?><li><strong><?php echo (int) $maxprot; ?> g</strong><span>de proteína por hamburguesa</span></li><?php endif; ?>
-				<li><strong>Gratis</strong><span>el envío desde <?php echo esc_html( $free ); ?> €</span></li>
+				<li><strong>Gratis</strong><span>el envío en cada pack</span></li>
 			</ul>
 		</header>
 		<div class="mpc-packs__grid">
@@ -103,7 +103,7 @@ add_shortcode( 'mpc_packs', function () {
 							<?php foreach ( $parts as $extra ) : ?>
 								<li class="is-gift"><?php echo mpc_icon( 'check' ); ?><span><?php echo esc_html( mb_strtoupper( mb_substr( $extra, 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $extra, 1, null, 'UTF-8' ) ); ?></span><em>Regalo</em></li>
 							<?php endforeach; ?>
-							<li><?php echo mpc_icon( 'check' ); ?><span>Envío refrigerado y gratis (desde <?php echo esc_html( $free ); ?> €)</span></li>
+							<li><?php echo mpc_icon( 'check' ); ?><span>Envío refrigerado y gratis</span></li>
 						</ul>
 						<p class="mpc-pack-card__price">
 							<?php if ( $reg > $sale ) : ?><del><?php echo wp_kses_post( wc_price( $reg ) ); ?></del><?php endif; ?>

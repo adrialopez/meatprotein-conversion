@@ -4,25 +4,59 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/** Estado del envío gratis: importe de productos (sin envío, con descuentos), lo que falta y el porcentaje. */
+/** Bandejas de hamburguesas en el carrito: cada pack cuenta 10; las bandejas sueltas, una por unidad. */
+function mpc_cart_trays() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return 0;
+	}
+	$n = 0;
+	foreach ( WC()->cart->get_cart() as $item ) {
+		$p = isset( $item['data'] ) ? $item['data'] : null;
+		if ( ! $p instanceof WC_Product ) {
+			continue;
+		}
+		$parent = $p->is_type( 'variation' ) ? wc_get_product( $p->get_parent_id() ) : $p;
+		if ( $parent && mpc_is_pack( $parent ) ) {
+			$n += 10 * (int) $item['quantity'];
+		} elseif ( $parent && mpc_is_single_burger( $parent ) ) {
+			$n += (int) $item['quantity'];
+		}
+	}
+	return $n;
+}
+
+/** Estado del envío gratis: gratis con 10 bandejas o más, o a partir del importe mínimo (productos, con descuentos). */
 function mpc_free_ship_state() {
 	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 		return null;
 	}
-	$min = (float) mpc_opt( 'free_min' );
-	$cnt = (int) WC()->cart->get_cart_contents_count();
-	$sub = (float) WC()->cart->get_displayed_subtotal();
+	$min    = (float) mpc_opt( 'free_min' );
+	$cnt    = (int) WC()->cart->get_cart_contents_count();
+	$trays  = mpc_cart_trays();
+	$sub    = (float) WC()->cart->get_displayed_subtotal();
 	if ( WC()->cart->display_prices_including_tax() ) {
 		$sub -= (float) WC()->cart->get_discount_tax();
 	}
-	$sub = max( 0, $sub - (float) WC()->cart->get_discount_total() );
+	$sub    = max( 0, $sub - (float) WC()->cart->get_discount_total() );
+	$free   = $trays >= 10 || ( $min > 0 && $sub >= $min );
+	$pct    = $free ? 100 : (int) min( 99, round( max( $min > 0 ? $sub / $min : 0, $trays / 10 ) * 100 ) );
 	return array(
-		'min'   => $min,
-		'sub'   => $sub,
-		'left'  => max( 0, $min - $sub ),
-		'pct'   => $min > 0 ? (int) min( 100, round( $sub / $min * 100 ) ) : 100,
-		'count' => $cnt,
+		'min'         => $min,
+		'sub'         => $sub,
+		'left'        => $free ? 0 : max( 0, $min - $sub ),
+		'trays'       => $trays,
+		'trays_left'  => max( 0, 10 - $trays ),
+		'pct'         => $pct,
+		'count'       => $cnt,
 	);
+}
+
+function mpc_free_ship_text( $st ) {
+	if ( $st['left'] <= 0 ) {
+		return '<strong>Envío gratis conseguido</strong>';
+	}
+	$bandejas = $st['trays_left'] . ( 1 === $st['trays_left'] ? ' bandeja más' : ' bandejas más' );
+	return 'Te faltan <strong>' . wc_price( $st['left'] ) . '</strong> o <strong>' . $bandejas . '</strong> para el envío gratis';
 }
 
 function mpc_free_ship_html() {
@@ -30,10 +64,7 @@ function mpc_free_ship_html() {
 	if ( ! $st || $st['min'] <= 0 || 0 === $st['count'] ) {
 		return '';
 	}
-	$txt = $st['left'] > 0
-		? 'Te faltan <strong>' . wc_price( $st['left'] ) . '</strong> para el envío gratis'
-		: '<strong>Envío gratis conseguido</strong>';
-	return '<div class="mpc-ship' . ( $st['left'] > 0 ? '' : ' is-done' ) . '"><p>' . $txt . '</p><span class="mpc-ship__bar"><i style="width:' . (int) $st['pct'] . '%"></i></span></div>';
+	return '<div class="mpc-ship' . ( $st['left'] > 0 ? '' : ' is-done' ) . '"><p>' . mpc_free_ship_text( $st ) . '</p><span class="mpc-ship__bar"><i style="width:' . (int) $st['pct'] . '%"></i></span></div>';
 }
 
 /** Datos mínimos para que el JS pinte la barra en el carrito lateral de Betheme (se refrescan con los fragmentos de WooCommerce). */
@@ -42,7 +73,7 @@ function mpc_cartdata_html() {
 	if ( ! $st ) {
 		return '<span class="mpc-cartdata" hidden></span>';
 	}
-	return '<span class="mpc-cartdata" hidden data-count="' . (int) $st['count'] . '" data-min="' . esc_attr( $st['min'] ) . '" data-pct="' . (int) $st['pct'] . '" data-left="' . esc_attr( wp_strip_all_tags( wc_price( $st['left'] ) ) ) . '" data-done="' . ( $st['left'] > 0 ? '0' : '1' ) . '"></span>';
+	return '<span class="mpc-cartdata" hidden data-count="' . (int) $st['count'] . '" data-min="' . esc_attr( $st['min'] ) . '" data-pct="' . (int) $st['pct'] . '" data-left="' . esc_attr( wp_strip_all_tags( wc_price( $st['left'] ) ) ) . '" data-trays-left="' . (int) $st['trays_left'] . '" data-done="' . ( $st['left'] > 0 ? '0' : '1' ) . '"></span>';
 }
 add_action( 'wp_footer', function () {
 	if ( ! is_admin() ) {

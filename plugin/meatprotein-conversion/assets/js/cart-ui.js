@@ -52,7 +52,7 @@
 						content.insertBefore(bar, content.firstChild);
 					}
 					bar.classList.toggle('is-done', done);
-					bar.querySelector('p').innerHTML = done ? '<strong>Envío gratis conseguido</strong>' : 'Te faltan <strong>' + data.getAttribute('data-left') + '</strong> para el envío gratis';
+					bar.querySelector('p').innerHTML = done ? '<strong>Envío gratis conseguido</strong>' : (function () { var t = parseInt(data.getAttribute('data-trays-left') || '10', 10); return 'Te faltan <strong>' + data.getAttribute('data-left') + '</strong> o <strong>' + t + (t === 1 ? ' bandeja más' : ' bandejas más') + '</strong> para el envío gratis'; })();
 					bar.querySelector('i').style.width = data.getAttribute('data-pct') + '%';
 				}
 			}

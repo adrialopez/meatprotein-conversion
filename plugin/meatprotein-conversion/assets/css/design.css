@@ -549,3 +549,47 @@ body.woocommerce-shop .mcb-section.mfn-global-section, body.tax-product_cat .mcb
 body.page:not(.home):not(.woocommerce-cart):not(.woocommerce-checkout):not(.woocommerce-account) .the_content_wrapper { max-width: 46rem; margin-left: auto; margin-right: auto; font-size: 1rem; line-height: 1.7; }
 body.page:not(.home):not(.woocommerce-cart):not(.woocommerce-checkout):not(.woocommerce-account) .the_content_wrapper p { margin: 0 0 1.1rem; }
 body.page:not(.home):not(.woocommerce-cart):not(.woocommerce-checkout):not(.woocommerce-account) .the_content_wrapper strong { color: var(--mpc-ink); }
+
+/* ---------- Cabecera única y menú ---------- */
+.mcb-header-section { background: #fff !important; border-bottom: 1px solid var(--mpc-line); }
+.mfn-header-mainmenu .mfn-menu-link, .mfn-sidemenu-menu .mfn-menu-link { transition: color .15s; }
+.mfn-header-mainmenu .mfn-menu-link:hover { color: var(--mpc-pink) !important; }
+.mfn-header-mainmenu li.mpc-nav-packs .menu-label { color: var(--mpc-pink) !important; }
+.mfn-header-mainmenu li.mpc-nav-packs .mfn-menu-link { position: relative; }
+.mfn-header-mainmenu li.mpc-nav-packs .mfn-menu-link::after { content: ""; position: absolute; left: 1rem; right: 1rem; bottom: -4px; height: 3px; border-radius: 3px; background: var(--mpc-pink); }
+/* Panel lateral */
+.mfn-sidemenu-tmpl-builder { font-family: var(--mpc-sans); }
+.mfn-sidemenu-tmpl-builder #menu-menu-principal-1 { display: grid; gap: .2rem; margin: 0 0 1.4rem !important; padding: 0 !important; }
+.mfn-sidemenu-tmpl-builder #menu-menu-principal-1 li { margin: 0 !important; border: 0 !important; list-style: none; }
+.mfn-sidemenu-tmpl-builder #menu-menu-principal-1 .mfn-menu-link { display: flex !important; align-items: center; padding: .7rem .2rem !important; font: 400 1.35rem/1.1 var(--mpc-display) !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--mpc-ink) !important; }
+.mfn-sidemenu-tmpl-builder #menu-menu-principal-1 li.mpc-nav-packs .mfn-menu-link { padding: .8rem 1rem !important; border-radius: 14px; background: var(--mpc-pink); color: #fff !important; }
+.mfn-sidemenu-tmpl-builder #menu-menu-principal-1 li.mpc-nav-packs .menu-label { color: #fff !important; }
+.mfn-sidemenu-tmpl-builder #menu-menu-principal-1 .outer-menu-sub, .mfn-sidemenu-tmpl-builder #menu-categorias .outer-menu-sub { display: none !important; }
+.mfn-sidemenu-tmpl-builder #menu-categorias { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin: 0 !important; padding: 0 !important; }
+.mfn-sidemenu-tmpl-builder #menu-categorias::before { content: "Categorías"; grid-column: 1 / -1; font: 700 .75rem var(--mpc-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mpc-soft); }
+.mfn-sidemenu-tmpl-builder #menu-categorias li { margin: 0 !important; border: 1.5px solid var(--mpc-line) !important; border-radius: 16px; overflow: hidden; list-style: none; background: #fff; transition: border-color .15s, transform .1s; }
+.mfn-sidemenu-tmpl-builder #menu-categorias li:hover { border-color: var(--mpc-pink) !important; }
+.mfn-sidemenu-tmpl-builder #menu-categorias li:active { transform: scale(.98); }
+.mfn-sidemenu-tmpl-builder #menu-categorias .mfn-menu-link { display: flex !important; flex-direction: column; align-items: stretch; gap: .35rem; padding: .45rem .45rem .7rem !important; text-align: center; }
+.mfn-sidemenu-tmpl-builder #menu-categorias .menu-icon { display: block !important; width: 100% !important; margin: 0 !important; }
+.mfn-sidemenu-tmpl-builder #menu-categorias .menu-icon img { display: block; width: 100% !important; height: auto !important; max-width: none; aspect-ratio: 4 / 3; object-fit: contain; padding: 6%; border-radius: 10px; background: var(--mpc-sky-soft); }
+.mfn-sidemenu-tmpl-builder #menu-categorias .menu-label { font: 700 .88rem/1.2 var(--mpc-sans) !important; text-transform: none !important; letter-spacing: 0 !important; color: var(--mpc-ink) !important; }
+.mpc-sm-foot { margin-top: 1.4rem; padding-top: 1.1rem; border-top: 1px solid var(--mpc-line); display: grid; gap: .7rem; font-family: var(--mpc-sans); }
+.mpc-sm-free { margin: 0; padding: .7rem .9rem; border-radius: 12px; background: #eaf6ef; color: #14573b; font: 600 .88rem/1.35 var(--mpc-sans); }
+.mpc-sm-call { display: flex; flex-direction: column; padding: .8rem .9rem; border-radius: 12px; border: 1.5px solid var(--mpc-line); text-decoration: none !important; color: var(--mpc-ink) !important; }
+.mpc-sm-call span { font: 500 .78rem var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-sm-call strong { font: 700 1.1rem var(--mpc-sans); }
+.mpc-sm-link { font: 600 .88rem var(--mpc-sans); color: var(--mpc-soft) !important; text-decoration: underline; text-underline-offset: 3px; }
+/* En packs no hace falta: el pack ya lleva el envío gratis y ya cuenta lo que incluye. */
+body.mpc-pack-page .column_toggle { display: none !important; }
+.mfn-sidemenu-tmpl-builder { padding-top: 3.4rem !important; max-height: calc(100dvh - 20px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.mfn-sidemenu-tmpl-builder #menu-categorias li::before, .mfn-sidemenu-tmpl-builder #menu-categorias li::after, .mfn-sidemenu-tmpl-builder .menu-item-helper { display: none !important; }
+.mfn-sidemenu-tmpl-builder #menu-categorias .mfn-menu-link, .mfn-sidemenu-tmpl-builder #menu-categorias li { border-bottom-style: solid !important; }
+#mfn-sidemenu-tmpl-38 .mcb-section, #mfn-sidemenu-tmpl-38 .section_wrapper, #mfn-sidemenu-tmpl-38 .mcb-wrap, #mfn-sidemenu-tmpl-38 .mcb-wrap-inner, #mfn-sidemenu-tmpl-38 .mcb-column-inner, #mfn-sidemenu-tmpl-38 .column { height: auto !important; min-height: 0 !important; }
+.mfn-sidemenu-tmpl-builder { padding: 3.4rem .6rem .8rem !important; box-sizing: border-box; }
+#mfn-sidemenu-tmpl-38 .mcb-section { border: 0 !important; background: transparent !important; box-shadow: none !important; padding: 0 !important; overflow: visible !important; }
+.mfn-sidemenu-tmpl-builder { background: #fff; }
+.mfn-sidemenu-tmpl-builder #menu-categorias li { border-bottom: 1.5px solid var(--mpc-line) !important; }
+.mfn-sidemenu-tmpl-builder #menu-categorias .mfn-menu-link { border: 0 !important; box-shadow: none !important; }
+.mfn-sidemenu-tmpl .mfn-sidemenu-closebutton { position: fixed !important; top: .7rem; right: .7rem; z-index: 6; width: 40px !important; height: 40px !important; display: grid; place-items: center; border-radius: 50%; background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .15); }
+.mfn-sidemenu-tmpl .mfn-sidemenu-closebutton { border-radius: 50% !important; overflow: hidden; }

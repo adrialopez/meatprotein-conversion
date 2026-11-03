@@ -135,10 +135,7 @@ html.mpc-has-pack .mfn-variations-wrapper { display: none !important; }
 .mpc-secure li { margin: 0; }
 .mpc-secure li::before { content: "✓ "; color: var(--mpc-ok); font-weight: 700; }
 
-/* ---------- Checkout: foco en pagar (cabecera y pie mínimos) ---------- */
-body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl a.mfn-menu-link,
-body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mfn-header-menu-burger,
-body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mfn-header-icon-box:not(.mfn-header-cart) { display: none !important; }
+/* ---------- Checkout: foco en pagar (pie mínimo; la cabecera es la misma que en el resto de la web) ---------- */
 body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-footer-tmpl { display: none; }
 .mpc-checkout-help { margin: 2rem auto 0; padding: 1.4rem 1rem 2.2rem; max-width: 760px; text-align: center; font: 500 .9rem/1.6 var(--mpc-sans); color: var(--mpc-soft); border-top: 1px solid var(--mpc-line); }
 .mpc-checkout-help a { color: var(--mpc-ink); text-decoration: underline; text-underline-offset: 3px; }

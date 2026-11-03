@@ -76,6 +76,7 @@ add_action( 'woocommerce_single_product_summary', function () {
 
 /* Garantías junto al botón de compra. */
 add_action( 'woocommerce_after_add_to_cart_form', function () {
+	global $product;
 	$free  = (int) mpc_opt( 'free_min' );
 	$ship  = (int) mpc_opt( 'ship_cost' );
 	$phone = trim( mpc_opt( 'phone' ) );
@@ -89,7 +90,9 @@ add_action( 'woocommerce_after_add_to_cart_form', function () {
 	<p class="mpc-eta" data-mpc-eta hidden><?php echo mpc_icon( 'truck' ); ?><span></span></p>
 	<ul class="mpc-trust">
 		<li><?php echo mpc_icon( 'truck' ); ?><span><strong>Llega refrigerado con SEUR</strong>En 24-48 h, de lunes a jueves antes de las 14:00.</span></li>
-		<li><?php echo mpc_icon( 'ship' ); ?><span><strong>Envío gratis desde <?php echo esc_html( $free ); ?> €</strong>Por debajo, <?php echo esc_html( $ship ); ?> € a toda la Península.</span></li>
+		<?php if ( ! mpc_is_pack( $product ) ) : ?>
+		<li><?php echo mpc_icon( 'ship' ); ?><span><strong>Envío gratis con 10 bandejas o desde <?php echo esc_html( $free ); ?> €</strong>Por debajo, <?php echo esc_html( $ship ); ?> € a toda la Península.</span></li>
+		<?php endif; ?>
 		<li><?php echo mpc_icon( 'shield' ); ?><span><strong>Si llega en mal estado, lo reponemos</strong>O te devolvemos el dinero del pedido.</span></li>
 		<li><?php echo mpc_icon( 'snow' ); ?><span><strong>Congélalas al recibirlas</strong>Duran 12 meses en el congelador y unas 72 h en la nevera.</span></li>
 	</ul>

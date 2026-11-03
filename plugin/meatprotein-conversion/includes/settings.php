@@ -5,14 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function mpc_defaults() {
 	return array(
-		'free_min'      => '50',
+		'free_min'      => '60',
 		'addons'        => '',
 		'gift_product'  => '',
 		'step_salsa'    => '',
 		'step_pan'      => '',
 		'step_queso'    => '',
 		'ship_cost'     => '9',
-		'promo_text'    => 'Envío refrigerado en 24-48 h · Gratis desde 50 €',
+		'promo_text'    => 'Envío refrigerado en 24-48 h · Gratis con 10 bandejas o desde 60 €',
 		'promo_url'     => '',
 		'promo_ends'    => '',
 		'promo_cta'     => '',
@@ -61,7 +61,7 @@ function mpc_settings_page() {
 	echo '<div class="wrap"><h1>Conversión</h1><form method="post" action="options.php">';
 	settings_fields( 'mpc' );
 	echo '<h2>Envío</h2><table class="form-table">';
-	$f( 'free_min', 'Envío gratis desde (€)', 'Importe de productos a partir del cual el envío es gratis. Debe coincidir con WooCommerce.', 'number' );
+	$f( 'free_min', 'Envío gratis desde (€)', 'Importe de productos a partir del cual el envío es gratis (además, 10 bandejas o más siempre lo tienen gratis). Debe coincidir con WooCommerce.', 'number' );
 	$f( 'ship_cost', 'Coste de envío si no llega (€)', 'Solo informativo, para los textos.', 'number' );
 	$f( 'gift_product', 'Producto de la bandeja de regalo (ID)', 'Si el pack incluye una bandeja de regalo que es un producto de la tienda, indica su ID y su stock se descontará con cada pack. Cámbialo cuando cambie el regalo de la promo.', 'number' );
 	$f( 'step_salsa', 'Bundle: salsas (IDs)', 'Vacío = automático: salsas más vendidas con stock.' );

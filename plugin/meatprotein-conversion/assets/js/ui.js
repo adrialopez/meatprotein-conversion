@@ -81,24 +81,40 @@
 })();
 
 
-/** «Packs» como primera opción del menú principal (escritorio y menú móvil). */
+/** Menú: «Packs» como primera opción (barra y panel lateral), imágenes de categoría sin texto alternativo erróneo y pie con contacto. */
 (function () {
 	'use strict';
-	var url = window.mpcNav && window.mpcNav.packs;
-	if (!url) { return; }
-	var path = url.replace(/^https?:\/\/[^/]+/, '');
-	Array.prototype.forEach.call(document.querySelectorAll('ul.mfn-header-mainmenu, #menu-main-menu, #menu-menu-principal'), function (ul) {
-		if (ul.querySelector('a[href="' + path + '"], a[href="' + url + '"]')) { return; }
-		var first = ul.querySelector('li');
-		if (!first) { return; }
-		var li = first.cloneNode(true);
-		li.removeAttribute('id');
-		li.className = li.className.replace(/\bcurrent[-_\w]*/g, '');
-		var a = li.querySelector('a');
-		a.setAttribute('href', path || url);
-		var label = li.querySelector('.menu-label');
-		if (label) { label.textContent = 'PACKS'; } else { a.textContent = 'PACKS'; }
-		var sub = li.querySelector('.menu-sub'); if (sub) { sub.remove(); }
-		ul.insertBefore(li, first);
-	});
+	var nav = window.mpcNav || {};
+	var url = nav.packs;
+	if (url) {
+		var path = url.replace(/^https?:\/\/[^/]+/, '');
+		Array.prototype.forEach.call(document.querySelectorAll('ul.mfn-header-mainmenu, ul.mfn-sidemenu-menu[id^="menu-menu-principal"], #menu-main-menu'), function (ul) {
+			if (ul.querySelector('a[href="' + path + '"], a[href="' + url + '"]')) { return; }
+			var first = ul.querySelector('li');
+			if (!first) { return; }
+			var li = first.cloneNode(true);
+			li.removeAttribute('id');
+			li.className = li.className.replace(/\bcurrent[-_\w]*/g, '') + ' mpc-nav-packs';
+			var as = li.querySelectorAll('a');
+			as[0].setAttribute('href', path || url);
+			as[0].removeAttribute('aria-current');
+			var label = li.querySelector('.menu-label');
+			if (label) { label.textContent = 'PACKS'; } else { as[0].textContent = 'PACKS'; }
+			Array.prototype.forEach.call(li.querySelectorAll('.menu-sub, .outer-menu-sub'), function (x) { x.remove(); });
+			ul.insertBefore(li, first);
+		});
+	}
+	Array.prototype.forEach.call(document.querySelectorAll('.mfn-menu-item-icon img'), function (img) { img.setAttribute('alt', ''); });
+	var cats = document.querySelector('#mfn-sidemenu-tmpl-38 #menu-categorias, .mfn-sidemenu-tmpl-builder #menu-categorias');
+	if (cats && !document.querySelector('.mpc-sm-foot')) {
+		var col = cats.closest('.column') || cats.parentNode;
+		var foot = document.createElement('div');
+		foot.className = 'mpc-sm-foot';
+		var h = '';
+		if (nav.free) { h += '<p class="mpc-sm-free">' + nav.free + '</p>'; }
+		if (nav.phone && nav.phoneHref) { h += '<a class="mpc-sm-call" href="tel:' + nav.phoneHref + '"><span>Llámanos</span><strong>' + nav.phone + '</strong></a>'; }
+		if (nav.ship) { h += '<a class="mpc-sm-link" href="' + nav.ship + '">Envíos y devoluciones</a>'; }
+		foot.innerHTML = h;
+		col.appendChild(foot);
+	}
 })();
