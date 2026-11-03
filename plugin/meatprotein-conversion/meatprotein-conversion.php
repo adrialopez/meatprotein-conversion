@@ -3,7 +3,7 @@
  * Plugin Name:       Meatprotein Conversion
  * Plugin URI:        https://github.com/adrialopez/meatprotein-conversion
  * Description:       Mejoras de conversión para meatprotein.eu: pack a medida, bandejas y productos básicos, carrito, pago, portada y menú.
- * Version:           0.14.0
+ * Version:           0.15.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
