@@ -168,22 +168,42 @@ add_filter( 'the_content', function ( $content ) {
 	$is_pack = mpc_is_pack( $product );
 	$blocks  = array();
 
-	$title_clean = mpc_clean_title( get_the_title() );
+	$title_clean = mpc_clean_title( $product->get_name() );
 	$extras      = array_slice( array_map( 'trim', explode( '+', $title_clean ) ), 1 );
 	/* Si el contenido es solo el título repetido, no aporta nada. */
 	$norm = function ( $x ) {
 		return mb_strtolower( preg_replace( '/[^\p{L}\p{N}]+/u', '', html_entity_decode( wp_strip_all_tags( $x ) ) ), 'UTF-8' );
 	};
 	$c = $norm( $content );
-	similar_text( $c, $norm( get_the_title() ), $pct_c );
-	if ( '' !== $c && ( $c === $norm( get_the_title() ) || $c === $norm( $title_clean ) || $pct_c >= 85 ) ) {
+	similar_text( $c, $norm( $product->get_name() ), $pct_c );
+	if ( '' !== $c && ( $c === $norm( $product->get_name() ) || $c === $norm( $title_clean ) || $pct_c >= 85 ) ) {
+		$content = '';
+	}
+	/* En el pack, una descripción corta casi igual al título (con erratas, mayúsculas o emojis) tampoco aporta nada. */
+	if ( $is_pack && mb_strlen( trim( wp_strip_all_tags( $content ) ), 'UTF-8' ) <= 260 ) {
 		$content = '';
 	}
 	if ( $is_pack ) {
-		$gift_txt = $extras ? ' Además recibes: ' . esc_html( mb_strtolower( implode( ' y ', $extras ), 'UTF-8' ) ) . '.' : '';
+		$gift_one = $extras ? mb_strtolower( preg_replace( '/\s+de regalo$/iu', '', $extras[0] ), 'UTF-8' ) : '';
+		$prot     = mpc_max_protein();
+		$tiles    = array(
+			array( 'check', '10', 'bandejas a tu elección, puedes repetir sabores' ),
+			array( 'ship', '40', 'hamburguesas de 100 g (4 por bandeja)' ),
+		);
+		if ( $prot ) {
+			$tiles[] = array( 'lab', (int) $prot . ' g', 'de proteína como máximo en cada hamburguesa' );
+		}
+		if ( $gift_one ) {
+			$tiles[] = array( 'ship', '+1', $gift_one . ', de regalo' );
+		}
+		$grid = '<ul class="mpc-incl">';
+		foreach ( $tiles as $t ) {
+			$grid .= '<li' . ( '+1' === $t[1] ? ' class="is-gift"' : '' ) . '>' . mpc_icon( $t[0] ) . '<strong>' . esc_html( $t[1] ) . '</strong><span>' . esc_html( $t[2] ) . '</span></li>';
+		}
+		$grid    .= '</ul>';
 		$blocks[] = array(
 			'title' => 'Qué recibes',
-			'body'  => '<p>10 bandejas de hamburguesas a tu elección: tú decides los sabores y puedes repetir los que más te gusten.' . $gift_txt . '</p><p>Cada bandeja trae 4 hamburguesas de 100 g (400 g).' . ( mpc_max_protein() ? ' Hasta ' . (int) mpc_max_protein() . ' g de proteína en cada hamburguesa.' : '' ) . ' Pulsa «Info» junto a cada sabor para ver sus ingredientes y valores nutricionales.</p>',
+			'body'  => $grid . '<p>Pulsa «Info» junto a cada sabor en el selector para ver sus ingredientes y valores nutricionales.</p>',
 			'open'  => true,
 		);
 	}
@@ -212,7 +232,12 @@ add_filter( 'the_content', function ( $content ) {
 	}
 	$blocks[] = array(
 		'title' => 'Cómo llega y cómo se conserva',
-		'body'  => '<ul><li>Se envía <strong>refrigerado</strong> con SEUR, en transporte refrigerado y en 24-48 h.</li><li>Al recibirlo, <strong>congélalo</strong>: en el congelador dura 12 meses; en la nevera, unas 72 horas.</li><li>Entregamos de lunes a jueves antes de las 14:00. Los pedidos del jueves por la tarde y del viernes salen el lunes, para preservar la calidad.</li><li>Si llega en mal estado, nos hacemos cargo de la devolución o de la reposición del pedido.</li></ul>',
+		'body'  => '<ul class="mpc-flow">'
+			. '<li>' . mpc_icon( 'truck' ) . '<span><strong>Refrigerado con SEUR</strong>En transporte refrigerado y en 24-48 h.</span></li>'
+			. '<li>' . mpc_icon( 'ship' ) . '<span><strong>Envíos de lunes a jueves</strong>Lo que pidas el jueves por la tarde o el viernes sale el lunes, para preservar la calidad.</span></li>'
+			. '<li>' . mpc_icon( 'snow' ) . '<span><strong>Congélalo al recibirlo</strong>12 meses en el congelador; en la nevera, unas 72 horas.</span></li>'
+			. '<li>' . mpc_icon( 'shield' ) . '<span><strong>Si llega mal, lo reponemos</strong>Nos hacemos cargo de la devolución o de la reposición del pedido.</span></li>'
+			. '</ul>',
 		'open'  => true,
 	);
 	$cert = trim( (string) mpc_opt( 'certs' ) );

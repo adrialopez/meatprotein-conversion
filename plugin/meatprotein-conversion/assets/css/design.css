@@ -481,3 +481,29 @@ body.mpc-hero-on .mcb-section-d377ff003 { display: none !important; }
 	.mpc-hero { padding-top: 7rem; padding-bottom: 2.2rem; }
 	.mpc-hero__micro { margin-top: .6rem; }
 }
+
+/* ---------- Pestaña «Qué incluye» ---------- */
+.mpc-info { margin: 0; border-top: 0; }
+.mpc-info__item { margin: 0 0 .7rem; border: 1.5px solid var(--mpc-line); border-radius: 16px; background: #fff; overflow: hidden; }
+.mpc-info__item summary { padding: 1rem 1.1rem; font: 700 1rem/1.25 var(--mpc-sans); }
+.mpc-info__body { padding: 0 1.1rem 1.1rem; }
+.mpc-incl { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+.mpc-incl li { display: flex; flex-direction: column; gap: .15rem; margin: 0 !important; padding: .8rem .85rem; border-radius: 14px; background: var(--mpc-sky-soft); }
+.mpc-incl .mpc-i { width: 22px; height: 22px; margin-bottom: .2rem; color: var(--mpc-teal-ink); }
+.mpc-incl strong { font: 400 1.15rem/1.1 var(--mpc-display); color: var(--mpc-ink); }
+.mpc-incl span { font: 500 .82rem/1.35 var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-incl .is-gift { background: #eaf6ef; }
+.mpc-incl .is-gift .mpc-i, .mpc-incl .is-gift strong { color: var(--mpc-ok); }
+.mpc-flow { list-style: none; margin: 0; padding: 0 !important; display: grid; gap: .9rem; }
+.mpc-flow li { display: flex; gap: .8rem; align-items: flex-start; margin: 0 !important; }
+.mpc-flow .mpc-i { flex: none; width: 24px; height: 24px; margin-top: .1rem; color: var(--mpc-teal-ink); }
+.mpc-flow span { display: flex; flex-direction: column; font: 400 .92rem/1.45 var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-flow strong { font: 700 .98rem var(--mpc-sans); color: var(--mpc-ink); }
+@media (min-width: 760px) { .mpc-incl { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.mpc-incl, .mpc-flow { margin-left: 0 !important; margin-right: 0 !important; padding-left: 0 !important; padding-right: 0 !important; }
+.mpc-incl strong { font-size: 1.02rem; overflow-wrap: anywhere; }
+.mpc-incl li { min-width: 0; }
+.mfn-woocommerce-tabs .mfn-woocommerce-tabs-content, .mfn-woocommerce-tabs-content .the_content_wrapper { padding-left: 0 !important; padding-right: 0 !important; }
+@media (max-width: 759px) { .mfn-woocommerce-tabs { padding-left: .8rem !important; padding-right: .8rem !important; } }
+.mpc-incl strong { font-size: 1.7rem; line-height: 1; }
+.mpc-incl span { font-size: .84rem; }
