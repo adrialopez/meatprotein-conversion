@@ -1,0 +1,75 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+function mpc_defaults() {
+	return array(
+		'free_min'      => '50',
+		'ship_cost'     => '9',
+		'promo_text'    => 'Envío refrigerado en 24-48 h · Gratis desde 50 €',
+		'promo_url'     => '',
+		'promo_ends'    => '',
+		'promo_cta'     => '',
+		'nutrition'     => '',
+		'origin'        => '',
+		'certs'         => '',
+		'phone'         => '944 999 194',
+		'whatsapp'      => '',
+	);
+}
+
+function mpc_opt( $key ) {
+	$o = wp_parse_args( (array) get_option( 'mpc_settings', array() ), mpc_defaults() );
+	return isset( $o[ $key ] ) ? $o[ $key ] : '';
+}
+
+add_action( 'admin_menu', function () {
+	add_submenu_page( 'woocommerce', 'Conversión', 'Conversión', 'manage_woocommerce', 'mpc', 'mpc_settings_page' );
+} );
+add_action( 'admin_init', function () {
+	register_setting( 'mpc', 'mpc_settings', array( 'sanitize_callback' => function ( $in ) {
+		$out = array();
+		foreach ( mpc_defaults() as $k => $d ) {
+			$v = isset( $in[ $k ] ) ? wp_unslash( $in[ $k ] ) : '';
+			$out[ $k ] = in_array( $k, array( 'nutrition', 'origin', 'certs' ), true ) ? wp_kses_post( $v ) : sanitize_text_field( $v );
+		}
+		return $out;
+	} ) );
+} );
+
+function mpc_settings_page() {
+	$f = function ( $key, $label, $help = '', $type = 'text' ) {
+		$v = mpc_opt( $key );
+		echo '<tr><th><label for="mpc_' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label></th><td>';
+		if ( 'textarea' === $type ) {
+			echo '<textarea id="mpc_' . esc_attr( $key ) . '" name="mpc_settings[' . esc_attr( $key ) . ']" rows="4" class="large-text">' . esc_textarea( $v ) . '</textarea>';
+		} else {
+			echo '<input id="mpc_' . esc_attr( $key ) . '" type="' . esc_attr( $type ) . '" name="mpc_settings[' . esc_attr( $key ) . ']" value="' . esc_attr( $v ) . '" class="regular-text">';
+		}
+		if ( $help ) {
+			echo '<p class="description">' . esc_html( $help ) . '</p>';
+		}
+		echo '</td></tr>';
+	};
+	echo '<div class="wrap"><h1>Conversión</h1><form method="post" action="options.php">';
+	settings_fields( 'mpc' );
+	echo '<h2>Envío</h2><table class="form-table">';
+	$f( 'free_min', 'Envío gratis desde (€)', 'Importe de productos a partir del cual el envío es gratis. Debe coincidir con WooCommerce.', 'number' );
+	$f( 'ship_cost', 'Coste de envío si no llega (€)', 'Solo informativo, para los textos.', 'number' );
+	echo '</table><h2>Promo puntual</h2><table class="form-table">';
+	$f( 'promo_text', 'Texto de la barra superior', 'Déjalo vacío para ocultar la barra.' );
+	$f( 'promo_cta', 'Texto del enlace', 'Por ejemplo: Ver el pack.' );
+	$f( 'promo_url', 'Enlace de la barra', 'URL completa.' );
+	$f( 'promo_ends', 'La promo termina', 'Si la rellenas, se muestra una cuenta atrás y la barra desaparece sola al terminar.', 'datetime-local' );
+	echo '</table><h2>Información de producto</h2><table class="form-table">';
+	$f( 'nutrition', 'Información nutricional y alérgenos', 'Aparece en la ficha de cada pack. Si está vacío, el bloque no se muestra.', 'textarea' );
+	$f( 'origin', 'Origen y fabricación', 'Quién fabrica, de dónde viene la carne.', 'textarea' );
+	$f( 'certs', 'Certificaciones', 'Por ejemplo: IFS Food, BRC, registro sanitario.', 'textarea' );
+	echo '</table><h2>Contacto</h2><table class="form-table">';
+	$f( 'phone', 'Teléfono' );
+	$f( 'whatsapp', 'WhatsApp (solo números, con prefijo)', 'Ejemplo: 34600000000. Si lo rellenas se añade el enlace.' );
+	echo '</table>';
+	submit_button();
+	echo '</form></div>';
+}

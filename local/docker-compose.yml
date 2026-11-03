@@ -1,0 +1,49 @@
+name: meatprotein-conversion
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_DATABASE: wp
+      MARIADB_USER: wp
+      MARIADB_PASSWORD: wp
+      MARIADB_ROOT_PASSWORD: root
+    command: --max_allowed_packet=256M
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ../backup:/dump:ro
+  wordpress:
+    image: wordpress:6-php8.3-apache
+    depends_on: [db]
+    ports:
+      - "8095:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wp
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME','http://localhost:8095');
+        define('WP_SITEURL','http://localhost:8095');
+        define('WP_ENVIRONMENT_TYPE','local');
+        define('WP_MEMORY_LIMIT','512M');
+        define('WP_MAX_MEMORY_LIMIT','512M');
+        define('DISABLE_WP_CRON', true);
+        define('FORCE_SSL_ADMIN', false);
+    volumes:
+      - ../site-copy/wp-content:/var/www/html/wp-content
+      - ../plugin/meatprotein-conversion:/var/www/html/wp-content/plugins/meatprotein-conversion
+  wpcli:
+    image: wordpress:cli-php8.3
+    profiles: [tools]
+    depends_on: [db]
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wp
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_TABLE_PREFIX: wp_
+    volumes_from: [wordpress]
+volumes:
+  dbdata:

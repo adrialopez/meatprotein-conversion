@@ -1,0 +1,183 @@
+/* Meatprotein Conversion · marca: rosa #d65491, turquesa #009aa5, cielo #cbe7f2, tinta #0b0b0b */
+:root {
+	--mpc-pink: #d65491;
+	--mpc-pink-dark: #b93d77;
+	--mpc-teal: #009aa5;
+	--mpc-sky: #cbe7f2;
+	--mpc-sky-soft: #eef7fb;
+	--mpc-ink: #0b0b0b;
+	--mpc-soft: #5b6670;
+	--mpc-line: #dfe7ec;
+	--mpc-ok: #1f8a5b;
+	--mpc-radius: 12px;
+	--mpc-display: "Dela Gothic One", -apple-system, "Segoe UI", sans-serif;
+	--mpc-sans: "Instrument Sans", -apple-system, "Segoe UI", sans-serif;
+}
+.mpc-i { flex: none; }
+
+/* ---------- Barra superior de promo ---------- */
+.mpc-promo { background: var(--mpc-ink); color: #fff; text-align: center; font: 500 .86rem/1.3 var(--mpc-sans); padding: .55rem 1rem; position: relative; z-index: 20; }
+.mpc-promo p { margin: 0; }
+.mpc-promo a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; margin-left: .4rem; }
+.mpc-promo__count { display: inline-block; margin-left: .35rem; padding: .1rem .55rem; border-radius: 999px; background: var(--mpc-pink); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ---------- Ficha: título, precio, ahorro ---------- */
+.single-product .entry-title, .single-product h1.product_title, .single-product .mfn-product-title, .single-product h1 { font-size: clamp(1.6rem, 3.6vw, 2.6rem) !important; line-height: 1.12 !important; letter-spacing: -.5px; text-wrap: balance; }
+.single-product .product_meta .sku_wrapper { display: none; }
+.mpc-save { margin: .1rem 0 1rem; font: 500 .95rem var(--mpc-sans); color: var(--mpc-ok); }
+.mpc-save strong { font-weight: 700; }
+
+/* ---------- Selector de sabores ---------- */
+.mpc-has-pack table.variations tr.mpc-hide, tr.mpc-hide { display: none !important; }
+.mpc-pack { margin: 1.2rem 0 1.4rem; padding: 1.1rem 1.1rem 1.2rem; background: var(--mpc-sky-soft); border: 1px solid var(--mpc-line); border-radius: 16px; font-family: var(--mpc-sans); }
+.mpc-pack[hidden] { display: none; }
+.mpc-pack__head { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+.mpc-pack__head h3 { margin: 0; font: 400 1.25rem/1.1 var(--mpc-display); letter-spacing: 0; }
+.mpc-pack__count { margin: 0; font-size: .95rem; color: var(--mpc-soft); }
+.mpc-pack__count strong { color: var(--mpc-ink); }
+.mpc-pack__gift { margin: .5rem 0 0; font-size: .88rem; color: var(--mpc-ok); font-weight: 600; }
+.mpc-pack__bar { height: 8px; border-radius: 99px; background: #fff; border: 1px solid var(--mpc-line); margin: .8rem 0 .7rem; overflow: hidden; }
+.mpc-pack__bar i { display: block; height: 100%; width: 0; background: var(--mpc-pink); border-radius: 99px; transition: width .25s ease; }
+.mpc-pack__bar.is-full i { background: var(--mpc-ok); }
+.mpc-pack__tools { display: flex; gap: 1.2rem; margin: 0 0 .4rem; }
+.mpc-link { background: none; border: 0; padding: .3rem 0; font: 600 .86rem var(--mpc-sans); color: var(--mpc-pink-dark); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 0; text-transform: none; letter-spacing: 0; }
+.mpc-link:hover { color: var(--mpc-ink); background: none; }
+.mpc-pack__group { border: 0; margin: .9rem 0 0; padding: 0; min-width: 0; }
+.mpc-pack__group legend { padding: 0; margin: 0 0 .45rem; font: 700 .72rem var(--mpc-sans); letter-spacing: .12em; text-transform: uppercase; color: var(--mpc-soft); }
+.mpc-pack__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: .5rem; }
+.mpc-flavour { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .4rem .5rem .4rem .8rem; background: #fff; border: 1.5px solid var(--mpc-line); border-radius: 10px; transition: border-color .15s, box-shadow .15s; }
+.mpc-flavour.is-on { border-color: var(--mpc-pink); box-shadow: 0 0 0 1px var(--mpc-pink); }
+.mpc-flavour__name { font: 600 .92rem/1.2 var(--mpc-sans); color: var(--mpc-ink); min-width: 0; }
+.mpc-step { display: inline-flex; align-items: center; gap: .15rem; flex: none; }
+.mpc-step__b { width: 34px; height: 34px; min-height: 0; padding: 0; border-radius: 50%; border: 1.5px solid var(--mpc-ink); background: #fff; color: var(--mpc-ink); font: 600 1.15rem/1 var(--mpc-sans); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s, color .15s; text-transform: none; letter-spacing: 0; }
+.mpc-step__b:hover:not(:disabled) { background: var(--mpc-ink); color: #fff; }
+.mpc-step__b:disabled { opacity: .3; cursor: not-allowed; }
+.mpc-step__n { min-width: 1.5rem; text-align: center; font: 700 1rem var(--mpc-sans); font-variant-numeric: tabular-nums; }
+
+/* ---------- Garantías junto al botón ---------- */
+.mpc-trust { list-style: none; margin: 1.2rem 0 .6rem; padding: 0; display: grid; gap: .65rem; font-family: var(--mpc-sans); }
+.mpc-trust li { display: flex; gap: .75rem; align-items: flex-start; margin: 0; padding: 0; }
+.mpc-trust li .mpc-i { color: var(--mpc-teal); margin-top: .1rem; }
+.mpc-trust li span { display: flex; flex-direction: column; font-size: .88rem; line-height: 1.35; color: var(--mpc-soft); }
+.mpc-trust li strong { font-weight: 700; font-size: .95rem; color: var(--mpc-ink); }
+.mpc-trust__links { margin: 0 0 1rem; font: 500 .84rem var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-trust__links a { color: var(--mpc-ink); text-decoration: underline; text-underline-offset: 3px; }
+.mpc-trust--row { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin: 2rem 0 0; padding: 1.2rem; background: var(--mpc-sky-soft); border-radius: 16px; }
+
+/* ---------- Información al final de la ficha ---------- */
+.mpc-info { margin: 2.2rem 0 0; border-top: 1px solid var(--mpc-line); font-family: var(--mpc-sans); }
+.mpc-info__item { border-bottom: 1px solid var(--mpc-line); }
+.mpc-info__item summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.05rem 0; font: 400 1.05rem/1.2 var(--mpc-display); }
+.mpc-info__item summary::-webkit-details-marker { display: none; }
+.mpc-info__item summary::after { content: ""; width: 10px; height: 10px; border: solid var(--mpc-ink); border-width: 0 2px 2px 0; transform: rotate(45deg); transition: transform .2s; margin-right: .3rem; flex: none; }
+.mpc-info__item[open] summary::after { transform: rotate(-135deg); }
+.mpc-info__body { padding: 0 0 1.2rem; font-size: .96rem; line-height: 1.6; color: #2b343b; }
+.mpc-info__body p { margin: 0 0 .7rem; }
+.mpc-info__body ul { margin: 0; padding-left: 1.1rem; }
+.mpc-info__body li { margin-bottom: .45rem; }
+.mpc-draft { padding: .7rem .9rem; border: 1px dashed var(--mpc-pink); border-radius: 8px; color: var(--mpc-pink-dark); background: #fff7fb; }
+
+/* ---------- Barra fija inferior (móvil) ---------- */
+.mpc-sticky { position: fixed; z-index: 99990; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: .8rem; padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom)); background: #fff; border-top: 1px solid var(--mpc-line); box-shadow: 0 -8px 24px rgba(11,11,11,.1); font-family: var(--mpc-sans); }
+.mpc-sticky[hidden] { display: none; }
+.mpc-sticky__txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
+.mpc-sticky__n { font-size: .95rem; }
+.mpc-sticky__p { font-size: .85rem; color: var(--mpc-soft); }
+.mpc-sticky__btn { flex: none; min-height: 48px; padding: 0 1.4rem; border: 0; border-radius: var(--mpc-radius); background: var(--mpc-ink); color: #fff; font: 400 .95rem var(--mpc-display); cursor: pointer; text-transform: none; letter-spacing: 0; }
+.mpc-sticky__btn.is-ready { background: var(--mpc-pink); }
+@media (min-width: 850px) { .mpc-sticky { display: none !important; } }
+body.single-product { scroll-padding-bottom: 90px; }
+
+/* ---------- Barra de envío gratis ---------- */
+.mpc-ship { display: block; width: 100%; box-sizing: border-box; flex: 1 1 100%; margin: 0 0 1.2rem; padding: .85rem 1rem; background: var(--mpc-sky-soft); border: 1px solid var(--mpc-line); border-radius: var(--mpc-radius); font-family: var(--mpc-sans); }
+.mpc-ship[hidden] { display: none; }
+.mpc-ship p { margin: 0 0 .5rem; font-size: .92rem; color: var(--mpc-ink); }
+.mpc-ship__bar { display: block; height: 7px; background: #fff; border-radius: 99px; overflow: hidden; border: 1px solid var(--mpc-line); }
+.mpc-ship__bar i { display: block; height: 100%; background: var(--mpc-pink); border-radius: 99px; transition: width .3s; }
+.mpc-ship.is-done { background: #eaf6f0; border-color: #bfe3d1; }
+.mpc-ship.is-done .mpc-ship__bar i { background: var(--mpc-ok); }
+
+/* ---------- Página de packs ---------- */
+.mpc-packs { font-family: var(--mpc-sans); }
+.mpc-steps { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .8rem; margin: 0 0 2rem; padding: 0; counter-reset: s; }
+.mpc-steps li { display: flex; align-items: center; gap: .7rem; margin: 0; padding: .8rem 1rem; background: var(--mpc-sky-soft); border-radius: var(--mpc-radius); font-weight: 600; font-size: .95rem; }
+.mpc-steps b { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--mpc-ink); color: #fff; display: grid; place-items: center; font: 400 .85rem var(--mpc-display); }
+.mpc-packs__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 380px)); justify-content: center; gap: 1.4rem; align-items: stretch; }
+.mpc-pack-card { position: relative; display: flex; flex-direction: column; padding: 1rem 1rem 1.2rem; background: #fff; border: 1.5px solid var(--mpc-line); border-radius: 18px; transition: box-shadow .2s, transform .2s; }
+.mpc-pack-card:hover { box-shadow: 0 14px 34px rgba(11,11,11,.1); transform: translateY(-2px); }
+.mpc-pack-card.is-top { border-color: var(--mpc-pink); box-shadow: 0 0 0 1px var(--mpc-pink); }
+.mpc-pack-card__badge { position: absolute; z-index: 2; top: -.7rem; left: 1rem; padding: .3rem .8rem; border-radius: 99px; background: var(--mpc-pink); color: #fff; font: 700 .72rem var(--mpc-sans); letter-spacing: .08em; text-transform: uppercase; }
+.mpc-pack-card__img { display: block; margin: 0 0 .9rem; border-radius: 12px; overflow: hidden; background: var(--mpc-sky-soft); }
+.mpc-pack-card__img img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+.mpc-pack-card h3 { margin: 0 0 .7rem; font: 400 1.1rem/1.2 var(--mpc-display); letter-spacing: 0; text-transform: none; }
+.mpc-pack-card h3 a { color: var(--mpc-ink); text-decoration: none; }
+.mpc-pack-card__inc { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: .4rem; flex: 1; }
+.mpc-pack-card__inc li { display: flex; gap: .5rem; align-items: flex-start; margin: 0; font-size: .9rem; line-height: 1.35; color: #2b343b; }
+.mpc-pack-card__inc .mpc-i { width: 18px; height: 18px; color: var(--mpc-ok); margin-top: .1rem; }
+.mpc-pack-card__price { display: flex; align-items: baseline; flex-wrap: wrap; gap: .1rem .6rem; margin: 0 0 .9rem; }
+.mpc-pack-card__price del { color: var(--mpc-soft); font-size: .95rem; }
+.mpc-pack-card__price strong { font: 400 1.7rem var(--mpc-display); color: var(--mpc-pink); }
+.mpc-pack-card__price small { width: 100%; color: var(--mpc-ok); font-weight: 700; font-size: .84rem; }
+.mpc-btn { display: block; text-align: center; padding: .95rem 1rem; border-radius: var(--mpc-radius); background: var(--mpc-pink); color: #fff !important; font: 400 1rem var(--mpc-display); text-decoration: none !important; transition: background .15s; }
+.mpc-btn:hover { background: var(--mpc-pink-dark); }
+
+/* ---------- Checkout ---------- */
+.woocommerce-checkout .mpc-coupon { margin: 0 0 1.1rem; }
+.mpc-coupon__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; }
+.mpc-coupon__input { margin: 0 !important; min-height: 48px; width: 100%; }
+.mpc-coupon__btn { margin: 0; min-height: 48px; padding: 0 1.4rem; min-width: max-content; border: 2px solid var(--mpc-ink); border-radius: var(--mpc-radius); background: transparent; color: var(--mpc-ink); font: 700 .9rem var(--mpc-sans); cursor: pointer; transition: background-color .2s, color .2s; text-transform: none; letter-spacing: 0; }
+.mpc-coupon__btn:hover { background: var(--mpc-ink); color: #fff; }
+.mpc-coupon__msg { margin: .5rem 0 0; font-size: .86rem; color: var(--mpc-ok); }
+.mpc-coupon__msg.is-error { color: #b3261e; }
+.mpc-rv { display: flex; gap: .85rem; align-items: center; }
+.mpc-rv__img img { display: block; width: 60px; height: 60px; object-fit: cover; border-radius: 8px; background: var(--mpc-sky-soft); }
+.mpc-rv__name { display: flex; flex-direction: column; font: 600 .98rem/1.3 var(--mpc-sans); color: var(--mpc-ink); }
+.mpc-rv__qty { font: 400 .84rem var(--mpc-sans); color: var(--mpc-soft); margin-top: .15rem; }
+.mpc-secure { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem 1.1rem; margin: 1rem 0 0; padding: 0; font-size: .8rem; color: var(--mpc-soft); }
+.mpc-secure li { margin: 0; }
+.mpc-secure li::before { content: "✓ "; color: var(--mpc-ok); font-weight: 700; }
+
+/* ---------- Checkout: foco en pagar (cabecera y pie mínimos) ---------- */
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl a.mfn-menu-link,
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mfn-header-menu-burger,
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mfn-header-icon-box:not(.mfn-header-cart) { display: none !important; }
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-footer-tmpl { display: none; }
+.mpc-checkout-help { margin: 2rem auto 0; padding: 1.4rem 1rem 2.2rem; max-width: 760px; text-align: center; font: 500 .9rem/1.6 var(--mpc-sans); color: var(--mpc-soft); border-top: 1px solid var(--mpc-line); }
+.mpc-checkout-help a { color: var(--mpc-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Campos: mismo molde que Pifarré, con la marca de Meatprotein */
+.woocommerce-checkout form.checkout input.input-text,
+.woocommerce-checkout form.checkout select,
+.woocommerce-checkout form.checkout textarea,
+.woocommerce-checkout form.checkout .select2-container--default .select2-selection--single {
+	box-sizing: border-box; width: 100%; min-height: 52px; margin: 0; padding: 0 16px;
+	border: 1px solid #c9d5dc !important; border-radius: var(--mpc-radius) !important; background-color: #fff; box-shadow: none;
+	font: 400 16px/1.3 var(--mpc-sans); color: var(--mpc-ink); outline: 0;
+}
+.woocommerce-checkout form.checkout textarea { min-height: 104px; padding: 14px 16px; }
+.woocommerce-checkout form.checkout input.input-text:hover, .woocommerce-checkout form.checkout select:hover, .woocommerce-checkout form.checkout textarea:hover { border-color: #9fb1bb !important; }
+.woocommerce-checkout form.checkout input.input-text:focus, .woocommerce-checkout form.checkout select:focus, .woocommerce-checkout form.checkout textarea:focus,
+.woocommerce-checkout form.checkout .select2-container--open .select2-selection--single { border-color: var(--mpc-pink) !important; box-shadow: 0 0 0 3px rgba(214, 84, 145, .18); }
+.woocommerce-checkout form.checkout .woocommerce-invalid input.input-text, .woocommerce-checkout form.checkout .woocommerce-invalid select { border-color: #b3261e !important; }
+.woocommerce-checkout form.checkout .form-row { margin-bottom: 12px; }
+.woocommerce-checkout form.checkout .form-row label { font: 600 .88rem var(--mpc-sans); margin-bottom: .3rem; }
+.woocommerce-checkout form.checkout .select2-container { width: 100% !important; }
+.woocommerce-checkout form.checkout .select2-container--default .select2-selection--single .select2-selection__rendered { line-height: 50px; padding: 0; }
+.woocommerce-checkout form.checkout .select2-container--default .select2-selection--single .select2-selection__arrow { height: 50px; right: 12px; }
+
+/* Resumen: una sola tarjeta limpia */
+.woocommerce-checkout .woocommerce-checkout-review-order-table thead { display: none; }
+.woocommerce-checkout .woocommerce-checkout-review-order-table th, .woocommerce-checkout .woocommerce-checkout-review-order-table td { padding: .75rem 0; border: 0; border-bottom: 1px solid var(--mpc-line); background: none; }
+.woocommerce-checkout .woocommerce-checkout-review-order-table td.product-total { text-align: right; white-space: nowrap; font-weight: 700; vertical-align: top; }
+.woocommerce-checkout .woocommerce-checkout-review-order-table .order-total th, .woocommerce-checkout .woocommerce-checkout-review-order-table .order-total td { border-bottom: 0; }
+.woocommerce-checkout .woocommerce-checkout-review-order-table dl.variation { margin: .5rem 0 0; font-size: .86rem; color: var(--mpc-soft); }
+.woocommerce-checkout .woocommerce-checkout-review-order-table dl.variation dt { float: none; font-weight: 700; color: var(--mpc-ink); }
+.woocommerce-checkout .woocommerce-checkout-review-order-table dl.variation dd { margin: 0; }
+.woocommerce-checkout .woocommerce-checkout-review-order-table dl.variation dd p { margin: 0; }
+
+/* Métodos de pago como tarjetas */
+.woocommerce-checkout #payment ul.payment_methods > li { border: 1.5px solid var(--mpc-line); border-radius: var(--mpc-radius); background: #fff; overflow: hidden; margin: 0 0 .6rem; transition: border-color .2s, box-shadow .2s; }
+.woocommerce-checkout #payment ul.payment_methods > li.active-payment, .woocommerce-checkout #payment ul.payment_methods > li:has(input[type="radio"]:checked) { border-color: var(--mpc-pink); box-shadow: 0 0 0 1px var(--mpc-pink); }
+.woocommerce-checkout #payment div.payment_box { background: var(--mpc-sky-soft); border: 0; border-top: 1px solid var(--mpc-line); border-radius: 0; font-size: .9rem; color: var(--mpc-soft); }
+.woocommerce-checkout #payment div.payment_box::before { display: none; }
+.woocommerce-checkout #place_order { width: 100%; min-height: 58px; border-radius: var(--mpc-radius); font-size: 1.02rem; }
