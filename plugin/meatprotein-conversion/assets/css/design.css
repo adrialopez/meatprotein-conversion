@@ -539,3 +539,13 @@ body.mpc-hero-on .mcb-section.mfn-global-section, body.mpc-hero-on .mcb-section-
 	.mcb-section-3xbvrqhbb .banner-desc .title { font-size: .92rem !important; }
 	.mcb-section-ef697df3d ul.products li.product:nth-child(n+5) { display: none; }
 }
+
+/* ---------- Revisión final ---------- */
+/* El panel de acceso fuera de pantalla dejaba una sombra gris en el borde derecho de todas las páginas. */
+.mfn-header-login { box-shadow: none !important; }
+/* En tienda, categorías y etiquetas los productos van primero: la promo (que ya está en la barra y en el menú) no los empuja. */
+body.woocommerce-shop .mcb-section.mfn-global-section, body.tax-product_cat .mcb-section.mfn-global-section, body.tax-product_tag .mcb-section.mfn-global-section { display: none !important; }
+/* Páginas de texto (FAQs, envíos, calidad...): lectura cómoda. */
+body.page:not(.home):not(.woocommerce-cart):not(.woocommerce-checkout):not(.woocommerce-account) .the_content_wrapper { max-width: 46rem; margin-left: auto; margin-right: auto; font-size: 1rem; line-height: 1.7; }
+body.page:not(.home):not(.woocommerce-cart):not(.woocommerce-checkout):not(.woocommerce-account) .the_content_wrapper p { margin: 0 0 1.1rem; }
+body.page:not(.home):not(.woocommerce-cart):not(.woocommerce-checkout):not(.woocommerce-account) .the_content_wrapper strong { color: var(--mpc-ink); }
