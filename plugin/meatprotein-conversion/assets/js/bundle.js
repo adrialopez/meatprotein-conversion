@@ -45,6 +45,23 @@
 	var $btn = $(bar).find('.mpc-cta__btn'), $txt = $(bar).find('.mpc-cta__txt');
 	document.body.classList.add('mpc-has-cta');
 
+	/* Cabecera de la ficha: «más vendido» encima del título y el regalo en una píldora debajo. */
+	(function () {
+		var h1 = document.querySelector('.column_product_title h1, h1.product_title');
+		if (!h1 || !isPack) { return; }
+		var gift = root.getAttribute('data-gift');
+		if (root.getAttribute('data-top') === '1') {
+			var top = document.createElement('p'); top.className = 'mpc-eyebrow'; top.textContent = 'Pack más vendido';
+			h1.parentNode.insertBefore(top, h1);
+		}
+		if (gift) {
+			var pill = document.createElement('p'); pill.className = 'mpc-giftpill';
+			pill.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 7v13M12 7c-2-4-6-4-6-1.5S10 7 12 7zM12 7c2-4 6-4 6-1.5S14 7 12 7z"/></svg>';
+			var sp = document.createElement('span'); sp.textContent = 'Incluye ' + gift;
+			pill.appendChild(sp);
+			h1.parentNode.insertBefore(pill, h1.nextSibling);
+		}
+	})();
 	/* Etiqueta junto al selector de cantidad (solo pack; en bandejas sueltas la cantidad va en la barra fija). */
 	var $qty = $form.find('.quantity').first(), $qlab = $();
 	if (isPack && $qty.length) {

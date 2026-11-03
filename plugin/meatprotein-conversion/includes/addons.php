@@ -235,6 +235,16 @@ add_action( 'woocommerce_before_add_to_cart_button', function () {
 		$base = $vars ? (float) $vars[0]['display_price'] : $base;
 	}
 	$attrs = ' data-kind="' . ( $is_pack ? 'pack' : 'single' ) . '" data-base="' . esc_attr( $base ) . '" data-product="' . (int) $product->get_id() . '"';
+	if ( $is_pack ) {
+		$gift_parts = array_slice( array_map( 'trim', explode( '+', mpc_clean_title( $product->get_name() ) ) ), 1 );
+		if ( $gift_parts ) {
+			$attrs .= ' data-gift="' . esc_attr( $gift_parts[0] ) . '"';
+		}
+		$all_packs = mpc_get_packs();
+		if ( $all_packs && (int) $all_packs[0]->get_id() === (int) $product->get_id() && $product->get_total_sales() > 0 ) {
+			$attrs .= ' data-top="1"';
+		}
+	}
 	if ( $is_single ) {
 		$packs = mpc_get_packs();
 		if ( $packs ) {

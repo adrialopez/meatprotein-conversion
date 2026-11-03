@@ -65,6 +65,13 @@ add_action( 'woocommerce_single_product_summary', function () {
 			(int) round( ( $reg - $sale ) / $reg * 100 )
 		);
 	}
+	if ( mpc_is_pack( $product ) && $sale > 0 ) {
+		printf(
+			'<p class="mpc-per">%s por bandeja · %s por hamburguesa</p>',
+			wp_kses_post( wc_price( $sale / 10 ) ),
+			wp_kses_post( wc_price( $sale / 40 ) )
+		);
+	}
 }, 11 );
 
 /* Garantías junto al botón de compra. */
@@ -243,7 +250,12 @@ add_filter( 'the_title', function ( $title, $id = 0 ) {
 		return $title;
 	}
 	$p = wc_get_product( $id );
-	return ( $p && mpc_is_pack( $p ) ) ? mpc_clean_title( $title ) : $title;
+	if ( ! $p || ! mpc_is_pack( $p ) ) {
+		return $title;
+	}
+	/* El título largo se reparte: «10 bandejas de hamburguesas Meatprotein» arriba y el regalo en una píldora aparte. */
+	$parts = explode( '+', mpc_clean_title( $title ), 2 );
+	return trim( $parts[0] );
 }, 20, 2 );
 
 
@@ -264,7 +276,7 @@ add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
 	}
 	if ( $is_pack && mpc_nutrition_table_html() ) {
 		$tabs['mpc_nutrition'] = array(
-			'title'    => 'Valores nutricionales',
+			'title'    => 'Nutrición',
 			'priority' => 15,
 			'callback' => function () {
 				echo '<div class="mpc-info__body"><p>Valores de cada sabor por 100 g. Para ver los ingredientes y alérgenos, pulsa «Info» junto al sabor en el selector.</p>' . mpc_nutrition_table_html(); // phpcs:ignore WordPress.Security.EscapeOutput
@@ -283,3 +295,17 @@ add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
 	);
 	return $tabs;
 }, 98 );
+
+
+/* Clases de cuerpo para dar estilo a la cabecera de la ficha solo en packs y bandejas. */
+add_filter( 'body_class', function ( $classes ) {
+	if ( is_singular( 'product' ) ) {
+		$p = wc_get_product( get_queried_object_id() );
+		if ( $p && mpc_is_pack( $p ) ) {
+			$classes[] = 'mpc-pack-page';
+		} elseif ( $p && mpc_is_single_burger( $p ) ) {
+			$classes[] = 'mpc-single-page';
+		}
+	}
+	return $classes;
+} );

@@ -107,9 +107,6 @@
 			var tr = this.closest('tr'); if (tr) { tr.classList.add('mpc-hide'); }
 		}
 	});
-	if (gifts) {
-		$(host).find('.mpc-pack__head').after('<p class="mpc-pack__gift">Regalo incluido en el pack, no hace falta elegirlo.</p>');
-	}
 
 	var $count = $(host).find('.mpc-pack__count'), $barI = $(host).find('.mpc-pack__bar i'), $bar = $(host).find('.mpc-pack__bar');
 

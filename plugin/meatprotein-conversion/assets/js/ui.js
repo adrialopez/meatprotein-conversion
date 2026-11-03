@@ -56,3 +56,26 @@
 	span.appendChild(document.createTextNode('. Lo recibes en 24-48 h, refrigerado.'));
 	el.hidden = false;
 })();
+
+
+/** Pestañas de la ficha como control segmentado con indicador que se desliza. */
+(function () {
+	'use strict';
+	var nav = document.querySelector('.mfn-woocommerce-tabs-nav');
+	if (!nav) { return; }
+	var ind = document.createElement('li');
+	ind.className = 'mpc-tabind'; ind.setAttribute('aria-hidden', 'true'); ind.setAttribute('role', 'presentation');
+	nav.appendChild(ind);
+	function place() {
+		var a = nav.querySelector('li.active');
+		if (!a) { return; }
+		ind.style.width = a.offsetWidth + 'px';
+		ind.style.transform = 'translateX(' + a.offsetLeft + 'px)';
+		if (nav.scrollWidth > nav.clientWidth + 2) { nav.scrollTo({ left: a.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' }); }
+	}
+	nav.classList.add('has-ind');
+	if ('MutationObserver' in window) { new MutationObserver(place).observe(nav, { attributes: true, subtree: true, attributeFilter: ['class'] }); }
+	window.addEventListener('resize', place);
+	place(); setTimeout(place, 250);
+	if (document.fonts && document.fonts.ready) { document.fonts.ready.then(place); }
+})();
