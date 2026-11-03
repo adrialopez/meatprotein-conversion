@@ -86,7 +86,7 @@
 		if (!items.length) { return; }
 		html += '<fieldset class="mpc-pack__group"><legend>' + g + '</legend><div class="mpc-pack__grid">';
 		items.forEach(function (k) {
-			html += '<div class="mpc-flavour" data-k="' + k + '"><span class="mpc-flavour__name">' + flavours[k].label + (INFO[k] ? ' <button type="button" class="mpc-info-btn" data-info="' + k + '" aria-label="Información de ' + flavours[k].label + '">Info</button>' : '') + '</span>' +
+			html += '<div class="mpc-flavour" data-k="' + k + '"><span class="mpc-flavour__name">' + flavours[k].label + (INFO[k] ? ' <button type="button" class="mpc-info-btn" data-info="' + k + '" aria-label="Información de ' + flavours[k].label + '">Info</button>' : '') + (INFO[k] && INFO[k].d ? '<small class="mpc-flavour__sub">' + INFO[k].d.prot + ' g de proteína · ' + INFO[k].d.kcal + ' kcal</small>' : '') + '</span>' +
 				'<span class="mpc-step"><button type="button" class="mpc-step__b" data-d="-1" aria-label="Quitar ' + flavours[k].label + '">−</button><output class="mpc-step__n">0</output><button type="button" class="mpc-step__b" data-d="1" aria-label="Añadir ' + flavours[k].label + '">+</button></span></div>';
 		});
 		html += '</div></fieldset>';
@@ -140,20 +140,32 @@
 	});
 	/* Ficha de ingredientes y valores nutricionales de cada sabor. */
 	var dlg = null;
+	function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+	function infoHtml(d) {
+		var x = d.d;
+		if (!x) { return '<img class="mpc-dialog__img" src="' + esc(d.i) + '" alt="Ingredientes y valores nutricionales de ' + esc(d.t) + '">'; }
+		var ing = esc(x.ing).replace(/\b([A-ZÁÉÍÓÚÑ]{3,})\b/g, '<strong>$1</strong>');
+		var row = function (a, b) { return '<tr><th scope="row">' + a + '</th><td>' + b + '</td></tr>'; };
+		return '<p class="mpc-dialog__chips"><strong>' + esc(x.prot) + ' g</strong> de proteína · <strong>' + esc(x.kcal) + ' kcal</strong> por 100 g</p>' +
+			'<h4>Ingredientes</h4><p>' + ing + '</p>' +
+			'<h4>Peso neto</h4><p>' + esc(x.peso) + '</p>' +
+			'<h4>Información nutricional (por 100 g)</h4><table class="mpc-table mpc-table--dlg"><tbody>' +
+			row('Valor energético', esc(x.kj) + ' kJ / ' + esc(x.kcal) + ' kcal') + row('Grasas', esc(x.fat) + ' g') + row('de las cuales saturadas', esc(x.sat) + ' g') +
+			row('Hidratos de carbono', esc(x.carb) + ' g') + row('de los cuales azúcares', esc(x.sug) + ' g') + row('Proteínas', esc(x.prot) + ' g') + row('Sal', esc(x.salt) + ' g') + '</tbody></table>';
+	}
 	function openInfo(k) {
 		var d = INFO[k]; if (!d) { return; }
 		if (!dlg) {
 			dlg = document.createElement('dialog');
 			dlg.className = 'mpc-dialog';
-			dlg.innerHTML = '<form method="dialog"><button class="mpc-dialog__x" aria-label="Cerrar">×</button></form><h3 class="mpc-dialog__t"></h3><img class="mpc-dialog__img" alt=""><p class="mpc-dialog__l"><a href="#" target="_blank" rel="noopener">Ver la hamburguesa</a></p>';
+			dlg.innerHTML = '<form method="dialog"><button class="mpc-dialog__x" aria-label="Cerrar">×</button></form><h3 class="mpc-dialog__t"></h3><div class="mpc-dialog__b"></div><p class="mpc-dialog__l"></p>';
 			document.body.appendChild(dlg);
 			dlg.addEventListener('click', function (e) { if (e.target === dlg) { dlg.close(); } });
 		}
 		dlg.querySelector('.mpc-dialog__t').textContent = d.t;
-		dlg.querySelector('.mpc-dialog__img').src = d.i;
-		dlg.querySelector('.mpc-dialog__img').alt = 'Ingredientes y valores nutricionales de ' + d.t;
-		dlg.querySelector('.mpc-dialog__l a').href = d.u;
-		if (dlg.showModal) { dlg.showModal(); } else { window.open(d.i, '_blank'); }
+		dlg.querySelector('.mpc-dialog__b').innerHTML = infoHtml(d);
+		dlg.querySelector('.mpc-dialog__l').innerHTML = (d.d ? '<a href="' + esc(d.i) + '" target="_blank" rel="noopener">Ver la etiqueta original</a> · ' : '') + '<a href="' + esc(d.u) + '" target="_blank" rel="noopener">Ver la hamburguesa</a>';
+		if (dlg.showModal) { dlg.showModal(); } else { window.open(d.u, '_blank'); }
 	}
 	$(host).on('click', '[data-info]', function (e) { e.preventDefault(); e.stopPropagation(); openInfo(this.getAttribute('data-info')); });
 	$(host).on('click', '[data-act="clear"]', function () { counts = {}; sync(); });

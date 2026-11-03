@@ -12,7 +12,7 @@ function mpc_defaults() {
 		'promo_ends'    => '',
 		'promo_cta'     => '',
 		'nutrition'     => '',
-		'origin'        => '',
+		'origin'        => 'Meatprotein es la marca de Servicarfres S.L. (Calle Marino Archer 43, 48013 Bilbao), que fabrica estas hamburguesas.',
 		'certs'         => '',
 		'phone'         => '944 999 194',
 		'whatsapp'      => '',

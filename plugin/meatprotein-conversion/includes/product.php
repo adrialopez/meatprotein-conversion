@@ -120,7 +120,7 @@ add_filter( 'the_content', function ( $content ) {
 		$gift_txt = $extras ? ' Además recibes: ' . esc_html( mb_strtolower( implode( ' y ', $extras ), 'UTF-8' ) ) . '.' : '';
 		$blocks[] = array(
 			'title' => 'Qué recibes',
-			'body'  => '<p>10 bandejas de hamburguesas a tu elección: tú decides los sabores y puedes repetir los que más te gusten.' . $gift_txt . '</p><p>Cada bandeja trae 4 hamburguesas de 100 g (400 g). En cada sabor puedes ver los ingredientes y los valores nutricionales pulsando «Info» en el selector.</p>',
+			'body'  => '<p>10 bandejas de hamburguesas a tu elección: tú decides los sabores y puedes repetir los que más te gusten.' . $gift_txt . '</p><p>Cada bandeja trae 4 hamburguesas de 100 g (400 g).' . ( mpc_max_protein() ? ' Hasta ' . (int) mpc_max_protein() . ' g de proteína en cada hamburguesa.' : '' ) . ' Pulsa «Info» junto a cada sabor para ver sus ingredientes y valores nutricionales.</p>',
 			'open'  => true,
 		);
 	}
@@ -136,17 +136,18 @@ add_filter( 'the_content', function ( $content ) {
 		'body'  => '<p>Controlamos las materias primas en la recepción, el proceso de producción y el peso y aspecto de cada pedido antes de enviarlo. Los alérgenos están identificados y documentados en cada receta.</p>' . ( $cert ? wpautop( $cert ) : '' ) . ( $q ? '<p><a href="' . esc_url( $q ) . '">Ver los controles de calidad</a></p>' : '' ),
 		'open'  => false,
 	);
-	$nut = trim( (string) mpc_opt( 'nutrition' ) );
-	if ( $nut ) {
-		$blocks[] = array( 'title' => 'Información nutricional y alérgenos', 'body' => wpautop( $nut ), 'open' => false );
-	} elseif ( 'local' === wp_get_environment_type() ) {
-		$blocks[] = array( 'title' => 'Información nutricional y alérgenos', 'body' => '<p class="mpc-draft">Pendiente: proteína y calorías por hamburguesa, peso por bandeja, ingredientes y alérgenos. Se rellena en WooCommerce &gt; Conversión.</p>', 'open' => false );
+	$nut_html = mpc_nutrition_table_html();
+	$nut      = trim( (string) mpc_opt( 'nutrition' ) );
+	if ( $nut_html || $nut ) {
+		$blocks[] = array(
+			'title' => 'Información nutricional y alérgenos',
+			'body'  => '<p>Pulsa «Info» junto a cada sabor en el selector para ver sus ingredientes y alérgenos.</p>' . $nut_html . ( $nut ? wpautop( $nut ) : '' ),
+			'open'  => false,
+		);
 	}
 	$origin = trim( (string) mpc_opt( 'origin' ) );
 	if ( $origin ) {
 		$blocks[] = array( 'title' => 'Quién lo fabrica', 'body' => wpautop( $origin ), 'open' => false );
-	} elseif ( 'local' === wp_get_environment_type() ) {
-		$blocks[] = array( 'title' => 'Quién lo fabrica', 'body' => '<p class="mpc-draft">Pendiente: fabricante, origen de la carne y certificaciones.</p>', 'open' => false );
 	}
 
 	$html = '<div class="mpc-info">';

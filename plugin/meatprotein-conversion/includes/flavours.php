@@ -60,6 +60,72 @@ function mpc_flavours_data() {
 			'i' => esc_url_raw( $m[1] ),
 			'u' => get_permalink( $id ),
 		);
+		$nut = mpc_flavour_nutrition( $id );
+		if ( $nut ) {
+			$out[ $key ]['d'] = $nut;
+		}
 	}
 	return $out;
+}
+
+/**
+ * Ingredientes y valores nutricionales de cada hamburguesa, transcritos de las etiquetas que hay en
+ * la descripción de cada producto (por 100 g; cada hamburguesa pesa 100 g). Se editan en data/flavours.json.
+ */
+function mpc_nutrition_data() {
+	static $data = null;
+	if ( null === $data ) {
+		$file = MPC_DIR . 'data/flavours.json';
+		$data = is_readable( $file ) ? json_decode( (string) file_get_contents( $file ), true ) : array();
+		$data = is_array( $data ) ? $data : array();
+	}
+	return $data;
+}
+
+function mpc_flavour_nutrition( $product_id ) {
+	$all = mpc_nutrition_data();
+	return $all[ (string) $product_id ] ?? null;
+}
+
+/** «22,2» -> 22.2 */
+function mpc_num( $s ) {
+	return (float) str_replace( ',', '.', (string) $s );
+}
+
+/** Proteína máxima por hamburguesa entre los sabores con datos, redondeada hacia abajo. */
+function mpc_max_protein() {
+	$max = 0.0;
+	foreach ( mpc_nutrition_data() as $d ) {
+		$max = max( $max, mpc_num( $d['prot'] ?? 0 ) );
+	}
+	return (int) floor( $max );
+}
+
+/** Tabla de valores nutricionales de todos los sabores con datos (por 100 g). */
+function mpc_nutrition_table_html() {
+	$rows = array();
+	$seen = array();
+	foreach ( mpc_flavour_products() as $id ) {
+		if ( isset( $seen[ $id ] ) ) {
+			continue;
+		}
+		$seen[ $id ] = true;
+		$d = mpc_flavour_nutrition( $id );
+		if ( ! $d ) {
+			continue;
+		}
+		$rows[ $id ] = array( html_entity_decode( wp_strip_all_tags( get_the_title( $id ) ), ENT_QUOTES, 'UTF-8' ), $d );
+	}
+	if ( ! $rows ) {
+		return '';
+	}
+	uasort( $rows, function ( $a, $b ) {
+		return mpc_num( $b[1]['prot'] ) <=> mpc_num( $a[1]['prot'] );
+	} );
+	$h = '<div class="mpc-table-wrap"><table class="mpc-table"><thead><tr><th>Hamburguesa</th><th>Kcal</th><th>Proteínas</th><th>Grasas</th><th>Hidratos</th><th>Sal</th></tr></thead><tbody>';
+	foreach ( $rows as $id => $r ) {
+		list( $title, $d ) = $r;
+		$h .= '<tr><th scope="row">' . esc_html( preg_replace( '/\s*NEW!?$/u', '', $title ) ) . '</th><td>' . esc_html( $d['kcal'] ) . '</td><td>' . esc_html( $d['prot'] ) . ' g</td><td>' . esc_html( $d['fat'] ) . ' g</td><td>' . esc_html( $d['carb'] ) . ' g</td><td>' . esc_html( $d['salt'] ) . ' g</td></tr>';
+	}
+	return $h . '</tbody></table></div><p class="mpc-table__note">Valores por 100 g. Cada hamburguesa pesa 100 g y cada bandeja trae 4. Las albóndigas vienen en bandeja de 400 g.</p>';
 }

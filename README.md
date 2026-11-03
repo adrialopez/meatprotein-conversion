@@ -10,7 +10,7 @@ Es una propuesta: se probó solo en una copia local y **no está instalado en pr
 | Selector de sabores del pack | Sustituye 10 desplegables de ~24 opciones por una cuadrícula con +/-, contador y barra de progreso. Rellena los desplegables de WooCommerce por detrás (emparejamiento sabor -> bandeja), así carrito, pedidos y emails no cambian. El regalo (atributo con una sola opción) se elige solo. |
 | Barra fija en móvil | Progreso del pack y botón «Añadir al carrito», por encima de la barra de iconos de Betheme. |
 | Garantías junto al botón | Refrigerado SEUR 24-48 h, envío gratis desde X €, reposición si llega mal, congelación. Datos tomados de las páginas Envíos y FAQs de la web. |
-| Info de cada sabor | Botón «Info» junto a cada sabor: abre la imagen de ingredientes, peso y valores nutricionales que ya está en la descripción de esa hamburguesa (mapa sabor -> producto en `includes/flavours.php`). |
+| Info de cada sabor | Botón «Info» junto a cada sabor con ingredientes, peso y valores nutricionales **en texto** (transcritos de las etiquetas que hay como imagen en cada hamburguesa; datos en `data/flavours.json`, mapa sabor -> producto en `includes/flavours.php`). Cada tarjeta muestra proteína y kcal. La ficha del pack incluye una tabla con todos los sabores. **Revisar los datos antes de publicar** (ver más abajo). |
 | Bloques de información | Qué recibes, cómo llega y se conserva, calidad y seguridad, información nutricional y fabricante (estos dos se muestran solo si se rellenan en WooCommerce > Conversión). |
 | Barra de envío gratis | Carrito, checkout y minicarrito: «Te faltan X € para el envío gratis». |
 | Promo puntual | Barra superior con texto, enlace y cuenta atrás; desaparece sola al terminar. |
@@ -38,3 +38,13 @@ La base de datos local se exporta **sin clientes ni pedidos** (solo productos, p
 
 ZIP `meatprotein-conversion-x.y.z.zip` (carpeta `meatprotein-conversion/`). Antes de activar en producción: copia de la web,
 rellenar WooCommerce > Conversión y comprobar un pedido de prueba con cada pasarela.
+
+## Datos nutricionales: revisar antes de publicar
+
+`data/flavours.json` se transcribió a mano de las imágenes de etiqueta (por 100 g). Son datos de etiquetado alimentario:
+hay que cotejarlos con las etiquetas reales y con la ficha técnica. Dudas detectadas al transcribir:
+
+- **Pollo y trufa (#18999):** la imagen de su descripción da 404, no hay datos.
+- Tres etiquetas con valores idénticos (543,9 kJ / 130 kcal / 3,9 / 0,9 / 1,9 / 0,3 / 21,7 / 0,9): Pollo Cheese-Bacon, Ternera y queso, Ternera queso y trufa.
+- Tres con 505,3 kJ / 120,7 kcal / 2,7 / 0,8 / 4,8 / 1,4 / 19,3: Pavo y cebolla, Mango Protein Chicken, Pollo miel y tomate.
+- En las etiquetas de Pollo miel y tomate (mostaza) y Pollo, pepinillos y cheddar (leche, queso) los alérgenos no están en mayúsculas como en el resto.
