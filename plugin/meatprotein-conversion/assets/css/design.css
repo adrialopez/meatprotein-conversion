@@ -277,3 +277,61 @@ a.mpc-upsell__add.button:hover { background: var(--mpc-pink) !important; color: 
 .mfn-cart-holder .mfn-chp-remove { font-size: 0 !important; }
 .mfn-cart-holder .mfn-chp-remove::after { content: "Quitar"; font: 500 .85rem var(--mpc-sans); color: var(--mpc-soft); text-decoration: underline; text-underline-offset: 3px; }
 .mfn-cart-holder .mfn-chp-remove:hover::after { color: var(--mpc-ink); }
+
+/* ---------- Página de packs ---------- */
+.mpc-packs { max-width: 1100px; margin: 0 auto; }
+.mpc-packs h2 { margin: 0 0 .4rem; font: 400 clamp(1.35rem, 1.1rem + 1.2vw, 1.9rem)/1.1 var(--mpc-display); letter-spacing: 0; text-transform: none; }
+.mpc-packs__intro { text-align: center; margin: 0 0 1.6rem; }
+.mpc-packs__lead { margin: 0 auto 1.1rem; max-width: 40rem; font: 500 clamp(1rem, .95rem + .3vw, 1.15rem)/1.5 var(--mpc-sans); color: var(--mpc-soft); text-wrap: balance; }
+.mpc-packs__stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+.mpc-packs__stats li { margin: 0; padding: .8rem .6rem; display: flex; flex-direction: column; gap: .15rem; background: var(--mpc-sky-soft); border-radius: var(--mpc-radius); }
+.mpc-packs__stats strong { font: 400 1.45rem/1 var(--mpc-display); color: var(--mpc-pink); }
+.mpc-packs__stats span { font: 600 .8rem/1.25 var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-packs__grid { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; margin: 0 0 2.4rem; }
+.mpc-pack-card { padding: 0; overflow: visible; }
+.mpc-pack-card__img { position: relative; margin: 0; border-radius: 16px 16px 0 0; }
+.mpc-pack-card__pct { position: absolute; right: .8rem; top: .8rem; padding: .3rem .7rem; border-radius: 99px; background: var(--mpc-ink); color: #fff; font: 400 .9rem var(--mpc-display); }
+.mpc-pack-card__body { display: flex; flex-direction: column; padding: 1.1rem 1.1rem 1.3rem; min-width: 0; }
+.mpc-pack-card h3 { font-size: clamp(1.15rem, 1rem + .8vw, 1.6rem); text-wrap: balance; }
+.mpc-pack-card__inc li { align-items: center; }
+.mpc-pack-card__inc li span { flex: 1; min-width: 0; }
+.mpc-pack-card__inc .is-gift span { font-weight: 700; }
+.mpc-pack-card__inc em { flex: none; font: 700 .68rem var(--mpc-sans); letter-spacing: .08em; text-transform: uppercase; font-style: normal; color: #fff; background: var(--mpc-ok); padding: .15rem .55rem; border-radius: 99px; }
+.mpc-pack-card__price strong { font-size: clamp(1.9rem, 1.5rem + 1.4vw, 2.6rem); line-height: 1; }
+.mpc-pack-card__per { width: 100%; font: 500 .86rem var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-pack-card .mpc-btn { padding: 1.05rem 1rem; font-size: 1.1rem; }
+.mpc-pack-card__note { margin: .6rem 0 0; text-align: center; font: 500 .8rem var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-fav, .mpc-how, .mpc-faq { margin: 0 0 2.4rem; }
+.mpc-fav__sub { margin: 0 0 .8rem; font: 500 .95rem/1.4 var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-fav__rail { list-style: none; margin: 0 -1rem; padding: .3rem 1rem 1rem; display: flex; gap: .75rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.mpc-fav__rail::-webkit-scrollbar { display: none; }
+.mpc-fav__rail li { margin: 0; flex: 0 0 148px; scroll-snap-align: start; }
+.mpc-fav__card { display: flex; flex-direction: column; gap: .3rem; height: 100%; text-decoration: none !important; color: var(--mpc-ink) !important; padding: .5rem .5rem .8rem; border: 1.5px solid var(--mpc-line); border-radius: 16px; background: #fff; transition: border-color .15s, transform .15s; }
+.mpc-fav__card:hover { border-color: var(--mpc-pink); transform: translateY(-2px); }
+.mpc-fav__card img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; background: var(--mpc-sky-soft); }
+.mpc-fav__name { font: 700 .92rem/1.25 var(--mpc-sans); }
+.mpc-fav__prot { font: 600 .78rem var(--mpc-sans); color: var(--mpc-ok); }
+.mpc-how .mpc-steps { margin: .6rem 0 0; }
+.mpc-faq details { border-bottom: 1px solid var(--mpc-line); }
+.mpc-faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem .1rem; font: 700 1rem/1.3 var(--mpc-sans); }
+.mpc-faq summary::-webkit-details-marker { display: none; }
+.mpc-faq summary::after { content: ""; flex: none; width: 9px; height: 9px; border: solid var(--mpc-ink); border-width: 0 2px 2px 0; transform: rotate(45deg); transition: transform .2s; }
+.mpc-faq details[open] summary::after { transform: rotate(-135deg); }
+.mpc-faq details p { margin: 0 0 1rem; max-width: 46rem; font: 400 .95rem/1.55 var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-packs__alt { margin: 1.4rem 0 0; text-align: center; font: 500 .95rem var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-packs__alt a { color: var(--mpc-ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 760px) {
+	.mpc-packs__stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+	.mpc-pack-card.is-top { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: stretch; }
+	.mpc-pack-card.is-top .mpc-pack-card__img { border-radius: 16px 0 0 16px; height: 100%; }
+	.mpc-pack-card.is-top .mpc-pack-card__img img { height: 100%; }
+	.mpc-pack-card.is-top .mpc-pack-card__body { padding: 1.8rem 1.8rem 1.6rem; justify-content: center; }
+	.mpc-pack-card__inc { flex: 0 0 auto; margin-bottom: 1.2rem; }
+	.mpc-fav__rail { margin: 0; padding: .3rem 0 1rem; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; }
+	.mpc-fav__rail li { flex: none; }
+}
+@media (min-width: 1000px) { .mpc-fav__rail { grid-template-columns: repeat(8, minmax(0, 1fr)); } .mpc-fav__name { font-size: .85rem; } }
+.mpc-packs .mpc-packs__stats, .mpc-packs ul.mpc-trust, .mpc-packs ul.mpc-fav__rail { margin-left: 0; margin-right: 0; }
+.mpc-packs .mpc-fav__rail li { list-style: none; }
+.mpc-packs .mpc-fav__rail li::marker, .mpc-packs .mpc-fav__rail li::before { content: none; }
+@media (max-width: 759px) { .mpc-packs ul.mpc-fav__rail { margin-left: -1rem; margin-right: -1rem; } }
