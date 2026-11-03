@@ -13,7 +13,7 @@ add_action( 'woocommerce_before_variations_form', function () {
 	if ( ! mpc_is_pack( $product ) ) {
 		return;
 	}
-	echo '<div class="mpc-pack" data-mpc-pack hidden></div>';
+	echo '<div class="mpc-pack" data-mpc-pack data-flavours="' . esc_attr( wp_json_encode( mpc_flavours_data() ) ) . '" hidden></div>';
 	echo '<script>document.documentElement.classList.add("mpc-has-pack");</script>';
 } );
 
@@ -120,7 +120,7 @@ add_filter( 'the_content', function ( $content ) {
 		$gift_txt = $extras ? ' Además recibes: ' . esc_html( mb_strtolower( implode( ' y ', $extras ), 'UTF-8' ) ) . '.' : '';
 		$blocks[] = array(
 			'title' => 'Qué recibes',
-			'body'  => '<p>10 bandejas de hamburguesas a tu elección: tú decides los sabores y puedes repetir los que más te gusten.' . $gift_txt . '</p>',
+			'body'  => '<p>10 bandejas de hamburguesas a tu elección: tú decides los sabores y puedes repetir los que más te gusten.' . $gift_txt . '</p><p>Cada bandeja trae 4 hamburguesas de 100 g (400 g). En cada sabor puedes ver los ingredientes y los valores nutricionales pulsando «Info» en el selector.</p>',
 			'open'  => true,
 		);
 	}

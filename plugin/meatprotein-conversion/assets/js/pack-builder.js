@@ -17,8 +17,11 @@
 	if (S < 4) { return; }
 
 	/* ---- Sabores: unión de las opciones de todos los desplegables ---- */
+	/* Un mismo sabor escrito de varias formas en los desplegables se trata como uno solo. */
+	var ALIAS = { 'ternera y queso trufa': 'ternera queso y trufa', 'miel con tomate': 'miel y tomate', 'pavo con cebolla caramelizada': 'pavo cebolla', 'ternera cebolla': 'ternera cebolla caramelizada', 'cheese bacon': 'chees bacon' };
 	function norm(s) {
-		return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&amp;|&/g, ' y ').replace(/[^a-z0-9]+/g, ' ').trim();
+		var k = String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&amp;|&/g, ' y ').replace(/[^a-z0-9]+/g, ' ').trim();
+		return ALIAS[k] || k;
 	}
 	var FIX = { 'chees bacon': 'Cheese bacon', 'cheese bacon': 'Cheese bacon', 'mexican': 'Mexican', 'espinacas y queso': 'Espinacas y queso', 'pollo trufa': 'Pollo trufa', 'ternera queso y trufa': 'Ternera, queso y trufa', 'ternera queso': 'Ternera y queso', 'miel y tomate': 'Miel y tomate', 'miel con tomate': 'Miel y tomate', 'pechuga con puerro y calabaza': 'Pechuga, puerro y calabaza', 'kebab': 'Kebab', 'satay': 'Satay', 'chicken mango': 'Pollo y mango', 'pavo cebolla': 'Pavo y cebolla', 'pavo con cebolla caramelizada': 'Pavo y cebolla caramelizada', 'ternera cebolla caramelizada': 'Ternera y cebolla caramelizada', 'ternera cebolla': 'Ternera y cebolla' };
 	function pretty(raw, key) {
@@ -50,6 +53,8 @@
 	var keys = Object.keys(flavours);
 	if (!keys.length) { return; }
 
+	var INFO = {};
+	try { INFO = JSON.parse(host.getAttribute('data-flavours') || '{}') || {}; } catch (e) { INFO = {}; }
 	var counts = {};
 	function total(c) { return Object.keys(c).reduce(function (a, k) { return a + (c[k] || 0); }, 0); }
 
@@ -81,7 +86,7 @@
 		if (!items.length) { return; }
 		html += '<fieldset class="mpc-pack__group"><legend>' + g + '</legend><div class="mpc-pack__grid">';
 		items.forEach(function (k) {
-			html += '<div class="mpc-flavour" data-k="' + k + '"><span class="mpc-flavour__name">' + flavours[k].label + '</span>' +
+			html += '<div class="mpc-flavour" data-k="' + k + '"><span class="mpc-flavour__name">' + flavours[k].label + (INFO[k] ? ' <button type="button" class="mpc-info-btn" data-info="' + k + '" aria-label="Información de ' + flavours[k].label + '">Info</button>' : '') + '</span>' +
 				'<span class="mpc-step"><button type="button" class="mpc-step__b" data-d="-1" aria-label="Quitar ' + flavours[k].label + '">−</button><output class="mpc-step__n">0</output><button type="button" class="mpc-step__b" data-d="1" aria-label="Añadir ' + flavours[k].label + '">+</button></span></div>';
 		});
 		html += '</div></fieldset>';
@@ -133,6 +138,24 @@
 		if (!assign(counts)) { counts[k] -= d; if (!counts[k]) { delete counts[k]; } }
 		sync();
 	});
+	/* Ficha de ingredientes y valores nutricionales de cada sabor. */
+	var dlg = null;
+	function openInfo(k) {
+		var d = INFO[k]; if (!d) { return; }
+		if (!dlg) {
+			dlg = document.createElement('dialog');
+			dlg.className = 'mpc-dialog';
+			dlg.innerHTML = '<form method="dialog"><button class="mpc-dialog__x" aria-label="Cerrar">×</button></form><h3 class="mpc-dialog__t"></h3><img class="mpc-dialog__img" alt=""><p class="mpc-dialog__l"><a href="#" target="_blank" rel="noopener">Ver la hamburguesa</a></p>';
+			document.body.appendChild(dlg);
+			dlg.addEventListener('click', function (e) { if (e.target === dlg) { dlg.close(); } });
+		}
+		dlg.querySelector('.mpc-dialog__t').textContent = d.t;
+		dlg.querySelector('.mpc-dialog__img').src = d.i;
+		dlg.querySelector('.mpc-dialog__img').alt = 'Ingredientes y valores nutricionales de ' + d.t;
+		dlg.querySelector('.mpc-dialog__l a').href = d.u;
+		if (dlg.showModal) { dlg.showModal(); } else { window.open(d.i, '_blank'); }
+	}
+	$(host).on('click', '[data-info]', function (e) { e.preventDefault(); e.stopPropagation(); openInfo(this.getAttribute('data-info')); });
 	$(host).on('click', '[data-act="clear"]', function () { counts = {}; sync(); });
 	$(host).on('click', '[data-act="random"]', function () {
 		var guard = 0;

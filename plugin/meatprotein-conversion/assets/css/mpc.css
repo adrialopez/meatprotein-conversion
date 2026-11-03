@@ -181,3 +181,14 @@ body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-footer-tmpl { di
 .woocommerce-checkout #payment div.payment_box { background: var(--mpc-sky-soft); border: 0; border-top: 1px solid var(--mpc-line); border-radius: 0; font-size: .9rem; color: var(--mpc-soft); }
 .woocommerce-checkout #payment div.payment_box::before { display: none; }
 .woocommerce-checkout #place_order { width: 100%; min-height: 58px; border-radius: var(--mpc-radius); font-size: 1.02rem; }
+
+/* ---------- Info de cada sabor ---------- */
+.mpc-info-btn { display: inline-block; margin-left: .35rem; padding: .08rem .5rem; min-height: 0; border: 1px solid var(--mpc-teal); border-radius: 99px; background: #fff; color: var(--mpc-teal); font: 700 .7rem/1.5 var(--mpc-sans); letter-spacing: .04em; text-transform: uppercase; cursor: pointer; vertical-align: middle; }
+.mpc-info-btn:hover { background: var(--mpc-teal); color: #fff; }
+.mpc-dialog { width: min(92vw, 520px); max-height: 92vh; padding: 1.1rem 1.1rem 1rem; border: 0; border-radius: 18px; box-shadow: 0 24px 60px rgba(11,11,11,.35); font-family: var(--mpc-sans); overflow: auto; }
+.mpc-dialog::backdrop { background: rgba(11,11,11,.55); }
+.mpc-dialog__x { position: absolute; top: .5rem; right: .6rem; width: 36px; height: 36px; min-height: 0; padding: 0; border: 0; border-radius: 50%; background: var(--mpc-sky-soft); color: var(--mpc-ink); font: 400 1.5rem/1 var(--mpc-sans); cursor: pointer; }
+.mpc-dialog__t { margin: 0 2.4rem .8rem 0; font: 400 1.1rem/1.2 var(--mpc-display); letter-spacing: 0; text-transform: none; }
+.mpc-dialog__img { display: block; width: 100%; height: auto; border-radius: 12px; }
+.mpc-dialog__l { margin: .8rem 0 0; font-size: .9rem; }
+.mpc-dialog__l a { color: var(--mpc-ink); text-decoration: underline; text-underline-offset: 3px; }

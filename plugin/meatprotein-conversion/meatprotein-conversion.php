@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Meatprotein Conversion
  * Description: Mejoras de conversión para meatprotein.eu: selector de sabores del pack, bloque de confianza, barra de envío gratis, página de packs, promos puntuales y checkout.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Adrià López
  * Author URI: https://adria-lopez.com
  * Text Domain: meatprotein-conversion
@@ -13,12 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_VERSION', '0.1.0' );
+define( 'MPC_VERSION', '0.2.0' );
 define( 'MPC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MPC_URL', plugin_dir_url( __FILE__ ) );
 
 require_once MPC_DIR . 'includes/settings.php';
 require_once MPC_DIR . 'includes/helpers.php';
+require_once MPC_DIR . 'includes/flavours.php';
 require_once MPC_DIR . 'includes/product.php';
 require_once MPC_DIR . 'includes/cart.php';
 require_once MPC_DIR . 'includes/promo.php';

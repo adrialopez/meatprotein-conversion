@@ -10,6 +10,7 @@ Es una propuesta: se probó solo en una copia local y **no está instalado en pr
 | Selector de sabores del pack | Sustituye 10 desplegables de ~24 opciones por una cuadrícula con +/-, contador y barra de progreso. Rellena los desplegables de WooCommerce por detrás (emparejamiento sabor -> bandeja), así carrito, pedidos y emails no cambian. El regalo (atributo con una sola opción) se elige solo. |
 | Barra fija en móvil | Progreso del pack y botón «Añadir al carrito», por encima de la barra de iconos de Betheme. |
 | Garantías junto al botón | Refrigerado SEUR 24-48 h, envío gratis desde X €, reposición si llega mal, congelación. Datos tomados de las páginas Envíos y FAQs de la web. |
+| Info de cada sabor | Botón «Info» junto a cada sabor: abre la imagen de ingredientes, peso y valores nutricionales que ya está en la descripción de esa hamburguesa (mapa sabor -> producto en `includes/flavours.php`). |
 | Bloques de información | Qué recibes, cómo llega y se conserva, calidad y seguridad, información nutricional y fabricante (estos dos se muestran solo si se rellenan en WooCommerce > Conversión). |
 | Barra de envío gratis | Carrito, checkout y minicarrito: «Te faltan X € para el envío gratis». |
 | Promo puntual | Barra superior con texto, enlace y cuenta atrás; desaparece sola al terminar. |
