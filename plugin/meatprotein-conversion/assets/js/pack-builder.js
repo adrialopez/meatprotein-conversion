@@ -190,9 +190,19 @@
 	window.mpcPackState = { count: total(counts), size: S };
 	try {
 		var pre = new URLSearchParams(location.search).get('mpc_pre');
-		if (pre && flavours[pre] && !soldOut(pre) && assign($.extend({}, counts, (function () { var o = {}; o[pre] = 1; return o; })()))) {
-			counts[pre] = 1; sync();
-			setTimeout(function () { host.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 400);
+		if (pre) {
+			/* Una o varias claves separadas por comas, repetibles: ?mpc_pre=pollo,pollo,ternera */
+			var next = $.extend({}, counts), added = 0;
+			pre.split(',').forEach(function (k) {
+				k = $.trim(k);
+				if (!k || !flavours[k] || soldOut(k) || total(next) >= S) { return; }
+				var t = $.extend({}, next); t[k] = (t[k] || 0) + 1;
+				if (assign(t)) { next = t; added++; }
+			});
+			if (added) {
+				counts = next; sync();
+				setTimeout(function () { host.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 400);
+			}
 		}
 	} catch (e) { /* sin parámetro: nada que hacer */ }
 })(jQuery);

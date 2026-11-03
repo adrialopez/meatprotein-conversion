@@ -21,6 +21,7 @@ function mpc_defaults() {
 		'certs'         => '',
 		'phone'         => '944 999 194',
 		'whatsapp'      => '',
+		'hero'          => '1',
 	);
 }
 
@@ -72,6 +73,8 @@ function mpc_settings_page() {
 	$f( 'promo_cta', 'Texto del enlace', 'Por ejemplo: Ver el pack.' );
 	$f( 'promo_url', 'Enlace de la barra', 'URL completa.' );
 	$f( 'promo_ends', 'La promo termina', 'Si la rellenas, se muestra una cuenta atrás y la barra desaparece sola al terminar.', 'datetime-local' );
+	echo '</table><h2>Portada</h2><table class="form-table">';
+	$f( 'hero', 'Portada interactiva (1 = sí, 0 = no)', 'Muestra el hero «Monta tu pack» en lugar del hero de siempre. Ponlo a 0 para volver al original.' );
 	echo '</table><h2>Información de producto</h2><table class="form-table">';
 	$f( 'nutrition', 'Información nutricional y alérgenos', 'Aparece en la ficha de cada pack. Si está vacío, el bloque no se muestra.', 'textarea' );
 	$f( 'origin', 'Origen y fabricación', 'Quién fabrica, de dónde viene la carne.', 'textarea' );
