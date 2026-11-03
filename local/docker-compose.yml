@@ -33,6 +33,7 @@ services:
     volumes:
       - ../site-copy/wp-content:/var/www/html/wp-content
       - ../plugin/meatprotein-conversion:/var/www/html/wp-content/plugins/meatprotein-conversion
+      - ../theme/meatprotein-child:/var/www/html/wp-content/themes/meatprotein-child
   wpcli:
     image: wordpress:cli-php8.3
     profiles: [tools]

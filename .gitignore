@@ -6,3 +6,7 @@ site-copy/
 
 # Propuesta comercial (privada: precio y datos del cliente)
 propuesta/
+
+# Dependencias de desarrollo del plugin
+plugin/meatprotein-conversion/vendor/
+plugin/meatprotein-conversion/.phpcs.json

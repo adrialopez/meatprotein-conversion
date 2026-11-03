@@ -3,7 +3,10 @@
  * Extras para el pack (producto estrella): se ofrecen en la ficha, en el carrito lateral, en el carrito
  * y en el checkout. Por defecto se eligen solos: el producto más vendido de cada categoría que no sea
  * hamburguesas (queso, pan, pizza, salsas, snacks…). Se pueden fijar a mano en WooCommerce > Conversión.
+ *
+ * @package Meatprotein_Conversion
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -16,21 +19,32 @@ function mpc_addon_ids() {
 	} else {
 		$ids = get_transient( 'mpc_addon_ids_auto' );
 		if ( ! is_array( $ids ) ) {
-			$ids   = array();
-			$seen  = array();
-			$ids_all = get_posts( array(
-				'post_type'      => 'product',
-				'post_status'    => 'publish',
-				'posts_per_page' => 150,
-				'fields'         => 'ids',
-				'meta_key'       => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery
-				'orderby'        => 'meta_value_num',
-				'order'          => 'DESC',
-				'tax_query'      => array( array( 'taxonomy' => 'product_type', 'field' => 'slug', 'terms' => 'simple' ) ), // phpcs:ignore WordPress.DB.SlowDBQuery
-			) );
-			$prods = array_filter( array_map( 'wc_get_product', $ids_all ), function ( $p ) {
-				return $p && $p->is_in_stock();
-			} );
+			$ids     = array();
+			$seen    = array();
+			$ids_all = get_posts(
+				array(
+					'post_type'      => 'product',
+					'post_status'    => 'publish',
+					'posts_per_page' => 150, // phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_posts_per_page -- Una sola vez y en caché (transient).
+					'fields'         => 'ids',
+					'meta_key'       => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery
+				'orderby'            => 'meta_value_num',
+				'order'              => 'DESC',
+				'tax_query'          => array(
+				array(
+				'taxonomy' => 'product_type',
+				'field'    => 'slug',
+				'terms'    => 'simple',
+				),
+				), // phpcs:ignore WordPress.DB.SlowDBQuery
+				)
+			);
+			$prods   = array_filter(
+				array_map( 'wc_get_product', $ids_all ),
+				function ( $p ) {
+					return $p && $p->is_in_stock();
+				}
+			);
 			foreach ( $prods as $p ) {
 				$cats = $p->get_category_ids();
 				if ( ! $cats || has_term( 'hamburguesas', 'product_cat', $p->get_id() ) || (float) $p->get_price() <= 0 ) {
@@ -38,7 +52,7 @@ function mpc_addon_ids() {
 				}
 				$key = (int) $cats[0];
 				if ( isset( $seen[ $key ] ) ) {
-					continue; // uno por categoría, para que la oferta sea variada
+					continue; // Uno por categoría, para que la oferta sea variada.
 				}
 				$seen[ $key ] = true;
 				$ids[]        = $p->get_id();
@@ -52,7 +66,12 @@ function mpc_addon_ids() {
 	return apply_filters( 'mpc_addon_ids', $ids );
 }
 
-/** Extras disponibles que no están ya en el carrito. */
+/**
+ * Extras sugeridos: los más vendidos con stock.
+ *
+ * @param int $limit Máximo de resultados.
+ * @return mixed Resultado.
+ */
 function mpc_addons_available( $limit = 6 ) {
 	$in_cart = array();
 	if ( function_exists( 'WC' ) && WC()->cart ) {
@@ -76,7 +95,12 @@ function mpc_addons_available( $limit = 6 ) {
 	return $out;
 }
 
-/** El primero de la lista por ventas se marca como «Más pedido». */
+/**
+ * Indica si un producto está entre los más vendidos de los extras.
+ *
+ * @param WC_Product|null $product Producto.
+ * @return bool
+ */
 function mpc_addon_is_top( $product ) {
 	static $top = null;
 	if ( null === $top ) {
@@ -93,32 +117,34 @@ function mpc_addon_is_top( $product ) {
 	return $top && (int) $product->get_id() === (int) $top && (int) $product->get_total_sales() >= 100;
 }
 
-/* ---------------------------------------------------------------------------------------------
-   1) Ficha del pack: bundle a medida por pasos (sabores → regalo → salsa → pan → queso → otros extras).
-   --------------------------------------------------------------------------------------------- */
+// 1) Ficha del pack: bundle a medida por pasos (sabores → regalo → salsa → pan → queso → otros extras).
 
-/** Nombre más cómodo de leer: sin «NEW», sin gramos sueltos y sin mayúsculas gritadas. */
+/**
+ * Nombre más cómodo de leer: sin «NEW», con unidades normalizadas y sin mayúsculas gritadas.
+ *
+ * @param string $name Nombre.
+ * @return string
+ */
 function mpc_nice_name( $name ) {
-	$n = wp_strip_all_tags( html_entity_decode( $name ) );
-	$n = trim( preg_replace( '/\s+/u', ' ', preg_replace( '/(?<=\s|^)NEW!?(?=\s|$)/iu', '', $n ) ) );
-	$letters = preg_replace( '/[^\p{L}]+/u', '', $n );
-	$upper   = preg_replace( '/[^\p{Lu}]+/u', '', $n );
-	if ( mb_strlen( $letters, 'UTF-8' ) > 4 && mb_strlen( $upper, 'UTF-8' ) / mb_strlen( $letters, 'UTF-8' ) > 0.7 ) {
-		$n = mb_strtolower( $n, 'UTF-8' );
-		$n = mb_strtoupper( mb_substr( $n, 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $n, 1, null, 'UTF-8' );
-	}
-	/* Unidades siempre en minúscula y separadas: «440G» -> «440 g». */
-	return preg_replace_callback( '/\b(\d+)\s?(kg|gr|g|ml|cl|l)\b/iu', function ( $m ) {
-		return $m[1] . ' ' . mb_strtolower( $m[2], 'UTF-8' );
-	}, $n );
+	return mpc_display_name( $name );
 }
 
-/** Producto «básico»: simple, y ni el pack ni una bandeja de hamburguesas (pizzas, panes, salsas, snacks...). */
+/**
+ * Producto básico: simple, y ni el pack ni una bandeja de hamburguesas.
+ *
+ * @param WC_Product|null $product Producto.
+ * @return bool
+ */
 function mpc_is_basic( $product ) {
 	return $product instanceof WC_Product && $product->is_type( 'simple' ) && ! mpc_is_pack( $product ) && ! mpc_is_single_burger( $product );
 }
 
-/** Nombre corto para tarjetas y resumen: sin gramos ni relleno de marca («Pan cosa nostra», «Queso curado proteico»). */
+/**
+ * Nombre corto para tarjetas y resumen: sin gramos ni relleno de marca.
+ *
+ * @param string $name Nombre.
+ * @return string
+ */
 function mpc_short_name( $name ) {
 	$n = mpc_nice_name( $name );
 	$n = preg_replace( '/\s*[-–]\s*\d+\s?(g|gr|ml)\b/iu', '', $n );
@@ -128,27 +154,50 @@ function mpc_short_name( $name ) {
 	return trim( $n );
 }
 
-/** Hamburguesa suelta (bandeja): producto simple de la categoría «hamburguesas». */
+/**
+ * Bandeja suelta: producto simple de la categoría hamburguesas.
+ *
+ * @param WC_Product|null $product Producto.
+ * @return bool
+ */
 function mpc_is_single_burger( $product ) {
 	return $product instanceof WC_Product && $product->is_type( 'simple' ) && has_term( 'hamburguesas', 'product_cat', $product->get_id() ) && ! mpc_is_pack( $product );
 }
 
-/** Productos de un paso del bundle: los fijados en ajustes o, si no, los más vendidos de esas categorías que cumplan el nombre. */
-function mpc_step_products( $setting, $cats, $include, $exclude, $limit, $skip_id = 0 ) {
+/**
+ * Productos de un paso del bundle: los fijados en ajustes o los más vendidos de esas categorías.
+ *
+ * @param string   $setting Ajuste que fija los IDs.
+ * @param string[] $cats Slugs de categoría.
+ * @param string   $include_pattern Patrón que debe cumplir el nombre.
+ * @param string   $exclude_pattern Patrón que no debe cumplir el nombre.
+ * @param int      $limit Máximo de resultados.
+ * @param int      $skip_id Producto que se omite.
+ * @return mixed Resultado.
+ */
+function mpc_step_products( $setting, $cats, $include_pattern, $exclude_pattern, $limit, $skip_id = 0 ) {
 	$cfg = trim( (string) mpc_opt( $setting ) );
 	if ( '' !== $cfg ) {
 		$ids = array_values( array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', $cfg ) ) ) );
 	} else {
-		$ids = get_posts( array(
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => 80,
-			'fields'         => 'ids',
-			'meta_key'       => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery
-			'orderby'        => 'meta_value_num',
-			'order'          => 'DESC',
-			'tax_query'      => array( array( 'taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => $cats ) ), // phpcs:ignore WordPress.DB.SlowDBQuery
-		) );
+		$ids = get_posts(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => 80,
+				'fields'         => 'ids',
+				'meta_key'       => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'orderby'            => 'meta_value_num',
+			'order'              => 'DESC',
+			'tax_query'          => array(
+			array(
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'terms'    => $cats,
+			),
+			), // phpcs:ignore WordPress.DB.SlowDBQuery
+			)
+		);
 	}
 	$out = array();
 	foreach ( $ids as $id ) {
@@ -160,7 +209,7 @@ function mpc_step_products( $setting, $cats, $include, $exclude, $limit, $skip_i
 			continue;
 		}
 		$name = $p->get_name();
-		if ( '' === $cfg && ( ( $include && ! preg_match( $include, $name ) ) || ( $exclude && preg_match( $exclude, $name ) ) ) ) {
+		if ( '' === $cfg && ( ( $include_pattern && ! preg_match( $include_pattern, $name ) ) || ( $exclude_pattern && preg_match( $exclude_pattern, $name ) ) ) ) {
 			continue;
 		}
 		$out[] = $p;
@@ -174,6 +223,9 @@ function mpc_step_products( $setting, $cats, $include, $exclude, $limit, $skip_i
 /**
  * Preguntas del flujo de compra, como en una app de pedidos: cada una es un carrusel de tarjetas con «+».
  * Pack: salsa, pan, queso. Bandeja suelta: pan, queso, salsa y «¿otra hamburguesa?».
+ *
+ * @param WC_Product|null $product Producto de la ficha.
+ * @return array Pasos con título, ayuda y productos.
  */
 function mpc_bundle_steps( $product = null ) {
 	$skip  = $product instanceof WC_Product ? $product->get_id() : 0;
@@ -216,16 +268,38 @@ function mpc_bundle_steps( $product = null ) {
 				break;
 			}
 		}
-		$steps = array( 'combo' => array( 'title' => 'Combínalo con', 'hint' => 'Lo que más se pide', 'items' => $items ) );
+		$steps = array(
+			'combo' => array(
+				'title' => 'Combínalo con',
+				'hint'  => 'Lo que más se pide',
+				'items' => $items,
+			),
+		);
 	} else {
-		$steps = array( 'salsa' => $salsa, 'pan' => $pan, 'queso' => $queso );
+		$steps = array(
+			'salsa' => $salsa,
+			'pan'   => $pan,
+			'queso' => $queso,
+		);
 	}
-	return apply_filters( 'mpc_bundle_steps', array_filter( $steps, function ( $st ) {
-		return ! empty( $st['items'] );
-	} ), $product );
+	return apply_filters(
+		'mpc_bundle_steps',
+		array_filter(
+			$steps,
+			function ( $st ) {
+				return ! empty( $st['items'] );
+			}
+		),
+		$product
+	);
 }
 
-/** Tarjeta de un extra: foto, nombre, precio y «+» que pasa a +/− al elegirlo. */
+/**
+ * HTML de la tarjeta de un extra.
+ *
+ * @param WC_Product $p Producto.
+ * @return string
+ */
 function mpc_card_html( $p ) {
 	$id    = (int) $p->get_id();
 	$price = (float) wc_get_price_to_display( $p );
@@ -244,64 +318,73 @@ function mpc_card_html( $p ) {
 }
 
 /** Raíz del flujo: datos para el JS (precio base, pack al que «subir») y las preguntas. */
-add_action( 'woocommerce_before_add_to_cart_button', function () {
-	global $product;
-	$is_pack   = mpc_is_pack( $product );
-	$is_single = mpc_is_single_burger( $product );
-	$is_basic  = mpc_is_basic( $product );
-	if ( ! $is_pack && ! $is_single && ! $is_basic ) {
-		return;
-	}
-	$base = (float) wc_get_price_to_display( $product );
-	if ( $is_pack ) {
-		$vars = $product->get_available_variations();
-		$base = $vars ? (float) $vars[0]['display_price'] : $base;
-	}
-	$attrs = ' data-kind="' . ( $is_pack ? 'pack' : ( $is_basic ? 'basic' : 'single' ) ) . '" data-base="' . esc_attr( $base ) . '" data-product="' . (int) $product->get_id() . '"';
-	if ( $is_pack ) {
-		$gift_parts = array_slice( array_map( 'trim', explode( '+', mpc_clean_title( $product->get_name() ) ) ), 1 );
-		if ( $gift_parts ) {
-			$attrs .= ' data-gift="' . esc_attr( $gift_parts[0] ) . '"';
+add_action(
+	'woocommerce_before_add_to_cart_button',
+	function () {
+		global $product;
+		$is_pack   = mpc_is_pack( $product );
+		$is_single = mpc_is_single_burger( $product );
+		$is_basic  = mpc_is_basic( $product );
+		if ( ! $is_pack && ! $is_single && ! $is_basic ) {
+			return;
 		}
-		$all_packs = mpc_get_packs();
-		if ( $all_packs && (int) $all_packs[0]->get_id() === (int) $product->get_id() && $product->get_total_sales() > 0 ) {
-			$attrs .= ' data-top="1"';
+		$base = (float) wc_get_price_to_display( $product );
+		if ( $is_pack ) {
+			$vars = $product->get_available_variations();
+			$base = $vars ? (float) $vars[0]['display_price'] : $base;
 		}
-	}
-	if ( $is_single ) {
-		$packs = mpc_get_packs();
-		if ( $packs ) {
-			$pv    = $packs[0]->get_available_variations();
-			$attrs .= ' data-pack-url="' . esc_url( $packs[0]->get_permalink() ) . '" data-pack-price="' . esc_attr( $pv ? $pv[0]['display_price'] : (float) $packs[0]->get_price() ) . '" data-pack-name="' . esc_attr( mpc_clean_title( $packs[0]->get_name() ) ) . '"';
+		$attrs = ' data-kind="' . ( $is_pack ? 'pack' : ( $is_basic ? 'basic' : 'single' ) ) . '" data-base="' . esc_attr( $base ) . '" data-product="' . (int) $product->get_id() . '"';
+		if ( $is_pack ) {
+			$gift_parts = array_slice( array_map( 'trim', explode( '+', mpc_clean_title( $product->get_name() ) ) ), 1 );
+			if ( $gift_parts ) {
+				$attrs .= ' data-gift="' . esc_attr( $gift_parts[0] ) . '"';
+			}
+			$all_packs = mpc_get_packs();
+			if ( $all_packs && (int) $all_packs[0]->get_id() === (int) $product->get_id() && $product->get_total_sales() > 0 ) {
+				$attrs .= ' data-top="1"';
+			}
 		}
-		$key = array_search( (int) $product->get_id(), mpc_flavour_products(), true );
-		if ( false !== $key ) {
-			$attrs .= ' data-flavour-key="' . esc_attr( $key ) . '"';
+		if ( $is_single ) {
+			$packs = mpc_get_packs();
+			if ( $packs ) {
+				$pv     = $packs[0]->get_available_variations();
+				$attrs .= ' data-pack-url="' . esc_url( $packs[0]->get_permalink() ) . '" data-pack-price="' . esc_attr( $pv ? $pv[0]['display_price'] : (float) $packs[0]->get_price() ) . '" data-pack-name="' . esc_attr( mpc_clean_title( $packs[0]->get_name() ) ) . '"';
+			}
+			$key = array_search( (int) $product->get_id(), mpc_flavour_products(), true );
+			if ( false !== $key ) {
+				$attrs .= ' data-flavour-key="' . esc_attr( $key ) . '"';
+			}
 		}
-	}
-	$out = '<div class="mpc-bundle"' . $attrs . '>';
+		$out = '<div class="mpc-bundle"' . $attrs . '>';
 
-	/* Regalo del pack: tarjeta incluida. */
-	if ( $is_pack ) {
-		$title  = mpc_clean_title( $product->get_name() );
-		$extras = array_slice( array_map( 'trim', explode( '+', $title ) ), 1 );
-		if ( $extras ) {
-			$gp    = (int) mpc_opt( 'gift_product' ) ? wc_get_product( (int) mpc_opt( 'gift_product' ) ) : null;
-			$out  .= '<section class="mpc-q mpc-q--gift"><h3 class="mpc-q__t">Tu regalo <small>Incluido en el pack</small></h3><div class="mpc-cards"><div class="mpc-card mpc-card--gift"><span class="mpc-card__img">' . ( $gp ? wp_kses_post( $gp->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ) : '<span class="mpc-gift__ico">' . mpc_icon( 'ship' ) . '</span>' ) . '<span class="mpc-card__ribbon">Gratis</span></span><span class="mpc-card__name">' . esc_html( mb_strtoupper( mb_substr( $extras[0], 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $extras[0], 1, null, 'UTF-8' ) ) . '</span><span class="mpc-card__price is-free">Incluido</span></div></div></section>';
+		/* Regalo del pack: tarjeta incluida. */
+		if ( $is_pack ) {
+			$title  = mpc_clean_title( $product->get_name() );
+			$extras = array_slice( array_map( 'trim', explode( '+', $title ) ), 1 );
+			if ( $extras ) {
+				$gp   = (int) mpc_opt( 'gift_product' ) ? wc_get_product( (int) mpc_opt( 'gift_product' ) ) : null;
+				$out .= '<section class="mpc-q mpc-q--gift"><h3 class="mpc-q__t">Tu regalo <small>Incluido en el pack</small></h3><div class="mpc-cards"><div class="mpc-card mpc-card--gift"><span class="mpc-card__img">' . ( $gp ? wp_kses_post( $gp->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ) : '<span class="mpc-gift__ico">' . mpc_icon( 'ship' ) . '</span>' ) . '<span class="mpc-card__ribbon">Gratis</span></span><span class="mpc-card__name">' . esc_html( mb_strtoupper( mb_substr( $extras[0], 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $extras[0], 1, null, 'UTF-8' ) ) . '</span><span class="mpc-card__price is-free">Incluido</span></div></div></section>';
+			}
 		}
-	}
-	foreach ( mpc_bundle_steps( $product ) as $key => $st ) {
-		$out .= '<section class="mpc-q mpc-q--' . esc_attr( $key ) . '"><h3 class="mpc-q__t">' . esc_html( $st['title'] ) . ' <small>' . esc_html( $st['hint'] ) . '</small></h3><div class="mpc-cards">';
-		foreach ( $st['items'] as $p ) {
-			$out .= mpc_card_html( $p );
+		foreach ( mpc_bundle_steps( $product ) as $key => $st ) {
+			$out .= '<section class="mpc-q mpc-q--' . esc_attr( $key ) . '"><h3 class="mpc-q__t">' . esc_html( $st['title'] ) . ' <small>' . esc_html( $st['hint'] ) . '</small></h3><div class="mpc-cards">';
+			foreach ( $st['items'] as $p ) {
+				$out .= mpc_card_html( $p );
+			}
+			$out .= '</div></section>';
 		}
-		$out .= '</div></section>';
-	}
-	$out .= '<div class="mpc-bundle__sum" hidden><span class="mpc-bundle__sumt"><small>Tu pedido</small><span class="mpc-chips" data-mpc-sumtxt></span></span><strong>+ <span data-mpc-extras>0,00 €</span></strong></div></div>';
-	echo $out; // phpcs:ignore WordPress.Security.EscapeOutput
-}, 5 );
+		$out .= '<div class="mpc-bundle__sum" hidden><span class="mpc-bundle__sumt"><small>Tu pedido</small><span class="mpc-chips" data-mpc-sumtxt></span></span><strong>+ <span data-mpc-extras>0,00 €</span></strong></div></div>';
+		echo $out; // phpcs:ignore WordPress.Security.EscapeOutput
+	},
+	5
+);
 
-/** Productos que se pueden pedir desde el bundle (los pasos + los extras generales). */
+/**
+ * IDs de extras que se pueden añadir junto a un producto (lista blanca).
+ *
+ * @param WC_Product|null $product Producto.
+ * @return int[]
+ */
 function mpc_bundle_allowed_ids( $product = null ) {
 	$ids = mpc_addon_ids();
 	foreach ( mpc_bundle_steps( $product ) as $st ) {
@@ -312,27 +395,48 @@ function mpc_bundle_allowed_ids( $product = null ) {
 	return array_map( 'intval', array_unique( $ids ) );
 }
 
-/** Al añadir el pack, se añaden también salsa, pan, queso y demás extras elegidos. */
-add_action( 'woocommerce_add_to_cart', function ( $cart_key, $product_id ) {
-	static $busy = false;
-	if ( $busy ) {
-		return;
-	}
-	$p = wc_get_product( $product_id );
-	if ( ! $p || ( ! mpc_is_pack( $p ) && ! mpc_is_single_burger( $p ) ) ) {
-		return;
-	}
-	$want = array(); // id => cantidad
-	if ( ! empty( $_REQUEST['mpc_extra'] ) && is_array( $_REQUEST['mpc_extra'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-		foreach ( wp_unslash( $_REQUEST['mpc_extra'] ) as $id => $qty ) { // phpcs:ignore WordPress.Security.NonceVerification
+/**
+ * Extras que el cliente ha marcado en la ficha (ID => cantidad).
+ *
+ * El formulario de añadir al carrito de WooCommerce no lleva nonce (así funciona su propio flujo), por eso aquí
+ * todo se sanea con absint, se limita la cantidad y, al añadir, solo se aceptan los IDs de la lista blanca del producto.
+ *
+ * @return int[] Cantidades por ID de producto.
+ */
+function mpc_requested_extras() {
+	$want = array();
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- Ver el comentario de la función.
+	if ( ! empty( $_REQUEST['mpc_extra'] ) && is_array( $_REQUEST['mpc_extra'] ) ) {
+		foreach ( wp_unslash( $_REQUEST['mpc_extra'] ) as $id => $qty ) {
 			if ( absint( $qty ) > 0 ) {
 				$want[ absint( $id ) ] = min( 10, absint( $qty ) );
 			}
 		}
 	}
-	if ( ! empty( $_REQUEST['mpc_sauce'] ) && absint( $_REQUEST['mpc_sauce'] ) > 0 ) { // phpcs:ignore WordPress.Security.NonceVerification
-		$want[ absint( $_REQUEST['mpc_sauce'] ) ] = 1; // phpcs:ignore WordPress.Security.NonceVerification
+	if ( ! empty( $_REQUEST['mpc_sauce'] ) && absint( $_REQUEST['mpc_sauce'] ) > 0 ) {
+		$want[ absint( $_REQUEST['mpc_sauce'] ) ] = 1;
 	}
+	// phpcs:enable
+	return $want;
+}
+
+/**
+ * Al añadir el pack, una bandeja o un producto básico, se añaden también los extras elegidos.
+ *
+ * @param string $cart_key   Clave de la línea del carrito (no se usa).
+ * @param int    $product_id ID del producto añadido.
+ * @return void
+ */
+function mpc_add_requested_extras( $cart_key, $product_id ) {
+	static $busy = false;
+	if ( $busy ) {
+		return;
+	}
+	$p = wc_get_product( $product_id );
+	if ( ! $p || ! ( mpc_is_pack( $p ) || mpc_is_single_burger( $p ) || mpc_is_basic( $p ) ) ) {
+		return;
+	}
+	$want = mpc_requested_extras();
 	if ( ! $want ) {
 		return;
 	}
@@ -341,18 +445,24 @@ add_action( 'woocommerce_add_to_cart', function ( $cart_key, $product_id ) {
 	$added   = 0;
 	foreach ( $want as $id => $qty ) {
 		if ( in_array( $id, $allowed, true ) && WC()->cart->add_to_cart( $id, $qty ) ) {
-			$added++;
+			++$added;
 		}
 	}
 	$busy = false;
 	if ( $added ) {
+		/* translators: %d: número de extras añadidos al pedido. */
 		wc_add_notice( sprintf( _n( 'También hemos añadido %d extra a tu pedido.', 'También hemos añadido %d extras a tu pedido.', $added, 'meatprotein-conversion' ), $added ) );
 	}
-}, 20, 2 );
+}
+add_action( 'woocommerce_add_to_cart', 'mpc_add_requested_extras', 20, 2 );
 
-/* ---------------------------------------------------------------------------------------------
-   2) Bloque «Completa tu pedido» reutilizable: carrito lateral, carrito y checkout.
-   --------------------------------------------------------------------------------------------- */
+/**
+ * Bloque «Completa tu pedido» reutilizable: carrito lateral, carrito y checkout.
+ *
+ * @param string $context Dónde se pinta: cart, checkout o side.
+ * @param int    $limit   Máximo de extras.
+ * @return string HTML del bloque, o cadena vacía si no hay nada que ofrecer.
+ */
 function mpc_upsell_html( $context = 'cart', $limit = 3 ) {
 	$list = mpc_addons_available( $limit );
 	if ( ! $list || ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
@@ -374,22 +484,38 @@ function mpc_upsell_html( $context = 'cart', $limit = 3 ) {
 }
 
 /* Carrito lateral: el bloque vive en el pie y el JS lo coloca bajo los productos; se refresca con los fragmentos. */
-add_action( 'wp_footer', function () {
-	if ( ! is_admin() && ! is_checkout() && ! is_cart() ) {
-		echo mpc_upsell_html( 'side', 3 ) ?: '<div class="mpc-upsell mpc-upsell--side" hidden></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+add_action(
+	'wp_footer',
+	function () {
+		if ( ! is_admin() && ! is_checkout() && ! is_cart() ) {
+			$side = mpc_upsell_html( 'side', 3 );
+			echo '' !== $side ? $side : '<div class="mpc-upsell mpc-upsell--side" hidden></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		}
+	},
+	4
+);
+add_filter(
+	'woocommerce_add_to_cart_fragments',
+	function ( $f ) {
+		$side                   = mpc_upsell_html( 'side', 3 );
+		$f['.mpc-upsell--side'] = '' !== $side ? $side : '<div class="mpc-upsell mpc-upsell--side" hidden></div>';
+		return $f;
 	}
-}, 4 );
-add_filter( 'woocommerce_add_to_cart_fragments', function ( $f ) {
-	$f['.mpc-upsell--side'] = mpc_upsell_html( 'side', 3 ) ?: '<div class="mpc-upsell mpc-upsell--side" hidden></div>';
-	return $f;
-} );
+);
 
 /* Carrito: bajo la tabla. */
-add_action( 'woocommerce_after_cart_table', function () {
-	echo mpc_upsell_html( 'cart', 4 ); // phpcs:ignore WordPress.Security.EscapeOutput
-} );
+add_action(
+	'woocommerce_after_cart_table',
+	function () {
+		echo mpc_upsell_html( 'cart', 4 ); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+);
 
 /* Checkout: una sola sugerencia, justo antes del pago, la de menor precio de las más vendidas. */
-add_action( 'woocommerce_review_order_before_payment', function () {
-	echo mpc_upsell_html( 'checkout', 1 ); // phpcs:ignore WordPress.Security.EscapeOutput
-}, 5 );
+add_action(
+	'woocommerce_review_order_before_payment',
+	function () {
+		echo mpc_upsell_html( 'checkout', 1 ); // phpcs:ignore WordPress.Security.EscapeOutput
+	},
+	5
+);

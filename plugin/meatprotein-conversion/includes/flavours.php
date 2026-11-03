@@ -3,45 +3,56 @@
  * Cada sabor del pack apunta a su hamburguesa: la imagen de ingredientes, peso y valores nutricionales
  * que ya está en la descripción de ese producto (así no se duplican datos).
  * Clave = nombre del sabor normalizado (minúsculas, sin tildes, «&» = «y»), igual que en el JS.
+ *
+ * @package Meatprotein_Conversion
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Correspondencia entre el nombre normalizado de cada sabor y el ID de su hamburguesa.
+ *
+ * @return mixed Resultado.
+ */
 function mpc_flavour_products() {
-	return apply_filters( 'mpc_flavour_products', array(
-		'chorizo'                       => 2499,
-		'barbacoa'                      => 5098,
-		'potro trufa'                   => 13621,
-		'potro'                         => 2458,
-		'espinacas y queso'             => 2427,
-		'albondigas'                    => 2500,
-		'pollo trufa'                   => 18999,
-		'miel y tomate'                 => 43882,
-		'miel con tomate'               => 43882,
-		'pizza'                         => 2455,
-		'pechuga con puerro y calabaza' => 34859,
-		'pollo'                         => 2462,
-		'chees bacon'                   => 2457,
-		'cheese bacon'                  => 2457,
-		'rulo de cabra'                 => 2459,
-		'ternera queso'                 => 2450,
-		'ternera queso y trufa'         => 20065,
-		'ternera y queso trufa'         => 20065,
-		'ternera cebolla caramelizada'  => 36141,
-		'ternera cebolla'               => 36141,
-		'ternera'                       => 2502,
-		'mexican'                       => 2461,
-		'bacon'                         => 4142,
-		'kebab'                         => 2501,
-		'pavo cebolla'                  => 34470,
-		'pavo con cebolla caramelizada' => 34470,
-		'pavo'                          => 2463,
-		'chicken mango'                 => 45578,
-		'satay'                         => 2498,
-		'parrilla'                      => 2460,
-		'pepinillo con queso cheddar'   => 42057,
-	) );
+	return apply_filters(
+		'mpc_flavour_products',
+		array(
+			'chorizo'                       => 2499,
+			'barbacoa'                      => 5098,
+			'potro trufa'                   => 13621,
+			'potro'                         => 2458,
+			'espinacas y queso'             => 2427,
+			'albondigas'                    => 2500,
+			'pollo trufa'                   => 18999,
+			'miel y tomate'                 => 43882,
+			'miel con tomate'               => 43882,
+			'pizza'                         => 2455,
+			'pechuga con puerro y calabaza' => 34859,
+			'pollo'                         => 2462,
+			'chees bacon'                   => 2457,
+			'cheese bacon'                  => 2457,
+			'rulo de cabra'                 => 2459,
+			'ternera queso'                 => 2450,
+			'ternera queso y trufa'         => 20065,
+			'ternera y queso trufa'         => 20065,
+			'ternera cebolla caramelizada'  => 36141,
+			'ternera cebolla'               => 36141,
+			'ternera'                       => 2502,
+			'mexican'                       => 2461,
+			'bacon'                         => 4142,
+			'kebab'                         => 2501,
+			'pavo cebolla'                  => 34470,
+			'pavo con cebolla caramelizada' => 34470,
+			'pavo'                          => 2463,
+			'chicken mango'                 => 45578,
+			'satay'                         => 2498,
+			'parrilla'                      => 2460,
+			'pepinillo con queso cheddar'   => 42057,
+		)
+	);
 }
 
 /** Datos para el JS: título, imagen de información y enlace de cada sabor. */
@@ -54,15 +65,15 @@ function mpc_flavours_data() {
 		}
 		$m = array( '', '' );
 		preg_match( '/<img[^>]+src="([^"]+)"/i', $p->post_content, $m );
-		$out[ $key ] = array(
+		$out[ $key ]      = array(
 			't' => html_entity_decode( wp_strip_all_tags( get_the_title( $id ) ), ENT_QUOTES, 'UTF-8' ),
 			'i' => esc_url_raw( $m[1] ),
 			'u' => get_permalink( $id ),
 		);
-		$avail          = mpc_available_trays( $id );
+		$avail            = mpc_available_trays( $id );
 		$out[ $key ]['s'] = ( null === $avail || $avail > 0 ) ? 1 : 0;
 		$out[ $key ]['m'] = null === $avail ? 99 : (int) $avail;
-		$nut = mpc_flavour_nutrition( $id );
+		$nut              = mpc_flavour_nutrition( $id );
 		if ( $nut ) {
 			$out[ $key ]['d'] = $nut;
 		}
@@ -78,18 +89,29 @@ function mpc_nutrition_data() {
 	static $data = null;
 	if ( null === $data ) {
 		$file = MPC_DIR . 'data/flavours.json';
-		$data = is_readable( $file ) ? json_decode( (string) file_get_contents( $file ), true ) : array();
+		$data = is_readable( $file ) ? wp_json_file_decode( $file, array( 'associative' => true ) ) : array();
 		$data = is_array( $data ) ? $data : array();
 	}
 	return $data;
 }
 
+/**
+ * Datos nutricionales de un producto.
+ *
+ * @param int $product_id ID de producto.
+ * @return mixed Resultado.
+ */
 function mpc_flavour_nutrition( $product_id ) {
 	$all = mpc_nutrition_data();
 	return $all[ (string) $product_id ] ?? null;
 }
 
-/** «22,2» -> 22.2 */
+/**
+ * Convierte «22,2» en 22.2.
+ *
+ * @param string $s Texto con un número.
+ * @return float
+ */
 function mpc_num( $s ) {
 	return (float) str_replace( ',', '.', (string) $s );
 }
@@ -103,7 +125,12 @@ function mpc_max_protein() {
 	return (int) floor( $max );
 }
 
-/** Nombre corto para la tabla: «Hamburguesa de pollo sabor bacon» pasa a «Pollo sabor bacon». */
+/**
+ * Nombre corto para la tabla nutricional.
+ *
+ * @param string $title Título.
+ * @return string
+ */
 function mpc_table_name( $title ) {
 	$t = preg_replace( '/\s*NEW!?$/u', '', $title );
 	$t = preg_replace( '/^Hamburguesa\s+(de\s+sabor\s+|de\s+|sabor\s+)?/iu', '', $t );
@@ -120,7 +147,7 @@ function mpc_nutrition_table_html() {
 			continue;
 		}
 		$seen[ $id ] = true;
-		$d = mpc_flavour_nutrition( $id );
+		$d           = mpc_flavour_nutrition( $id );
 		if ( ! $d ) {
 			continue;
 		}
@@ -129,13 +156,16 @@ function mpc_nutrition_table_html() {
 	if ( ! $rows ) {
 		return '';
 	}
-	uasort( $rows, function ( $a, $b ) {
-		return mpc_num( $b[1]['prot'] ) <=> mpc_num( $a[1]['prot'] );
-	} );
+	uasort(
+		$rows,
+		function ( $a, $b ) {
+			return mpc_num( $b[1]['prot'] ) <=> mpc_num( $a[1]['prot'] );
+		}
+	);
 	$h = '<div class="mpc-table-wrap"><table class="mpc-table"><thead><tr><th>Hamburguesa</th><th>Kcal</th><th>Proteínas</th><th>Grasas</th><th>Hidratos</th><th>Sal</th></tr></thead><tbody>';
 	foreach ( $rows as $id => $r ) {
 		list( $title, $d ) = $r;
-		$h .= '<tr><th scope="row">' . esc_html( mpc_table_name( $title ) ) . '</th><td>' . esc_html( $d['kcal'] ) . '</td><td>' . esc_html( $d['prot'] ) . ' g</td><td>' . esc_html( $d['fat'] ) . ' g</td><td>' . esc_html( $d['carb'] ) . ' g</td><td>' . esc_html( $d['salt'] ) . ' g</td></tr>';
+		$h                .= '<tr><th scope="row">' . esc_html( mpc_table_name( $title ) ) . '</th><td>' . esc_html( $d['kcal'] ) . '</td><td>' . esc_html( $d['prot'] ) . ' g</td><td>' . esc_html( $d['fat'] ) . ' g</td><td>' . esc_html( $d['carb'] ) . ' g</td><td>' . esc_html( $d['salt'] ) . ' g</td></tr>';
 	}
 	return $h . '</tbody></table></div><p class="mpc-table__note">Valores por 100 g. Cada hamburguesa pesa 100 g y cada bandeja trae 4. Las albóndigas vienen en bandeja de 400 g.</p>';
 }

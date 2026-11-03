@@ -1,9 +1,20 @@
 <?php
+/**
+ * Funciones de apoyo.
+ *
+ * @package Meatprotein_Conversion
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/** Un producto es un «pack» si es variable y tiene varios atributos «Bandeja N». */
+/**
+ * Indica si un producto es el pack de 10 bandejas.
+ *
+ * @param WC_Product|null $product Producto.
+ * @return bool
+ */
 function mpc_is_pack( $product ) {
 	if ( ! $product instanceof WC_Product || ! $product->is_type( 'variable' ) ) {
 		return false;
@@ -11,13 +22,18 @@ function mpc_is_pack( $product ) {
 	$n = 0;
 	foreach ( $product->get_attributes() as $attr ) {
 		if ( $attr->get_variation() && preg_match( '/^bandeja\s*\d+$/i', trim( $attr->get_name() ) ) ) {
-			$n++;
+			++$n;
 		}
 	}
 	return $n >= 4;
 }
 
-/** Nombre limpio para mostrar: sin emojis, sin «PROMOCIÓN», en minúsculas con la primera en mayúscula. */
+/**
+ * Título limpio: sin emojis, sin «PROMOCIÓN» y con erratas corregidas.
+ *
+ * @param string $title Título.
+ * @return string
+ */
 function mpc_clean_title( $title ) {
 	$t = html_entity_decode( wp_strip_all_tags( $title ), ENT_QUOTES, 'UTF-8' );
 	$t = preg_replace( '/[\x{1F000}-\x{1FFFF}\x{2600}-\x{27BF}\x{FE0F}]/u', '', $t );
@@ -30,6 +46,12 @@ function mpc_clean_title( $title ) {
 	return str_ireplace( 'meatprotein', 'Meatprotein', $t );
 }
 
+/**
+ * Icono SVG en línea.
+ *
+ * @param string $name Nombre.
+ * @return string
+ */
 function mpc_icon( $name ) {
 	$p = array(
 		'truck'  => '<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/>',
@@ -43,28 +65,38 @@ function mpc_icon( $name ) {
 	return '<svg class="mpc-i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . ( $p[ $name ] ?? '' ) . '</svg>';
 }
 
-/** URL de una página por slug, o vacío. */
+/**
+ * URL de una página por slug.
+ *
+ * @param string $slug Slug de la página.
+ * @return string
+ */
 function mpc_page_url( $slug ) {
 	$p = get_page_by_path( $slug );
 	return $p ? get_permalink( $p ) : '';
 }
 
-/** Preguntas frecuentes de compra (página de packs y pestaña de la ficha). */
+/**
+ * Preguntas frecuentes de compra.
+ *
+ * @param string $context Contexto: burger o basic.
+ * @return string
+ */
 function mpc_faq_html( $context = 'burger' ) {
 	$items = array(
-		'¿Puedo repetir sabores?'          => 'Sí. Eliges 10 bandejas entre todos los sabores disponibles y puedes repetir los que más te gusten.',
-		'¿Cómo llega el pedido?'           => 'Refrigerado con SEUR, en 24-48 h. Al recibirlo, congela lo que no vayas a comer esos días.',
-		'¿Cuánto duran congeladas?'        => 'Hasta 12 meses en el congelador y unas 72 horas en la nevera.',
-		'¿Qué pasa si algo llega mal?'     => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
-		'¿Y si se agota un sabor?'         => 'Solo aparecen los sabores con stock en ese momento, así que no pedirás nada que no podamos enviarte.',
-		'¿Cuándo sale mi pedido?'          => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
+		'¿Puedo repetir sabores?'      => 'Sí. Eliges 10 bandejas entre todos los sabores disponibles y puedes repetir los que más te gusten.',
+		'¿Cómo llega el pedido?'       => 'Refrigerado con SEUR, en 24-48 h. Al recibirlo, congela lo que no vayas a comer esos días.',
+		'¿Cuánto duran congeladas?'    => 'Hasta 12 meses en el congelador y unas 72 horas en la nevera.',
+		'¿Qué pasa si algo llega mal?' => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
+		'¿Y si se agota un sabor?'     => 'Solo aparecen los sabores con stock en ese momento, así que no pedirás nada que no podamos enviarte.',
+		'¿Cuándo sale mi pedido?'      => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
 	);
 	if ( 'basic' === $context ) {
 		$items = array(
-			'¿Cuándo sale mi pedido?'      => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
-			'¿Cuándo es gratis el envío?'  => 'Con 10 bandejas de hamburguesas o más, o en pedidos desde ' . (int) mpc_opt( 'free_min' ) . ' €. Por debajo, el envío cuesta ' . (int) mpc_opt( 'ship_cost' ) . ' € a toda la Península.',
+			'¿Cuándo sale mi pedido?'           => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
+			'¿Cuándo es gratis el envío?'       => 'Con 10 bandejas de hamburguesas o más, o en pedidos desde ' . (int) mpc_opt( 'free_min' ) . ' €. Por debajo, el envío cuesta ' . (int) mpc_opt( 'ship_cost' ) . ' € a toda la Península.',
 			'¿Puedo juntarlo con hamburguesas?' => 'Sí. Todo va en el mismo pedido y el mismo envío.',
-			'¿Qué pasa si algo llega mal?' => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
+			'¿Qué pasa si algo llega mal?'      => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
 		);
 	}
 	$h = '<div class="mpc-faq__list">';
@@ -72,4 +104,44 @@ function mpc_faq_html( $context = 'burger' ) {
 		$h .= '<details><summary>' . esc_html( $q ) . '</summary><p>' . esc_html( $a ) . '</p></details>';
 	}
 	return $h . '</div>';
+}
+
+
+/**
+ * Etiquetas y atributos SVG permitidos en los iconos.
+ *
+ * @return array Reglas para wp_kses().
+ */
+function mpc_svg_kses() {
+	return array(
+		'svg'    => array(
+			'class'           => true,
+			'viewbox'         => true,
+			'width'           => true,
+			'height'          => true,
+			'fill'            => true,
+			'stroke'          => true,
+			'stroke-width'    => true,
+			'stroke-linecap'  => true,
+			'stroke-linejoin' => true,
+			'aria-hidden'     => true,
+			'xmlns'           => true,
+		),
+		'path'   => array( 'd' => true ),
+		'circle' => array(
+			'cx' => true,
+			'cy' => true,
+			'r'  => true,
+		),
+	);
+}
+
+/**
+ * Pinta un icono SVG ya filtrado.
+ *
+ * @param string $name Nombre del icono.
+ * @return void
+ */
+function mpc_the_icon( $name ) {
+	echo wp_kses( mpc_icon( $name ), mpc_svg_kses() );
 }

@@ -1,49 +1,83 @@
 <?php
+/**
+ * Ajustes del plugin.
+ *
+ * @package Meatprotein_Conversion
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Valores por defecto de los ajustes.
+ *
+ * @return array
+ */
 function mpc_defaults() {
 	return array(
-		'free_min'      => '60',
-		'addons'        => '',
-		'gift_product'  => '',
-		'step_salsa'    => '',
-		'step_pan'      => '',
-		'step_queso'    => '',
-		'ship_cost'     => '9',
-		'promo_text'    => 'Envío refrigerado en 24-48 h · Gratis con 10 bandejas o desde 60 €',
-		'promo_url'     => '',
-		'promo_ends'    => '',
-		'promo_cta'     => '',
-		'nutrition'     => '',
-		'origin'        => 'Meatprotein es la marca de Servicarfres S.L. (Calle Marino Archer 43, 48013 Bilbao), que fabrica estas hamburguesas.',
-		'certs'         => '',
-		'phone'         => '944 999 194',
-		'whatsapp'      => '',
-		'hero'          => '1',
+		'free_min'     => '60',
+		'addons'       => '',
+		'gift_product' => '',
+		'step_salsa'   => '',
+		'step_pan'     => '',
+		'step_queso'   => '',
+		'ship_cost'    => '9',
+		'promo_text'   => 'Envío refrigerado en 24-48 h · Gratis con 10 bandejas o desde 60 €',
+		'promo_url'    => '',
+		'promo_ends'   => '',
+		'promo_cta'    => '',
+		'nutrition'    => '',
+		'origin'       => 'Meatprotein es la marca de Servicarfres S.L. (Calle Marino Archer 43, 48013 Bilbao), que fabrica estas hamburguesas.',
+		'certs'        => '',
+		'phone'        => '944 999 194',
+		'whatsapp'     => '',
+		'hero'         => '1',
 	);
 }
 
+/**
+ * Lee un ajuste del plugin.
+ *
+ * @param string $key Clave del ajuste.
+ * @return mixed
+ */
 function mpc_opt( $key ) {
 	$o = wp_parse_args( (array) get_option( 'mpc_settings', array() ), mpc_defaults() );
 	return isset( $o[ $key ] ) ? $o[ $key ] : '';
 }
 
-add_action( 'admin_menu', function () {
-	add_submenu_page( 'woocommerce', 'Conversión', 'Conversión', 'manage_woocommerce', 'mpc', 'mpc_settings_page' );
-} );
-add_action( 'admin_init', function () {
-	register_setting( 'mpc', 'mpc_settings', array( 'sanitize_callback' => function ( $in ) {
-		$out = array();
-		foreach ( mpc_defaults() as $k => $d ) {
-			$v = isset( $in[ $k ] ) ? wp_unslash( $in[ $k ] ) : '';
-			$out[ $k ] = in_array( $k, array( 'nutrition', 'origin', 'certs' ), true ) ? wp_kses_post( $v ) : sanitize_text_field( $v );
-		}
-		return $out;
-	} ) );
-} );
+add_action(
+	'admin_menu',
+	function () {
+		add_submenu_page( 'woocommerce', 'Conversión', 'Conversión', 'manage_woocommerce', 'mpc', 'mpc_settings_page' );
+	}
+);
+add_action(
+	'admin_init',
+	function () {
+		register_setting(
+			'mpc',
+			'mpc_settings',
+			array(
+				'sanitize_callback' => function ( $in ) {
+					$out = array();
+					foreach ( mpc_defaults() as $k => $d ) {
+						$v = isset( $in[ $k ] ) ? wp_unslash( $in[ $k ] ) : '';
+						$out[ $k ] = in_array( $k, array( 'nutrition', 'origin', 'certs' ), true ) ? wp_kses_post( $v ) : sanitize_text_field( $v );
+					}
+					return $out;
+				},
+			)
+		);
+	}
+);
 
+/**
+ * Pinta la página de ajustes en WooCommerce > Conversión.
+ *
+ * @return mixed Resultado.
+ */
 function mpc_settings_page() {
 	$f = function ( $key, $label, $help = '', $type = 'text' ) {
 		$v = mpc_opt( $key );

@@ -1,3 +1,12 @@
+/** La barra de promoción llega en una plantilla (Betheme no llama a wp_body_open): se coloca al principio del body. */
+(function () {
+	'use strict';
+	var tpl = document.getElementById('mpc-promo-tpl');
+	if (tpl && tpl.content && tpl.content.firstElementChild && !document.querySelector('.mpc-promo')) {
+		document.body.insertBefore(tpl.content.firstElementChild, document.body.firstChild);
+	}
+})();
+
 /** Cuenta atrás de la promo y cierre de la barra superior. */
 /* Proteína y kcal bajo el precio de cada hamburguesa en las tarjetas. */
 (function () {

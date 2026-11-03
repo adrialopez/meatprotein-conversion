@@ -1,9 +1,19 @@
 <?php
-/** Barra superior con promo puntual; con fecha de fin muestra cuenta atrás y se retira sola. */
+/**
+ * Barra superior con promo puntual; con fecha de fin muestra cuenta atrás y se retira sola.
+ *
+ * @package Meatprotein_Conversion
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * HTML de la barra superior de promoción.
+ *
+ * @return string
+ */
 function mpc_promo_html() {
 	$txt = trim( (string) mpc_opt( 'promo_text' ) );
 	if ( '' === $txt ) {
@@ -29,12 +39,37 @@ function mpc_promo_html() {
 	return $h . '</p></div>';
 }
 
-/* Betheme no llama a wp_body_open: la barra se imprime en una plantilla y se coloca al principio del <body>. */
-add_action( 'wp_footer', function () {
+/**
+ * Atributos permitidos en la barra de promoción.
+ *
+ * @return array
+ */
+function mpc_promo_kses() {
+	return array(
+		'div'  => array(
+			'class'          => true,
+			'data-mpc-promo' => true,
+			'data-ends'      => true,
+		),
+		'p'    => array(),
+		'span' => array(
+			'class'          => true,
+			'data-mpc-count' => true,
+			'aria-live'      => true,
+		),
+		'a'    => array( 'href' => true ),
+	);
+}
+
+/**
+ * Betheme no llama a wp_body_open: la barra se imprime en una plantilla y ui.js la coloca al principio del body.
+ *
+ * @return void
+ */
+function mpc_print_promo() {
 	$html = mpc_promo_html();
-	if ( '' === $html ) {
-		return;
+	if ( '' !== $html ) {
+		echo '<template id="mpc-promo-tpl">' . wp_kses( $html, mpc_promo_kses() ) . '</template>';
 	}
-	echo '<template id="mpc-promo-tpl">' . $html . '</template>'; // phpcs:ignore WordPress.Security.EscapeOutput
-	echo '<script>(function(){var t=document.getElementById("mpc-promo-tpl");if(t&&t.content&&t.content.firstElementChild){document.body.insertBefore(t.content.firstElementChild,document.body.firstChild);}})();</script>';
-}, 1 );
+}
+add_action( 'wp_footer', 'mpc_print_promo', 1 );
