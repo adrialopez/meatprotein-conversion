@@ -35,6 +35,8 @@ add_action( 'mfn_hook_content_before', function () {
 	$photo = apply_filters( 'mpc_hero_image', 'https://meatprotein.eu/wp-content/uploads/2024/06/meat-protein-home-scaled.jpg' );
 	$pimg  = wp_get_attachment_image_url( $pack->get_image_id(), 'woocommerce_thumbnail' );
 	$price = wp_strip_all_tags( wc_price( $sale ) );
+	$packs_url = mpc_page_url( 'packs' );
+	$quality   = mpc_page_url( 'controles-de-calidad' );
 	?>
 	<section class="mpc-hero" aria-labelledby="mpc-hero-t">
 		<div class="mpc-hero__in">
@@ -60,7 +62,7 @@ add_action( 'mfn_hook_content_before', function () {
 						<?php endforeach; ?>
 					</ul>
 					<a class="mpc-hero__cta" href="<?php echo esc_url( $pack->get_permalink() ); ?>"><span data-mpc-hcta>Elegir mis sabores</span><b data-mpc-hprice>· <?php echo esc_html( $price ); ?></b></a>
-					<p class="mpc-hero__micro">Envío gratis desde <?php echo esc_html( $free ); ?> € · Reposición garantizada · Se congela 12 meses</p>
+					<?php if ( $packs_url ) : ?><a class="mpc-hero__more" href="<?php echo esc_url( $packs_url ); ?>">Ver todos los packs</a><?php endif; ?>
 				</div>
 			</div>
 			<div class="mpc-hero__visual">
@@ -75,5 +77,64 @@ add_action( 'mfn_hook_content_before', function () {
 			</div>
 		</div>
 	</section>
+	<div class="mpc-strip-wrap"><ul class="mpc-strip">
+		<li><?php echo mpc_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>En 24-48 h</span></li>
+		<li><?php echo mpc_icon( 'shield' ); ?><span><strong>Reposición garantizada</strong>Si llega en mal estado</span></li>
+		<li><?php echo mpc_icon( 'ship' ); ?><span><strong>Envío gratis</strong>Desde <?php echo esc_html( $free ); ?> €</span></li>
+		<li><?php echo mpc_icon( 'lab' ); ?><span><strong><?php echo $quality ? '<a href="' . esc_url( $quality ) . '">Controles de calidad</a>' : 'Controles de calidad'; ?></strong>En cada pedido</span></li>
+	</ul></div>
 	<?php
+}, 5 );
+
+/* «Compra con tranquilidad»: bloque de confianza que hero.js coloca antes de la newsletter (si no hay JS se queda al final). */
+add_action( 'mfn_hook_content_after', function () {
+	if ( ! mpc_hero_enabled() ) {
+		return;
+	}
+	$phone   = trim( (string) mpc_opt( 'phone' ) );
+	$origin  = trim( wp_strip_all_tags( (string) mpc_opt( 'origin' ) ) );
+	$links   = array_filter( array(
+		'Envíos y devoluciones' => mpc_page_url( 'envios-y-devoluciones' ),
+		'Preguntas frecuentes'  => mpc_page_url( 'faqs' ),
+		'Controles de calidad'  => mpc_page_url( 'controles-de-calidad' ),
+	) );
+	$cards   = array(
+		array( 'snow', 'Cadena de frío', 'Sale refrigerado y llega en 24-48 h con SEUR. Al recibirlo, lo congelas y dura 12 meses.' ),
+		array( 'shield', 'Si algo llega mal, lo reponemos', 'Nos hacemos cargo de la reposición o te devolvemos el dinero. Sin discusiones.' ),
+		array( 'lab', 'Controles de calidad', 'Revisamos las materias primas, la producción y cada pedido antes de enviarlo.' ),
+		array( 'check', 'Pago seguro', 'Paga con tarjeta, PayPal o Bizum.' ),
+	);
+	?>
+	<section class="mpc-assure" data-mpc-assure aria-labelledby="mpc-assure-t">
+		<div class="mpc-assure__in">
+			<h2 id="mpc-assure-t">Compra con tranquilidad</h2>
+			<ul class="mpc-assure__grid">
+				<?php foreach ( $cards as $c ) : ?>
+					<li><?php echo mpc_icon( $c[0] ); ?><strong><?php echo esc_html( $c[1] ); ?></strong><span><?php echo esc_html( $c[2] ); ?></span></li>
+				<?php endforeach; ?>
+			</ul>
+			<?php if ( $origin ) : ?><p class="mpc-assure__origin"><?php echo esc_html( $origin ); ?></p><?php endif; ?>
+			<p class="mpc-assure__links">
+				<?php
+				$out = array();
+				foreach ( $links as $label => $url ) {
+					$out[] = '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
+				}
+				if ( $phone ) {
+					$out[] = '<a href="tel:' . esc_attr( preg_replace( '/\s+/', '', $phone ) ) . '">' . esc_html( $phone ) . '</a>';
+				}
+				echo implode( ' · ', $out ); // phpcs:ignore WordPress.Security.EscapeOutput
+				?>
+			</p>
+		</div>
+	</section>
+	<?php
+}, 5 );
+
+/* Enlace «Packs» en el menú principal: lo añade ui.js si la página existe y el menú no lo trae ya. */
+add_action( 'wp_footer', function () {
+	$url = mpc_page_url( 'packs' );
+	if ( $url ) {
+		echo '<script>window.mpcNav=' . wp_json_encode( array( 'packs' => $url ) ) . ';</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
 }, 5 );

@@ -79,3 +79,26 @@
 	place(); setTimeout(place, 250);
 	if (document.fonts && document.fonts.ready) { document.fonts.ready.then(place); }
 })();
+
+
+/** «Packs» como primera opción del menú principal (escritorio y menú móvil). */
+(function () {
+	'use strict';
+	var url = window.mpcNav && window.mpcNav.packs;
+	if (!url) { return; }
+	var path = url.replace(/^https?:\/\/[^/]+/, '');
+	Array.prototype.forEach.call(document.querySelectorAll('ul.mfn-header-mainmenu, #menu-main-menu, #menu-menu-principal'), function (ul) {
+		if (ul.querySelector('a[href="' + path + '"], a[href="' + url + '"]')) { return; }
+		var first = ul.querySelector('li');
+		if (!first) { return; }
+		var li = first.cloneNode(true);
+		li.removeAttribute('id');
+		li.className = li.className.replace(/\bcurrent[-_\w]*/g, '');
+		var a = li.querySelector('a');
+		a.setAttribute('href', path || url);
+		var label = li.querySelector('.menu-label');
+		if (label) { label.textContent = 'PACKS'; } else { a.textContent = 'PACKS'; }
+		var sub = li.querySelector('.menu-sub'); if (sub) { sub.remove(); }
+		ul.insertBefore(li, first);
+	});
+})();
