@@ -60,3 +60,16 @@ hay que cotejarlos con las etiquetas reales y con la ficha técnica. Dudas detec
 - Probado en local (WooCommerce, Betheme, PHP 8.3): pedido real con BACS, stock descontado y restituido al cancelar, validación con un sabor agotado.
 - Pendiente de decidir en producción: ID del producto regalo del pack (cambia con cada promo), si se quiere un descuento por extras (hoy no hay), y los textos de entrega.
 - Limitación: los reembolsos parciales no devuelven stock de los componentes; solo la cancelación/restitución completa del pedido.
+
+## Diseño con las herramientas de Betheme (0.14.0)
+
+El diseño se monta con Betheme, no encima de él:
+
+- **Portada:** secciones del constructor con un elemento «Código» (`[mpc_hero]`, `[mpc_strip]`, `[mpc_assure]`). Se sustituyen las secciones repetidas (hero original, promo global, «Burgers saludables»).
+- **Menú:** «Packs» es un elemento real del menú principal (se ve en la barra y en el panel lateral).
+- **Panel lateral (plantilla de Betheme):** su pie (`[mpc_menu_foot]`) con envío gratis y teléfono.
+- **Fichas de producto:** pestañas, precio, garantías y barra fija salen de los elementos de la plantilla de producto de Betheme; el plugin solo añade contenido con los ganchos de WooCommerce.
+
+Aplicar en una instalación: **WooCommerce > Conversión > Aplicar diseño** (o `wp mpc layout apply`). Guarda una copia de lo anterior; **Restaurar el original** (o `wp mpc layout restore`) lo deja como estaba. Es idempotente.
+
+Productos básicos (pizzas, panes, salsas, snacks...): barra de compra fija con cantidad, «Combínalo con», garantías según el tipo de producto (lo de «refrigerado» y «congélalo» solo en hamburguesas y pizzas), fecha de salida, banner del pack y pestañas «Detalles» y «Preguntas».

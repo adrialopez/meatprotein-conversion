@@ -66,12 +66,3 @@
 		requestAnimationFrame(step);
 	}
 })();
-
-
-/** El bloque «Compra con tranquilidad» se coloca justo antes de la newsletter. */
-(function () {
-	'use strict';
-	var box = document.querySelector('[data-mpc-assure]');
-	var news = document.querySelector('.mcb-section-6b7281057');
-	if (box && news && news.parentNode) { news.parentNode.insertBefore(box, news); }
-})();

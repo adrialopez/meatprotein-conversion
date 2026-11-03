@@ -53,7 +53,7 @@
 	span.innerHTML = '';
 	span.appendChild(document.createTextNode('Pídelo ahora y '));
 	var b = document.createElement('strong'); b.textContent = when; span.appendChild(b);
-	span.appendChild(document.createTextNode('. Lo recibes en 24-48 h, refrigerado.'));
+	span.appendChild(document.createTextNode('. Lo recibes en 24-48 h' + (el.getAttribute('data-cold') === '1' ? ', refrigerado.' : '.')));
 	el.hidden = false;
 })();
 

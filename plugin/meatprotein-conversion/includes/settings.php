@@ -58,7 +58,9 @@ function mpc_settings_page() {
 		}
 		echo '</td></tr>';
 	};
-	echo '<div class="wrap"><h1>Conversión</h1><form method="post" action="options.php">';
+	echo '<div class="wrap"><h1>Conversión</h1>';
+	mpc_layout_admin_box();
+	echo '<form method="post" action="options.php">';
 	settings_fields( 'mpc' );
 	echo '<h2>Envío</h2><table class="form-table">';
 	$f( 'free_min', 'Envío gratis desde (€)', 'Importe de productos a partir del cual el envío es gratis (además, 10 bandejas o más siempre lo tienen gratis). Debe coincidir con WooCommerce.', 'number' );

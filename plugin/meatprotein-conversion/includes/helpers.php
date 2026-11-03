@@ -50,7 +50,7 @@ function mpc_page_url( $slug ) {
 }
 
 /** Preguntas frecuentes de compra (página de packs y pestaña de la ficha). */
-function mpc_faq_html() {
+function mpc_faq_html( $context = 'burger' ) {
 	$items = array(
 		'¿Puedo repetir sabores?'          => 'Sí. Eliges 10 bandejas entre todos los sabores disponibles y puedes repetir los que más te gusten.',
 		'¿Cómo llega el pedido?'           => 'Refrigerado con SEUR, en 24-48 h. Al recibirlo, congela lo que no vayas a comer esos días.',
@@ -59,6 +59,14 @@ function mpc_faq_html() {
 		'¿Y si se agota un sabor?'         => 'Solo aparecen los sabores con stock en ese momento, así que no pedirás nada que no podamos enviarte.',
 		'¿Cuándo sale mi pedido?'          => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
 	);
+	if ( 'basic' === $context ) {
+		$items = array(
+			'¿Cuándo sale mi pedido?'      => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
+			'¿Cuándo es gratis el envío?'  => 'Con 10 bandejas de hamburguesas o más, o en pedidos desde ' . (int) mpc_opt( 'free_min' ) . ' €. Por debajo, el envío cuesta ' . (int) mpc_opt( 'ship_cost' ) . ' € a toda la Península.',
+			'¿Puedo juntarlo con hamburguesas?' => 'Sí. Todo va en el mismo pedido y el mismo envío.',
+			'¿Qué pasa si algo llega mal?' => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
+		);
+	}
 	$h = '<div class="mpc-faq__list">';
 	foreach ( $items as $q => $a ) {
 		$h .= '<details><summary>' . esc_html( $q ) . '</summary><p>' . esc_html( $a ) . '</p></details>';

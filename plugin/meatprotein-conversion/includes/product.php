@@ -87,15 +87,30 @@ add_action( 'woocommerce_after_add_to_cart_form', function () {
 		'Controles de calidad'  => mpc_page_url( 'controles-de-calidad' ),
 	) );
 	?>
-	<p class="mpc-eta" data-mpc-eta hidden><?php echo mpc_icon( 'truck' ); ?><span></span></p>
+	<?php $cold = $product instanceof WC_Product && has_term( array( 'hamburguesas', 'pizza-fitness' ), 'product_cat', $product->get_id() ); ?>
+	<p class="mpc-eta" data-mpc-eta<?php echo $cold ? ' data-cold="1"' : ''; ?> hidden><?php echo mpc_icon( 'truck' ); ?><span></span></p>
 	<ul class="mpc-trust">
-		<li><?php echo mpc_icon( 'truck' ); ?><span><strong>Llega refrigerado con SEUR</strong>En 24-48 h, de lunes a jueves antes de las 14:00.</span></li>
+		<li><?php echo mpc_icon( 'truck' ); ?><span><strong><?php echo $cold ? 'Llega refrigerado con SEUR' : 'Envío con SEUR en 24-48 h'; ?></strong><?php echo $cold ? 'En 24-48 h, de lunes a jueves antes de las 14:00.' : 'Enviamos de lunes a jueves antes de las 14:00.'; ?></span></li>
 		<?php if ( ! mpc_is_pack( $product ) ) : ?>
 		<li><?php echo mpc_icon( 'ship' ); ?><span><strong>Envío gratis con 10 bandejas o desde <?php echo esc_html( $free ); ?> €</strong>Por debajo, <?php echo esc_html( $ship ); ?> € a toda la Península.</span></li>
 		<?php endif; ?>
 		<li><?php echo mpc_icon( 'shield' ); ?><span><strong>Si llega en mal estado, lo reponemos</strong>O te devolvemos el dinero del pedido.</span></li>
+		<?php if ( $cold ) : ?>
 		<li><?php echo mpc_icon( 'snow' ); ?><span><strong>Congélalas al recibirlas</strong>Duran 12 meses en el congelador y unas 72 h en la nevera.</span></li>
+		<?php endif; ?>
 	</ul>
+	<?php
+	if ( $product instanceof WC_Product && mpc_is_basic( $product ) ) {
+		$packs = mpc_get_packs();
+		if ( $packs ) {
+			$pk   = $packs[0];
+			$pv   = $pk->get_available_variations();
+			$pp   = $pv ? (float) $pv[0]['display_price'] : (float) $pk->get_price();
+			$pimg = wp_get_attachment_image_url( $pk->get_image_id(), 'woocommerce_thumbnail' );
+			echo '<a class="mpc-packban" href="' . esc_url( $pk->get_permalink() ) . '">' . ( $pimg ? '<img src="' . esc_url( $pimg ) . '" alt="" loading="lazy" width="300" height="300">' : '' ) . '<span><b>¿Hamburguesas? Pack de 10 + 1 de regalo</b><span>Desde ' . wp_kses_post( wc_price( $pp ) ) . ' · envío gratis</span></span></a>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		}
+	}
+	?>
 	<p class="mpc-trust__links">
 		<?php
 		$out = array();
@@ -233,35 +248,40 @@ add_filter( 'the_content', function ( $content ) {
 			'open'  => true,
 		);
 	}
+	$cold = has_term( array( 'hamburguesas', 'pizza-fitness' ), 'product_cat', $product->get_id() );
+	$flow = '<li>' . mpc_icon( 'truck' ) . '<span><strong>' . ( $cold ? 'Refrigerado con SEUR' : 'Envío con SEUR' ) . '</strong>' . ( $cold ? 'En transporte refrigerado y en 24-48 h.' : 'En 24-48 h.' ) . '</span></li>'
+		. '<li>' . mpc_icon( 'ship' ) . '<span><strong>Envíos de lunes a jueves</strong>Lo que pidas el jueves por la tarde o el viernes sale el lunes, para preservar la calidad.</span></li>';
+	if ( $cold ) {
+		$flow .= '<li>' . mpc_icon( 'snow' ) . '<span><strong>Congélalo al recibirlo</strong>12 meses en el congelador; en la nevera, unas 72 horas.</span></li>';
+	}
+	$flow    .= '<li>' . mpc_icon( 'shield' ) . '<span><strong>Si llega mal, lo reponemos</strong>Nos hacemos cargo de la devolución o de la reposición del pedido.</span></li>';
 	$blocks[] = array(
-		'title' => 'Cómo llega y cómo se conserva',
-		'body'  => '<ul class="mpc-flow">'
-			. '<li>' . mpc_icon( 'truck' ) . '<span><strong>Refrigerado con SEUR</strong>En transporte refrigerado y en 24-48 h.</span></li>'
-			. '<li>' . mpc_icon( 'ship' ) . '<span><strong>Envíos de lunes a jueves</strong>Lo que pidas el jueves por la tarde o el viernes sale el lunes, para preservar la calidad.</span></li>'
-			. '<li>' . mpc_icon( 'snow' ) . '<span><strong>Congélalo al recibirlo</strong>12 meses en el congelador; en la nevera, unas 72 horas.</span></li>'
-			. '<li>' . mpc_icon( 'shield' ) . '<span><strong>Si llega mal, lo reponemos</strong>Nos hacemos cargo de la devolución o de la reposición del pedido.</span></li>'
-			. '</ul>',
+		'title' => 'Cómo llega' . ( $cold ? ' y cómo se conserva' : '' ),
+		'body'  => '<ul class="mpc-flow">' . $flow . '</ul>',
 		'open'  => true,
 	);
-	$cert = trim( (string) mpc_opt( 'certs' ) );
-	$q    = mpc_page_url( 'controles-de-calidad' );
-	$blocks[] = array(
-		'title' => 'Calidad y seguridad',
-		'body'  => '<p>Controlamos las materias primas en la recepción, el proceso de producción y el peso y aspecto de cada pedido antes de enviarlo. Los alérgenos están identificados y documentados en cada receta.</p>' . ( $cert ? wpautop( $cert ) : '' ) . ( $q ? '<p><a href="' . esc_url( $q ) . '">Ver los controles de calidad</a></p>' : '' ),
-		'open'  => false,
-	);
-	$nut_html = mpc_nutrition_table_html();
-	$nut      = trim( (string) mpc_opt( 'nutrition' ) );
-	if ( ! mpc_is_single_burger( $product ) && ! $is_pack && ( $nut_html || $nut ) ) {
+	/* Calidad, nutrición genérica y fabricante hablan de la producción propia (hamburguesas y pizzas): no se muestran en productos de otras marcas. */
+	if ( $cold || ! mpc_is_basic( $product ) ) {
+		$cert     = trim( (string) mpc_opt( 'certs' ) );
+		$q        = mpc_page_url( 'controles-de-calidad' );
 		$blocks[] = array(
-			'title' => 'Información nutricional y alérgenos',
-			'body'  => '<p>Pulsa «Info» junto a cada sabor en el selector para ver sus ingredientes y alérgenos.</p>' . $nut_html . ( $nut ? wpautop( $nut ) : '' ),
+			'title' => 'Calidad y seguridad',
+			'body'  => '<p>Controlamos las materias primas en la recepción, el proceso de producción y el peso y aspecto de cada pedido antes de enviarlo. Los alérgenos están identificados y documentados en cada receta.</p>' . ( $cert ? wpautop( $cert ) : '' ) . ( $q ? '<p><a href="' . esc_url( $q ) . '">Ver los controles de calidad</a></p>' : '' ),
 			'open'  => false,
 		);
-	}
-	$origin = trim( (string) mpc_opt( 'origin' ) );
-	if ( $origin ) {
-		$blocks[] = array( 'title' => 'Quién lo fabrica', 'body' => wpautop( $origin ), 'open' => false );
+		$nut_html = mpc_nutrition_table_html();
+		$nut      = trim( (string) mpc_opt( 'nutrition' ) );
+		if ( ! mpc_is_single_burger( $product ) && ! $is_pack && ! mpc_is_basic( $product ) && ( $nut_html || $nut ) ) {
+			$blocks[] = array(
+				'title' => 'Información nutricional y alérgenos',
+				'body'  => '<p>Pulsa «Info» junto a cada sabor en el selector para ver sus ingredientes y alérgenos.</p>' . $nut_html . ( $nut ? wpautop( $nut ) : '' ),
+				'open'  => false,
+			);
+		}
+		$origin = trim( (string) mpc_opt( 'origin' ) );
+		if ( $origin ) {
+			$blocks[] = array( 'title' => 'Quién lo fabrica', 'body' => wpautop( $origin ), 'open' => false );
+		}
 	}
 
 	$html = '<div class="mpc-info">';
@@ -278,6 +298,9 @@ add_filter( 'the_title', function ( $title, $id = 0 ) {
 		return $title;
 	}
 	$p = wc_get_product( $id );
+	if ( $p && mpc_is_basic( $p ) ) {
+		return mpc_nice_name( $title );
+	}
 	if ( ! $p || ! mpc_is_pack( $p ) ) {
 		return $title;
 	}
@@ -291,7 +314,7 @@ add_filter( 'the_title', function ( $title, $id = 0 ) {
    sin «Valoraciones» mientras no haya ninguna, y con valores nutricionales y preguntas frecuentes. */
 add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
 	global $product;
-	if ( ! $product instanceof WC_Product || ! ( mpc_is_pack( $product ) || mpc_is_single_burger( $product ) ) ) {
+	if ( ! $product instanceof WC_Product || ! ( mpc_is_pack( $product ) || mpc_is_single_burger( $product ) || mpc_is_basic( $product ) ) ) {
 		return $tabs;
 	}
 	$is_pack = mpc_is_pack( $product );
@@ -318,7 +341,8 @@ add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
 		'title'    => 'Preguntas',
 		'priority' => 25,
 		'callback' => function () {
-			echo '<div class="mpc-faq mpc-faq--tab">' . mpc_faq_html() . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+			global $product;
+			echo '<div class="mpc-faq mpc-faq--tab">' . mpc_faq_html( $product instanceof WC_Product && mpc_is_basic( $product ) ? 'basic' : 'burger' ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 		},
 	);
 	return $tabs;
@@ -333,6 +357,8 @@ add_filter( 'body_class', function ( $classes ) {
 			$classes[] = 'mpc-pack-page';
 		} elseif ( $p && mpc_is_single_burger( $p ) ) {
 			$classes[] = 'mpc-single-page';
+		} elseif ( $p && mpc_is_basic( $p ) ) {
+			$classes[] = 'mpc-basic-page';
 		}
 	}
 	return $classes;

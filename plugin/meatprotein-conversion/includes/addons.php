@@ -99,15 +99,23 @@ function mpc_addon_is_top( $product ) {
 
 /** Nombre más cómodo de leer: sin «NEW», sin gramos sueltos y sin mayúsculas gritadas. */
 function mpc_nice_name( $name ) {
-	$n = trim( preg_replace( '/\s+(NEW!?)$/iu', '', wp_strip_all_tags( html_entity_decode( $name ) ) ) );
+	$n = wp_strip_all_tags( html_entity_decode( $name ) );
+	$n = trim( preg_replace( '/\s+/u', ' ', preg_replace( '/(?<=\s|^)NEW!?(?=\s|$)/iu', '', $n ) ) );
 	$letters = preg_replace( '/[^\p{L}]+/u', '', $n );
 	$upper   = preg_replace( '/[^\p{Lu}]+/u', '', $n );
 	if ( mb_strlen( $letters, 'UTF-8' ) > 4 && mb_strlen( $upper, 'UTF-8' ) / mb_strlen( $letters, 'UTF-8' ) > 0.7 ) {
 		$n = mb_strtolower( $n, 'UTF-8' );
 		$n = mb_strtoupper( mb_substr( $n, 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $n, 1, null, 'UTF-8' );
-		$n = preg_replace( '/\b(\d+)\s?(ml|g|gr)\b/u', '$1 $2', $n );
 	}
-	return $n;
+	/* Unidades siempre en minúscula y separadas: «440G» -> «440 g». */
+	return preg_replace_callback( '/\b(\d+)\s?(kg|gr|g|ml|cl|l)\b/iu', function ( $m ) {
+		return $m[1] . ' ' . mb_strtolower( $m[2], 'UTF-8' );
+	}, $n );
+}
+
+/** Producto «básico»: simple, y ni el pack ni una bandeja de hamburguesas (pizzas, panes, salsas, snacks...). */
+function mpc_is_basic( $product ) {
+	return $product instanceof WC_Product && $product->is_type( 'simple' ) && ! mpc_is_pack( $product ) && ! mpc_is_single_burger( $product );
 }
 
 /** Nombre corto para tarjetas y resumen: sin gramos ni relleno de marca («Pan cosa nostra», «Queso curado proteico»). */
@@ -195,6 +203,20 @@ function mpc_bundle_steps( $product = null ) {
 				'items' => mpc_step_products( 'step_otras', array( 'hamburguesas' ), '', '/(pack|promoci)/i', 8, $skip ),
 			),
 		);
+	} elseif ( mpc_is_basic( $product ) ) {
+		$cats  = $product->get_category_ids();
+		$items = array();
+		foreach ( mpc_addon_ids() as $id ) {
+			$p = wc_get_product( $id );
+			if ( ! $p || (int) $id === (int) $skip || ! $p->is_in_stock() || array_intersect( $cats, $p->get_category_ids() ) ) {
+				continue;
+			}
+			$items[] = $p;
+			if ( count( $items ) >= 6 ) {
+				break;
+			}
+		}
+		$steps = array( 'combo' => array( 'title' => 'Combínalo con', 'hint' => 'Lo que más se pide', 'items' => $items ) );
 	} else {
 		$steps = array( 'salsa' => $salsa, 'pan' => $pan, 'queso' => $queso );
 	}
@@ -226,7 +248,8 @@ add_action( 'woocommerce_before_add_to_cart_button', function () {
 	global $product;
 	$is_pack   = mpc_is_pack( $product );
 	$is_single = mpc_is_single_burger( $product );
-	if ( ! $is_pack && ! $is_single ) {
+	$is_basic  = mpc_is_basic( $product );
+	if ( ! $is_pack && ! $is_single && ! $is_basic ) {
 		return;
 	}
 	$base = (float) wc_get_price_to_display( $product );
@@ -234,7 +257,7 @@ add_action( 'woocommerce_before_add_to_cart_button', function () {
 		$vars = $product->get_available_variations();
 		$base = $vars ? (float) $vars[0]['display_price'] : $base;
 	}
-	$attrs = ' data-kind="' . ( $is_pack ? 'pack' : 'single' ) . '" data-base="' . esc_attr( $base ) . '" data-product="' . (int) $product->get_id() . '"';
+	$attrs = ' data-kind="' . ( $is_pack ? 'pack' : ( $is_basic ? 'basic' : 'single' ) ) . '" data-base="' . esc_attr( $base ) . '" data-product="' . (int) $product->get_id() . '"';
 	if ( $is_pack ) {
 		$gift_parts = array_slice( array_map( 'trim', explode( '+', mpc_clean_title( $product->get_name() ) ) ), 1 );
 		if ( $gift_parts ) {

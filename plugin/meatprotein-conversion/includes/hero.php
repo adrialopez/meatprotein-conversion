@@ -15,14 +15,12 @@ add_filter( 'body_class', function ( $classes ) {
 	return $classes;
 } );
 
-add_action( 'mfn_hook_content_before', function () {
-	if ( ! mpc_hero_enabled() ) {
-		return;
-	}
+function mpc_hero_html() {
 	$packs = mpc_get_packs();
 	if ( ! $packs ) {
-		return;
+		return '';
 	}
+	ob_start();
 	$pack  = $packs[0];
 	$vars  = $pack->get_available_variations();
 	$reg   = $vars ? (float) $vars[0]['display_regular_price'] : (float) $pack->get_regular_price();
@@ -36,7 +34,6 @@ add_action( 'mfn_hook_content_before', function () {
 	$pimg  = wp_get_attachment_image_url( $pack->get_image_id(), 'woocommerce_thumbnail' );
 	$price = wp_strip_all_tags( wc_price( $sale ) );
 	$packs_url = mpc_page_url( 'packs' );
-	$quality   = mpc_page_url( 'controles-de-calidad' );
 	?>
 	<section class="mpc-hero" aria-labelledby="mpc-hero-t">
 		<div class="mpc-hero__in">
@@ -77,6 +74,15 @@ add_action( 'mfn_hook_content_before', function () {
 			</div>
 		</div>
 	</section>
+	<?php
+	return ob_get_clean();
+}
+
+function mpc_strip_html() {
+	$free    = (int) mpc_opt( 'free_min' );
+	$quality = mpc_page_url( 'controles-de-calidad' );
+	ob_start();
+	?>
 	<div class="mpc-strip-wrap"><ul class="mpc-strip">
 		<li><?php echo mpc_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>En 24-48 h</span></li>
 		<li><?php echo mpc_icon( 'shield' ); ?><span><strong>Reposición garantizada</strong>Si llega en mal estado</span></li>
@@ -84,13 +90,13 @@ add_action( 'mfn_hook_content_before', function () {
 		<li><?php echo mpc_icon( 'lab' ); ?><span><strong><?php echo $quality ? '<a href="' . esc_url( $quality ) . '">Controles de calidad</a>' : 'Controles de calidad'; ?></strong>En cada pedido</span></li>
 	</ul></div>
 	<?php
-}, 5 );
+	return ob_get_clean();
+}
+
+
 
 /* «Compra con tranquilidad»: bloque de confianza que hero.js coloca antes de la newsletter (si no hay JS se queda al final). */
-add_action( 'mfn_hook_content_after', function () {
-	if ( ! mpc_hero_enabled() ) {
-		return;
-	}
+function mpc_assure_html() {
 	$phone   = trim( (string) mpc_opt( 'phone' ) );
 	$origin  = trim( wp_strip_all_tags( (string) mpc_opt( 'origin' ) ) );
 	$links   = array_filter( array(
@@ -104,6 +110,7 @@ add_action( 'mfn_hook_content_after', function () {
 		array( 'lab', 'Controles de calidad', 'Revisamos las materias primas, la producción y cada pedido antes de enviarlo.' ),
 		array( 'check', 'Pago seguro', 'Paga con tarjeta, PayPal o Bizum.' ),
 	);
+	ob_start();
 	?>
 	<section class="mpc-assure" data-mpc-assure aria-labelledby="mpc-assure-t">
 		<div class="mpc-assure__in">
@@ -129,6 +136,45 @@ add_action( 'mfn_hook_content_after', function () {
 		</div>
 	</section>
 	<?php
+	return ob_get_clean();
+}
+
+/* Pie del panel lateral del menú: envío gratis, teléfono y enlace a envíos. */
+function mpc_menu_foot_html() {
+	$phone = trim( (string) mpc_opt( 'phone' ) );
+	$href  = preg_replace( '/[^\d+]/', '', $phone ? ( 0 === strpos( $phone, '+' ) ? $phone : '+34' . $phone ) : '' );
+	$ship  = mpc_page_url( 'envios-y-devoluciones' );
+	$h     = '<div class="mpc-sm-foot"><p class="mpc-sm-free">Envío gratis con 10 bandejas o desde ' . (int) mpc_opt( 'free_min' ) . ' €</p>';
+	if ( $phone && $href ) {
+		$h .= '<a class="mpc-sm-call" href="tel:' . esc_attr( $href ) . '"><span>Llámanos</span><strong>' . esc_html( $phone ) . '</strong></a>';
+	}
+	if ( $ship ) {
+		$h .= '<a class="mpc-sm-link" href="' . esc_url( $ship ) . '">Envíos y devoluciones</a>';
+	}
+	return $h . '</div>';
+}
+
+/** HTML en una sola línea: dentro de un elemento «Código» de Betheme los saltos de línea se convertirían en <br>. */
+function mpc_compact( $html ) {
+	return trim( preg_replace( '/>\s+</', '><', preg_replace( '/\s+/', ' ', $html ) ) );
+}
+
+/* Bloques para el constructor de Betheme: se colocan con un elemento «Código» (ver includes/layout.php). */
+add_shortcode( 'mpc_hero', function () { return mpc_compact( mpc_hero_html() ); } );
+add_shortcode( 'mpc_strip', function () { return mpc_compact( mpc_strip_html() ); } );
+add_shortcode( 'mpc_assure', function () { return mpc_compact( mpc_assure_html() ); } );
+add_shortcode( 'mpc_menu_foot', function () { return mpc_compact( mpc_menu_foot_html() ); } );
+
+/* Respaldo: si la portada aún no se ha montado en el constructor, se inyecta con los ganchos de Betheme. */
+add_action( 'mfn_hook_content_before', function () {
+	if ( mpc_hero_enabled() && ! get_option( 'mpc_layout_native' ) ) {
+		echo mpc_hero_html() . mpc_strip_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+}, 5 );
+add_action( 'mfn_hook_content_after', function () {
+	if ( mpc_hero_enabled() && ! get_option( 'mpc_layout_native' ) ) {
+		echo mpc_assure_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
 }, 5 );
 
 /* Enlace «Packs» en el menú principal: lo añade ui.js si la página existe y el menú no lo trae ya. */
