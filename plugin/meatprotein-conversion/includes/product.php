@@ -79,6 +79,7 @@ add_action( 'woocommerce_after_add_to_cart_form', function () {
 		'Controles de calidad'  => mpc_page_url( 'controles-de-calidad' ),
 	) );
 	?>
+	<p class="mpc-eta" data-mpc-eta hidden><?php echo mpc_icon( 'truck' ); ?><span></span></p>
 	<ul class="mpc-trust">
 		<li><?php echo mpc_icon( 'truck' ); ?><span><strong>Llega refrigerado con SEUR</strong>En 24-48 h, de lunes a jueves antes de las 14:00.</span></li>
 		<li><?php echo mpc_icon( 'ship' ); ?><span><strong>Envío gratis desde <?php echo esc_html( $free ); ?> €</strong>Por debajo, <?php echo esc_html( $ship ); ?> € a toda la Península.</span></li>
@@ -216,7 +217,7 @@ add_filter( 'the_content', function ( $content ) {
 	);
 	$nut_html = mpc_nutrition_table_html();
 	$nut      = trim( (string) mpc_opt( 'nutrition' ) );
-	if ( ! mpc_is_single_burger( $product ) && ( $nut_html || $nut ) ) {
+	if ( ! mpc_is_single_burger( $product ) && ! $is_pack && ( $nut_html || $nut ) ) {
 		$blocks[] = array(
 			'title' => 'Información nutricional y alérgenos',
 			'body'  => '<p>Pulsa «Info» junto a cada sabor en el selector para ver sus ingredientes y alérgenos.</p>' . $nut_html . ( $nut ? wpautop( $nut ) : '' ),
@@ -244,3 +245,41 @@ add_filter( 'the_title', function ( $title, $id = 0 ) {
 	$p = wc_get_product( $id );
 	return ( $p && mpc_is_pack( $p ) ) ? mpc_clean_title( $title ) : $title;
 }, 20, 2 );
+
+
+/* Pestañas de la ficha: sin «Información adicional» (solo repetía todas las opciones de cada bandeja),
+   sin «Valoraciones» mientras no haya ninguna, y con valores nutricionales y preguntas frecuentes. */
+add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
+	global $product;
+	if ( ! $product instanceof WC_Product || ! ( mpc_is_pack( $product ) || mpc_is_single_burger( $product ) ) ) {
+		return $tabs;
+	}
+	$is_pack = mpc_is_pack( $product );
+	unset( $tabs['additional_information'] );
+	if ( isset( $tabs['reviews'] ) && 0 === (int) $product->get_review_count() ) {
+		unset( $tabs['reviews'] );
+	}
+	if ( isset( $tabs['description'] ) ) {
+		$tabs['description']['title'] = $is_pack ? 'Qué incluye' : 'Detalles';
+	}
+	if ( $is_pack && mpc_nutrition_table_html() ) {
+		$tabs['mpc_nutrition'] = array(
+			'title'    => 'Valores nutricionales',
+			'priority' => 15,
+			'callback' => function () {
+				echo '<div class="mpc-info__body"><p>Valores de cada sabor por 100 g. Para ver los ingredientes y alérgenos, pulsa «Info» junto al sabor en el selector.</p>' . mpc_nutrition_table_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+				$nut = trim( (string) mpc_opt( 'nutrition' ) );
+				echo $nut ? wpautop( esc_html( $nut ) ) : '';
+				echo '</div>';
+			},
+		);
+	}
+	$tabs['mpc_faq'] = array(
+		'title'    => 'Preguntas',
+		'priority' => 25,
+		'callback' => function () {
+			echo '<div class="mpc-faq mpc-faq--tab">' . mpc_faq_html() . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		},
+	);
+	return $tabs;
+}, 98 );

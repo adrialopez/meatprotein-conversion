@@ -103,6 +103,14 @@ function mpc_max_protein() {
 	return (int) floor( $max );
 }
 
+/** Nombre corto para la tabla: «Hamburguesa de pollo sabor bacon» pasa a «Pollo sabor bacon». */
+function mpc_table_name( $title ) {
+	$t = preg_replace( '/\s*NEW!?$/u', '', $title );
+	$t = preg_replace( '/^Hamburguesa\s+(de\s+sabor\s+|de\s+|sabor\s+)?/iu', '', $t );
+	$t = trim( $t );
+	return mb_strtoupper( mb_substr( $t, 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $t, 1, null, 'UTF-8' );
+}
+
 /** Tabla de valores nutricionales de todos los sabores con datos (por 100 g). */
 function mpc_nutrition_table_html() {
 	$rows = array();
@@ -127,7 +135,7 @@ function mpc_nutrition_table_html() {
 	$h = '<div class="mpc-table-wrap"><table class="mpc-table"><thead><tr><th>Hamburguesa</th><th>Kcal</th><th>Proteínas</th><th>Grasas</th><th>Hidratos</th><th>Sal</th></tr></thead><tbody>';
 	foreach ( $rows as $id => $r ) {
 		list( $title, $d ) = $r;
-		$h .= '<tr><th scope="row">' . esc_html( preg_replace( '/\s*NEW!?$/u', '', $title ) ) . '</th><td>' . esc_html( $d['kcal'] ) . '</td><td>' . esc_html( $d['prot'] ) . ' g</td><td>' . esc_html( $d['fat'] ) . ' g</td><td>' . esc_html( $d['carb'] ) . ' g</td><td>' . esc_html( $d['salt'] ) . ' g</td></tr>';
+		$h .= '<tr><th scope="row">' . esc_html( mpc_table_name( $title ) ) . '</th><td>' . esc_html( $d['kcal'] ) . '</td><td>' . esc_html( $d['prot'] ) . ' g</td><td>' . esc_html( $d['fat'] ) . ' g</td><td>' . esc_html( $d['carb'] ) . ' g</td><td>' . esc_html( $d['salt'] ) . ' g</td></tr>';
 	}
 	return $h . '</tbody></table></div><p class="mpc-table__note">Valores por 100 g. Cada hamburguesa pesa 100 g y cada bandeja trae 4. Las albóndigas vienen en bandeja de 400 g.</p>';
 }

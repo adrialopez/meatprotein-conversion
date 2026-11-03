@@ -31,7 +31,7 @@
 
 	function extras() {
 		var items = [], total = 0;
-		$cards.each(function () { var $c = $(this), q = qty($c); if (q > 0) { items.push(q > 1 ? $c.attr('data-name') + ' ×' + q : $c.attr('data-name')); total += (parseFloat($c.attr('data-price')) || 0) * q; } });
+		$cards.each(function () { var $c = $(this), q = qty($c); if (q > 0) { items.push({ n: $c.attr('data-name'), q: q }); total += (parseFloat($c.attr('data-price')) || 0) * q; } });
 		return { items: items, total: total };
 	}
 	function mainQty() { return Math.max(1, parseInt($form.find('input.qty').first().val(), 10) || 1); }
@@ -45,10 +45,18 @@
 	var $btn = $(bar).find('.mpc-cta__btn'), $txt = $(bar).find('.mpc-cta__txt');
 	document.body.classList.add('mpc-has-cta');
 
+	/* Etiqueta junto al selector de cantidad (solo pack; en bandejas sueltas la cantidad va en la barra fija). */
+	var $qty = $form.find('.quantity').first(), $qlab = $();
+	if (isPack && $qty.length) {
+		$qlab = $('<span class="mpc-qlabel"><b>Cantidad</b><small></small></span>');
+		$qty.before($qlab);
+	}
 	function refresh() {
 		var ex = extras(), q = mainQty(), st = packState();
 		$(root).find('[data-mpc-extras]').text(fmt(ex.total));
-		$(root).find('[data-mpc-sumtxt]').text(ex.items.join(', '));
+		var chips = $(root).find('[data-mpc-sumtxt]').empty();
+		ex.items.forEach(function (it) { $('<span class="mpc-chips__i"></span>').text(it.n).append(it.q > 1 ? $('<em></em>').text('×' + it.q) : null).appendTo(chips); });
+		$qlab.find('small').text(q + (q === 1 ? ' pack' : ' packs') + ' · ' + (q * 40) + ' hamburguesas');
 		$(root).find('.mpc-bundle__sum').prop('hidden', ex.items.length === 0);
 		if (!isPack) { $(bar).find('.mpc-cta__qty output').text(q); $(bar).find('.mpc-cta__qty [data-d="-1"]').prop('disabled', q <= 1); }
 		var incomplete = isPack && st.count < st.size;

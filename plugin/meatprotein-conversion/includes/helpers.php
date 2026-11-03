@@ -48,3 +48,20 @@ function mpc_page_url( $slug ) {
 	$p = get_page_by_path( $slug );
 	return $p ? get_permalink( $p ) : '';
 }
+
+/** Preguntas frecuentes de compra (página de packs y pestaña de la ficha). */
+function mpc_faq_html() {
+	$items = array(
+		'¿Puedo repetir sabores?'          => 'Sí. Eliges 10 bandejas entre todos los sabores disponibles y puedes repetir los que más te gusten.',
+		'¿Cómo llega el pedido?'           => 'Refrigerado con SEUR, en 24-48 h. Al recibirlo, congela lo que no vayas a comer esos días.',
+		'¿Cuánto duran congeladas?'        => 'Hasta 12 meses en el congelador y unas 72 horas en la nevera.',
+		'¿Qué pasa si algo llega mal?'     => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
+		'¿Y si se agota un sabor?'         => 'Solo aparecen los sabores con stock en ese momento, así que no pedirás nada que no podamos enviarte.',
+		'¿Cuándo sale mi pedido?'          => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
+	);
+	$h = '<div class="mpc-faq__list">';
+	foreach ( $items as $q => $a ) {
+		$h .= '<details><summary>' . esc_html( $q ) . '</summary><p>' . esc_html( $a ) . '</p></details>';
+	}
+	return $h . '</div>';
+}

@@ -36,3 +36,23 @@
 	}
 	tick();
 })();
+
+
+/** «Sale hoy / mañana / el lunes» según la hora de Madrid (se envía de lunes a jueves; el jueves por la tarde y el viernes salen el lunes). */
+(function () {
+	'use strict';
+	var el = document.querySelector('[data-mpc-eta]');
+	if (!el) { return; }
+	var now;
+	try { now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })); } catch (e) { now = new Date(); }
+	var d = now.getDay(), h = now.getHours(), when;
+	if (d >= 1 && d <= 4 && h < 14) { when = 'sale hoy'; }
+	else if (d >= 1 && d <= 3) { when = 'sale mañana'; }
+	else { when = 'sale el lunes'; }
+	var span = el.querySelector('span');
+	span.innerHTML = '';
+	span.appendChild(document.createTextNode('Pídelo ahora y '));
+	var b = document.createElement('strong'); b.textContent = when; span.appendChild(b);
+	span.appendChild(document.createTextNode('. Lo recibes en 24-48 h, refrigerado.'));
+	el.hidden = false;
+})();

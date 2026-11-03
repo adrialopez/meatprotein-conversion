@@ -110,6 +110,16 @@ function mpc_nice_name( $name ) {
 	return $n;
 }
 
+/** Nombre corto para tarjetas y resumen: sin gramos ni relleno de marca («Pan cosa nostra», «Queso curado proteico»). */
+function mpc_short_name( $name ) {
+	$n = mpc_nice_name( $name );
+	$n = preg_replace( '/\s*[-–]\s*\d+\s?(g|gr|ml)\b/iu', '', $n );
+	$n = preg_replace( '/\s+\d+\s?(g|gr|ml)\b/iu', '', $n );
+	$n = preg_replace( '/^Pan de hamburguesas\s+/iu', 'Pan ', $n );
+	$n = preg_replace( '/\s+Meatprotein\b/iu', '', $n );
+	return trim( $n );
+}
+
 /** Hamburguesa suelta (bandeja): producto simple de la categoría «hamburguesas». */
 function mpc_is_single_burger( $product ) {
 	return $product instanceof WC_Product && $product->is_type( 'simple' ) && has_term( 'hamburguesas', 'product_cat', $product->get_id() ) && ! mpc_is_pack( $product );
@@ -198,7 +208,7 @@ function mpc_card_html( $p ) {
 	$id    = (int) $p->get_id();
 	$price = (float) wc_get_price_to_display( $p );
 	$max   = $p->managing_stock() ? max( 1, min( 10, (int) $p->get_stock_quantity() ) ) : 10;
-	$name  = mpc_nice_name( $p->get_name() );
+	$name  = mpc_short_name( $p->get_name() );
 	$h     = '<div class="mpc-card" data-id="' . $id . '" data-price="' . esc_attr( $price ) . '" data-name="' . esc_attr( $name ) . '" data-max="' . (int) $max . '">';
 	$h    .= '<span class="mpc-card__img">' . wp_kses_post( $p->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) );
 	$h    .= '<button type="button" class="mpc-card__add" aria-label="Añadir ' . esc_attr( $name ) . '">+</button>';
@@ -254,7 +264,7 @@ add_action( 'woocommerce_before_add_to_cart_button', function () {
 		}
 		$out .= '</div></section>';
 	}
-	$out .= '<div class="mpc-bundle__sum" hidden><span class="mpc-bundle__sumt">Tu pedido: <b data-mpc-sumtxt></b></span><strong>+ <span data-mpc-extras>0,00 €</span></strong></div></div>';
+	$out .= '<div class="mpc-bundle__sum" hidden><span class="mpc-bundle__sumt"><small>Tu pedido</small><span class="mpc-chips" data-mpc-sumtxt></span></span><strong>+ <span data-mpc-extras>0,00 €</span></strong></div></div>';
 	echo $out; // phpcs:ignore WordPress.Security.EscapeOutput
 }, 5 );
 

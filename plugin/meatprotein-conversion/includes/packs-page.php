@@ -145,11 +145,7 @@ add_shortcode( 'mpc_packs', function () {
 
 		<section class="mpc-faq" aria-labelledby="mpc-faq-t">
 			<h2 id="mpc-faq-t">Preguntas frecuentes</h2>
-			<details><summary>¿Puedo repetir sabores?</summary><p>Sí. Eliges 10 bandejas entre todos los sabores disponibles y puedes repetir los que más te gusten.</p></details>
-			<details><summary>¿Cómo llega el pedido?</summary><p>Refrigerado con SEUR, en 24-48 h. Al recibirlo, congela lo que no vayas a comer esos días.</p></details>
-			<details><summary>¿Cuánto duran congeladas?</summary><p>Hasta 12 meses en el congelador.</p></details>
-			<details><summary>¿Qué pasa si algo llega mal?</summary><p>Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.</p></details>
-			<details><summary>¿Y si se agota un sabor?</summary><p>Solo aparecen los sabores con stock en ese momento, así que no pedirás nada que no podamos enviarte.</p></details>
+			<?php echo mpc_faq_html(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		</section>
 
 		<ul class="mpc-trust mpc-trust--row">
