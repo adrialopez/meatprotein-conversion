@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Meatprotein Conversion
  * Description: Mejoras de conversión para meatprotein.eu: selector de sabores del pack, bloque de confianza, barra de envío gratis, página de packs, promos puntuales y checkout.
- * Version: 0.3.0
+ * Version: 0.4.0
  * Author: Adrià López
  * Author URI: https://adria-lopez.com
  * Text Domain: meatprotein-conversion
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_VERSION', '0.3.0' );
+define( 'MPC_VERSION', '0.4.0' );
 define( 'MPC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MPC_URL', plugin_dir_url( __FILE__ ) );
 
@@ -35,6 +35,7 @@ add_action( 'wp_enqueue_scripts', function () {
 		return 'local' === wp_get_environment_type() ? (string) filemtime( MPC_DIR . $rel ) : MPC_VERSION;
 	};
 	wp_enqueue_style( 'mpc', MPC_URL . 'assets/css/mpc.css', array(), $ver( 'assets/css/mpc.css' ) );
+	wp_enqueue_style( 'mpc-design', MPC_URL . 'assets/css/design.css', array( 'mpc' ), $ver( 'assets/css/design.css' ) );
 
 	if ( is_product() ) {
 		wp_enqueue_script( 'mpc-pack', MPC_URL . 'assets/js/pack-builder.js', array( 'jquery', 'wc-add-to-cart-variation' ), $ver( 'assets/js/pack-builder.js' ), true );
@@ -47,3 +48,17 @@ add_action( 'wp_enqueue_scripts', function () {
 add_action( 'wp_head', function () {
 	echo '<style id="mpc-ios-scroll">@supports (overflow: clip){html,body{overflow-x:clip!important}}</style>' . "\n";
 }, 99 );
+
+/* Proteína y kcal por hamburguesa en las tarjetas de producto (las pinta ui.js). */
+add_action( 'wp_footer', function () {
+	if ( is_admin() || is_checkout() || is_cart() ) {
+		return;
+	}
+	$map = array();
+	foreach ( mpc_nutrition_data() as $id => $d ) {
+		$map[ (int) $id ] = array( 'p' => $d['prot'], 'k' => $d['kcal'] );
+	}
+	if ( $map ) {
+		echo '<script>window.mpcNut=' . wp_json_encode( $map ) . ';</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+}, 2 );

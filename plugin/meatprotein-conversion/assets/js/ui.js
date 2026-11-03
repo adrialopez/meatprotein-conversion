@@ -1,4 +1,23 @@
 /** Cuenta atrás de la promo y cierre de la barra superior. */
+/* Proteína y kcal bajo el precio de cada hamburguesa en las tarjetas. */
+(function () {
+	'use strict';
+	var nut = window.mpcNut || {};
+	var cards = document.querySelectorAll('li.product[class*="post-"]');
+	Array.prototype.forEach.call(cards, function (li) {
+		var m = li.className.match(/\bpost-(\d+)\b/);
+		if (!m || !nut[m[1]]) { return; }
+		var d = li.querySelector('.desc');
+		if (!d || d.querySelector('.mpc-chip')) { return; }
+		var el = document.createElement('p');
+		el.className = 'mpc-chip';
+		el.textContent = nut[m[1]].p + ' g de proteína · ' + nut[m[1]].k + ' kcal';
+		var price = d.querySelector('.price');
+		if (price && price.parentNode) { price.parentNode.insertBefore(el, price.nextSibling); } else { d.appendChild(el); }
+	});
+})();
+
+/** Cuenta atrás de la promo y cierre de la barra superior. */
 (function () {
 	'use strict';
 	var bar = document.querySelector('[data-mpc-promo]');

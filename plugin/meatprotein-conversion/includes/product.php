@@ -85,11 +85,38 @@ add_filter( 'woocommerce_short_description', function ( $desc ) {
 	$norm = function ( $s ) {
 		return mb_strtolower( preg_replace( '/[^\p{L}\p{N}]+/u', '', wp_strip_all_tags( html_entity_decode( $s ) ) ), 'UTF-8' );
 	};
-	if ( $norm( $desc ) === $norm( get_the_title() ) ) {
+	$a = $norm( $desc );
+	$b = $norm( get_the_title() );
+	if ( $a === $b ) {
 		return '';
+	}
+	/* Mismo texto con erratas («badeja», «mango» / «mamgo»…): también sobra. */
+	if ( '' !== $a && '' !== $b ) {
+		similar_text( $a, $b, $pct );
+		if ( $pct >= 85 ) {
+			return '';
+		}
 	}
 	return $desc;
 } );
+/* Betheme saca la descripción corta del extracto automático del contenido: si repite el título, se quita. */
+add_filter( 'get_the_excerpt', function ( $excerpt, $post ) {
+	if ( ! is_singular( 'product' ) || ! $post || (int) $post->ID !== (int) get_queried_object_id() ) {
+		return $excerpt;
+	}
+	$norm = function ( $x ) {
+		return mb_strtolower( preg_replace( '/[^\p{L}\p{N}]+/u', '', html_entity_decode( wp_strip_all_tags( $x ) ) ), 'UTF-8' );
+	};
+	$a = $norm( $excerpt );
+	$b = $norm( get_the_title( $post ) );
+	if ( '' !== $a && '' !== $b ) {
+		similar_text( $a, $b, $pct );
+		if ( $pct >= 85 ) {
+			return '';
+		}
+	}
+	return $excerpt;
+}, 20, 2 );
 add_filter( 'wc_product_sku_enabled', function ( $on ) {
 	return is_product() ? false : $on;
 } );
@@ -113,7 +140,9 @@ add_filter( 'the_content', function ( $content ) {
 	$norm = function ( $x ) {
 		return mb_strtolower( preg_replace( '/[^\p{L}\p{N}]+/u', '', html_entity_decode( wp_strip_all_tags( $x ) ) ), 'UTF-8' );
 	};
-	if ( $norm( $content ) === $norm( get_the_title() ) || $norm( $content ) === $norm( $title_clean ) ) {
+	$c = $norm( $content );
+	similar_text( $c, $norm( get_the_title() ), $pct_c );
+	if ( '' !== $c && ( $c === $norm( get_the_title() ) || $c === $norm( $title_clean ) || $pct_c >= 85 ) ) {
 		$content = '';
 	}
 	if ( $is_pack ) {

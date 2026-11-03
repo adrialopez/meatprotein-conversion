@@ -16,6 +16,7 @@ Es una propuesta: se probó solo en una copia local y **no está instalado en pr
 | Promo puntual | Barra superior con texto, enlace y cuenta atrás; desaparece sola al terminar. |
 | `[mpc_packs]` | Comparador de packs para una página «Packs». |
 | Checkout | Cupón dentro del resumen, miniatura, sabores en una línea, campos y métodos de pago como en Pifarré, cabecera y pie mínimos. |
+| Capa de diseño (`assets/css/design.css`) | Tipografía fluida (cuerpo 16-17 px, interlineado 1,65, títulos con `text-wrap: balance`), contraste AA (rosa de texto y botones #c23a7a, 5,0:1; el original #d65491 daba 3,8:1), botones de 48 px, foco visible, `prefers-reduced-motion`, transiciones entre páginas (`@view-transition`). Hero con velo oscuro y titular blanco; categorías como tarjetas en cuadrícula (el carrusel mostraba una sola diapositiva de 1300 px); tarjetas de producto con nombre/precio más grandes, proteína y kcal por hamburguesa y botón a todo el ancho; banners «Snacks» y «Pizza fit» sin texto pisado por la imagen. Los selectores `.mcb-section-XXXX` son IDs de las secciones de la portada en Betheme: si se rehace la portada hay que revisarlos. |
 | Scroll en iOS | `overflow-x: clip` en `html` y `body` (Betheme pone `hidden` en ambos y bloquea el scroll). |
 
 ## Detección de packs

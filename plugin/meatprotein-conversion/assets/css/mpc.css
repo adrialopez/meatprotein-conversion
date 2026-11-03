@@ -1,7 +1,9 @@
 /* Meatprotein Conversion · marca: rosa #d65491, turquesa #009aa5, cielo #cbe7f2, tinta #0b0b0b */
 :root {
-	--mpc-pink: #d65491;
-	--mpc-pink-dark: #b93d77;
+	--mpc-pink: #c23a7a;          /* 5,0:1 sobre blanco (AA); el #d65491 original daba 3,8:1 */
+	--mpc-pink-dark: #a52c68;
+	--mpc-pink-bright: #d65491;   /* solo para fondos y adornos */
+	--mpc-teal-ink: #007c85;      /* teal para texto: 5,0:1 */
 	--mpc-teal: #009aa5;
 	--mpc-sky: #cbe7f2;
 	--mpc-sky-soft: #eef7fb;
@@ -183,8 +185,8 @@ body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-footer-tmpl { di
 .woocommerce-checkout #place_order { width: 100%; min-height: 58px; border-radius: var(--mpc-radius); font-size: 1.02rem; }
 
 /* ---------- Info de cada sabor ---------- */
-.mpc-info-btn { display: inline-block; margin-left: .35rem; padding: .08rem .5rem; min-height: 0; border: 1px solid var(--mpc-teal); border-radius: 99px; background: #fff; color: var(--mpc-teal); font: 700 .7rem/1.5 var(--mpc-sans); letter-spacing: .04em; text-transform: uppercase; cursor: pointer; vertical-align: middle; }
-.mpc-info-btn:hover { background: var(--mpc-teal); color: #fff; }
+.mpc-info-btn { display: inline-block; margin-left: .35rem; padding: .08rem .5rem; min-height: 0; border: 1px solid var(--mpc-teal-ink); border-radius: 99px; background: #fff; color: var(--mpc-teal-ink); font: 700 .7rem/1.5 var(--mpc-sans); letter-spacing: .04em; text-transform: uppercase; cursor: pointer; vertical-align: middle; }
+.mpc-info-btn:hover { background: var(--mpc-teal-ink); color: #fff; }
 .mpc-dialog { width: min(92vw, 520px); max-height: 92vh; padding: 1.1rem 1.1rem 1rem; border: 0; border-radius: 18px; box-shadow: 0 24px 60px rgba(11,11,11,.35); font-family: var(--mpc-sans); overflow: auto; }
 .mpc-dialog::backdrop { background: rgba(11,11,11,.55); }
 .mpc-dialog__x { position: absolute; top: .5rem; right: .6rem; width: 36px; height: 36px; min-height: 0; padding: 0; border: 0; border-radius: 50%; background: var(--mpc-sky-soft); color: var(--mpc-ink); font: 400 1.5rem/1 var(--mpc-sans); cursor: pointer; }

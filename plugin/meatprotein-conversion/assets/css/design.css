@@ -1,0 +1,92 @@
+/* Meatprotein · capa de diseño 2026: tipografía, contraste, tarjetas, hero y categorías.
+   Los selectores .mcb-section-XXXX son los IDs de las secciones de la portada en Betheme. */
+
+/* ---------- Base ---------- */
+html { scroll-behavior: smooth; scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; }
+body { font-size: clamp(1rem, .97rem + .15vw, 1.0625rem); line-height: 1.65; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+h1, h2, h3, h4 { text-wrap: balance; }
+p, li, figcaption { text-wrap: pretty; }
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 3px solid var(--mpc-teal-ink); outline-offset: 3px; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+	*, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+@view-transition { navigation: auto; }
+
+/* Títulos: escala fluida, sin saltos entre móvil y escritorio */
+.mfn-heading-tag, h2.title, .section-title { font-size: clamp(1.7rem, 1.2rem + 2vw, 2.6rem); line-height: 1.12; letter-spacing: -.01em; }
+
+/* ---------- Botones: contraste AA y objetivo táctil ---------- */
+a.button, a.button_theme, .button_theme, button.button, input.button, .single_add_to_cart_button, a.add_to_cart_button, .checkout-button, #place_order, .woocommerce-Button, .wc-block-components-button {
+	background-color: var(--mpc-pink) !important; color: #fff !important; border-color: var(--mpc-pink) !important;
+	border-radius: 12px; min-height: 48px; font-size: 1rem; letter-spacing: .01em;
+	transition: background-color .15s, transform .15s, box-shadow .15s;
+}
+a.button:hover, a.button_theme:hover, .button_theme:hover, button.button:hover, .single_add_to_cart_button:hover:not(.disabled), a.add_to_cart_button:hover, #place_order:hover {
+	background-color: var(--mpc-pink-dark) !important; border-color: var(--mpc-pink-dark) !important; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(165, 44, 104, .28);
+}
+.single_add_to_cart_button.disabled, .single_add_to_cart_button:disabled { opacity: .45; }
+a, .price, .product_meta a { --_l: var(--mpc-pink); }
+.product_meta a, .woocommerce-breadcrumb a { color: var(--mpc-pink); }
+.price, .price .amount, .price ins { color: var(--mpc-pink) !important; }
+
+/* ---------- Cabecera sobre la portada: legible encima de la foto ---------- */
+.home .mfn-header-tmpl { backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); background: rgba(255, 255, 255, .8) !important; box-shadow: 0 1px 0 rgba(11, 11, 11, .06); }
+.mfn-header-tmpl .mfn-menu-link { font-size: .95rem; letter-spacing: .02em; }
+
+/* ---------- Hero ---------- */
+.mcb-section-d377ff003 { position: relative; isolation: isolate; }
+.mcb-section-d377ff003::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+	background: linear-gradient(90deg, rgba(8, 12, 20, .62) 0%, rgba(8, 12, 20, .38) 50%, rgba(8, 12, 20, .08) 85%), linear-gradient(180deg, rgba(8, 12, 20, .22), transparent 35%); }
+.mcb-section-d377ff003 > .section_wrapper, .mcb-section-d377ff003 > .mcb-section-inner, .mcb-section-d377ff003 .wrap { position: relative; z-index: 1; }
+.mcb-section-d377ff003 h1.title { font-size: clamp(2.5rem, 1.3rem + 4.6vw, 5rem); line-height: 1.02; color: #fff !important; text-shadow: 0 2px 28px rgba(0, 0, 0, .45); }
+.mcb-section-d377ff003 h1.title span[style*="d65491"] { color: #ff9ccb !important; }
+.mcb-section-d377ff003 p, .mcb-section-d377ff003 .mfn-heading-subtitle { font-size: clamp(1.1rem, 1rem + .6vw, 1.45rem); line-height: 1.45; color: #fff !important; text-shadow: 0 1px 14px rgba(0, 0, 0, .55); max-width: 36em; margin-inline: auto; }
+
+/* ---------- Categorías: de carrusel de 1 diapositiva a cuadrícula ---------- */
+.mcb-section-3xbvrqhbb .swiper-wrapper { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; transform: none !important; height: auto !important; }
+.mcb-section-3xbvrqhbb .swiper-slide { width: auto !important; margin: 0 !important; height: auto !important; }
+.mcb-section-3xbvrqhbb .swiper-pagination, .mcb-section-3xbvrqhbb .swiper-button-prev, .mcb-section-3xbvrqhbb .swiper-button-next { display: none !important; }
+
+/* Cada categoría: foto del producto arriba, nombre debajo (antes el título pisaba la imagen) */
+.mcb-section-3xbvrqhbb .mfn-banner-box { display: flex !important; flex-direction: column; height: 100% !important; background: #fff; border: 1px solid var(--mpc-line); border-radius: 18px; overflow: hidden; text-decoration: none; transition: box-shadow .2s, transform .2s, border-color .2s; }
+.mcb-section-3xbvrqhbb .mfn-banner-box:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(11, 11, 11, .12); border-color: var(--mpc-pink); }
+.mcb-section-3xbvrqhbb .banner-image { position: static !important; height: auto !important; aspect-ratio: 1; background: var(--mpc-sky-soft); display: grid; place-items: center; padding: 10%; }
+.mcb-section-3xbvrqhbb .banner-image img { width: 100% !important; height: 100% !important; object-fit: contain; }
+.mcb-section-3xbvrqhbb .banner-desc { position: static !important; inset: auto !important; padding: .85rem .75rem 1rem; text-align: center; background: #fff !important; }
+.mcb-section-3xbvrqhbb .banner-desc .title { margin: 0; font: 600 1.05rem/1.25 var(--mpc-sans) !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--mpc-ink) !important; }
+.mcb-section-3xbvrqhbb .hidden-desc { display: none; }
+.mcb-section-3xbvrqhbb .banner-wrapper { position: static !important; transform: none !important; width: 100% !important; max-width: none !important; padding: 0 !important; }
+@media (max-width: 1023px) { .mcb-section-3xbvrqhbb .swiper-wrapper { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 599px) { .mcb-section-3xbvrqhbb .swiper-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+
+/* ---------- Tarjetas de producto ---------- */
+li.product .image_frame, li.product .product-loop-thumb { border-radius: 18px; overflow: hidden; background: #fff; border: 1px solid var(--mpc-line); transition: box-shadow .2s, transform .2s; }
+li.product:hover .image_frame { box-shadow: 0 14px 30px rgba(11, 11, 11, .12); transform: translateY(-2px); }
+li.product .desc { padding: .9rem .15rem 0; }
+li.product .mfn-woo-product-title, li.product .mfn-woo-product-title a { font: 600 1.1rem/1.3 var(--mpc-sans) !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--mpc-ink) !important; }
+li.product .price { display: block; margin: .3rem 0 0; font: 700 1.3rem/1.2 var(--mpc-sans) !important; }
+li.product .price del { color: var(--mpc-soft) !important; font-weight: 500; font-size: .95rem; }
+li.product .price ins { text-decoration: none; }
+li.product .mfn-li-product-row-button { margin-top: .7rem; }
+li.product .mfn-li-product-row-button a.button { display: block !important; width: 100% !important; box-sizing: border-box; text-align: center; }
+.mpc-chip { display: inline-block; margin: .45rem 0 0; padding: .22rem .65rem; border-radius: 99px; background: var(--mpc-sky-soft); color: #243038; font: 600 .84rem/1.35 var(--mpc-sans); }
+
+/* ---------- Banners «Snacks» y «Pizza fit»: texto legible, sin pisar la imagen ---------- */
+.mcb-section-ef697df3d .banner-desc .banner-wrapper { max-width: 58%; }
+.mcb-section-ef697df3d .banner-desc { background: linear-gradient(90deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 70%); }
+.mcb-section-ef697df3d h3.subtitle { font-size: clamp(1.4rem, 1rem + 1.4vw, 2rem); line-height: 1.12; }
+.mcb-section-ef697df3d h3.subtitle { max-width: 11em; }
+.mcb-section-ef697df3d p.excerpt { font-size: 1.05rem; line-height: 1.5; color: #243038 !important; max-width: 15em; }
+
+/* ---------- Pie y textos secundarios ---------- */
+.mfn-footer-tmpl a, .mfn-footer-tmpl p { font-size: 1rem; }
+.mfn-footer-tmpl a { padding-block: .15rem; }
+
+/* ---------- Móvil ---------- */
+@media (max-width: 767px) {
+	.mcb-section-ef697df3d .banner-desc .banner-wrapper { max-width: 68%; }
+	li.product .mfn-woo-product-title, li.product .mfn-woo-product-title a { font-size: 1rem !important; }
+	li.product .price { font-size: 1.2rem !important; }
+	.mpc-chip { font-size: .8rem; }
+}
