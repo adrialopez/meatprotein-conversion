@@ -135,6 +135,7 @@
 			if (sel.value !== v) { sel.value = v; }
 		});
 		$form.trigger('check_variations');
+		window.mpcPackState = { count: t, size: S };
 		$(document).trigger('mpc:change', [t, S]);
 	}
 
@@ -188,75 +189,13 @@
 	$form.on('click', '.reset_variations', function () { counts = {}; setTimeout(sync, 0); });
 	sync();
 
-	/* ---- Bundle a medida: salsa (una), pan y queso (cantidades) ---- */
-	var fmt = function (n) { return n.toFixed(2).replace('.', ',') + ' €'; };
-	function bundle() {
-		var items = [], total = 0;
-		$form.find('.mpc-opt').each(function () {
-			var $o = $(this), price = parseFloat($o.attr('data-price')) || 0, name = $o.attr('data-name') || '', qty = 0;
-			if ($o.hasClass('mpc-opt--radio')) { var $i = $o.find('input'); qty = ($i.prop('checked') && parseInt($i.val(), 10) > 0) ? 1 : 0; }
-			else { qty = parseInt($o.find('.mpc-qty__n').val(), 10) || 0; }
-			if (qty > 0) { items.push(qty > 1 ? name + ' ×' + qty : name); total += price * qty; }
-		});
-		return { items: items, total: total };
-	}
-	var extrasTotal = function () { return bundle().total; };
-	function syncExtras() {
-		var b = bundle();
-		$form.find('[data-mpc-extras]').text(fmt(b.total));
-		$form.find('[data-mpc-sumtxt]').text(b.items.join(', '));
-		$form.find('.mpc-bundle__sum').prop('hidden', b.items.length === 0);
-		$form.find('.mpc-opt').each(function () {
-			var $o = $(this), on = $o.hasClass('mpc-opt--radio') ? ($o.find('input').prop('checked') && parseInt($o.find('input').val(), 10) > 0) : (parseInt($o.find('.mpc-qty__n').val(), 10) || 0) > 0;
-			$o.toggleClass('is-on', !!on);
-			if (!$o.hasClass('mpc-opt--radio')) {
-				var $n = $o.find('.mpc-qty__n'), v = parseInt($n.val(), 10) || 0, mx = parseInt($n.attr('max'), 10) || 10;
-				$o.find('[data-d="-1"]').prop('disabled', v <= 0); $o.find('[data-d="1"]').prop('disabled', v >= mx);
-			}
-		});
-		$(document).trigger('mpc:change');
-	}
-	$form.on('click', '.mpc-qty__b', function () {
-		var $n = $(this).siblings('.mpc-qty__n'), mx = parseInt($n.attr('max'), 10) || 10, v = (parseInt($n.val(), 10) || 0) + parseInt(this.getAttribute('data-d'), 10);
-		$n.val(Math.max(0, Math.min(mx, v))); syncExtras();
-	});
-	$form.on('change', '.mpc-opt--radio input', syncExtras); syncExtras();
-
-	/* ---- Barra fija inferior en móvil ---- */
-	var $price = $('.summary .price, .entry-summary .price').first();
-	var $btn = $form.find('.single_add_to_cart_button').first();
-	var bar = document.createElement('div');
-	bar.className = 'mpc-sticky'; bar.hidden = true;
-	bar.innerHTML = '<div class="mpc-sticky__txt"><strong class="mpc-sticky__n"></strong><span class="mpc-sticky__p"></span></div><button type="button" class="mpc-sticky__btn"></button>';
-	document.body.appendChild(bar);
-	/* Betheme tiene su propia barra de iconos abajo en móvil: la mía va justo encima. */
-	function placeBar() {
-		var sm = document.querySelector('.mfn-footer-stickymenu'), h = 0;
-		if (sm && getComputedStyle(sm).display !== 'none' && getComputedStyle(sm).position === 'fixed') { h = Math.round(sm.getBoundingClientRect().height); }
-		bar.style.bottom = h + 'px';
-		bar.style.paddingBottom = h ? '.7rem' : '';
-	}
-	placeBar(); $(window).on('resize load', placeBar);
-	var $n = $(bar).find('.mpc-sticky__n'), $p = $(bar).find('.mpc-sticky__p'), $b = $(bar).find('.mpc-sticky__btn');
-	function stickyText() {
-		var t = total(counts), done = t >= S;
-		$n.text(done ? 'Pack completo' : t + ' de ' + S + ' sabores');
-		var priceTxt = ($price.find('ins .amount').last().text() || $price.find('.amount').last().text() || '').trim();
-		var ex = extrasTotal();
-		$p.text(ex > 0 ? priceTxt + ' + ' + fmt(ex) + ' de extras' : priceTxt);
-		$b.text(done ? 'Añadir al carrito' : 'Elegir sabores').toggleClass('is-ready', done);
-	}
-	$(document).on('mpc:change', stickyText); stickyText();
-	$b.on('click', function () {
-		if (total(counts) >= S && $btn.length) { $btn.trigger('click'); }
-		else { host.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-	});
-	var lastVisible = false;
-	if ('IntersectionObserver' in window && $btn.length) {
-		new IntersectionObserver(function (e) {
-			var visible = lastVisible = e[0].isIntersecting;
-			bar.hidden = visible || (window.scrollY < 380 && total(counts) === 0);
-		}, { threshold: 0.2 }).observe($btn[0]);
-		$(window).on('scroll', function () { bar.hidden = lastVisible || (window.scrollY < 380 && total(counts) === 0); });
-	}
+	/* Estado del pack para el botón fijo (bundle.js) y «subir a pack» desde una bandeja suelta (?mpc_pre=clave). */
+	window.mpcPackState = { count: total(counts), size: S };
+	try {
+		var pre = new URLSearchParams(location.search).get('mpc_pre');
+		if (pre && flavours[pre] && !soldOut(pre) && assign($.extend({}, counts, (function () { var o = {}; o[pre] = 1; return o; })()))) {
+			counts[pre] = 1; sync();
+			setTimeout(function () { host.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 400);
+		}
+	} catch (e) { /* sin parámetro: nada que hacer */ }
 })(jQuery);

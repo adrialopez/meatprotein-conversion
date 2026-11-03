@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Meatprotein Conversion
  * Description: Mejoras de conversión para meatprotein.eu: selector de sabores del pack, bloque de confianza, barra de envío gratis, página de packs, promos puntuales y checkout.
- * Version: 0.5.0
+ * Version: 0.6.0
  * Author: Adrià López
  * Author URI: https://adria-lopez.com
  * Text Domain: meatprotein-conversion
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_VERSION', '0.5.0' );
+define( 'MPC_VERSION', '0.6.0' );
 define( 'MPC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MPC_URL', plugin_dir_url( __FILE__ ) );
 
@@ -40,6 +40,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'mpc-design', MPC_URL . 'assets/css/design.css', array( 'mpc' ), $ver( 'assets/css/design.css' ) );
 
 	if ( is_product() ) {
+		wp_enqueue_script( 'mpc-bundle', MPC_URL . 'assets/js/bundle.js', array( 'jquery' ), $ver( 'assets/js/bundle.js' ), true );
 		wp_enqueue_script( 'mpc-pack', MPC_URL . 'assets/js/pack-builder.js', array( 'jquery', 'wc-add-to-cart-variation' ), $ver( 'assets/js/pack-builder.js' ), true );
 	}
 	wp_enqueue_script( 'mpc-cart', MPC_URL . 'assets/js/cart-ui.js', array( 'jquery' ), $ver( 'assets/js/cart-ui.js' ), true );

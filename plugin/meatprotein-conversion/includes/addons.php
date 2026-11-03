@@ -110,8 +110,13 @@ function mpc_nice_name( $name ) {
 	return $n;
 }
 
+/** Hamburguesa suelta (bandeja): producto simple de la categoría «hamburguesas». */
+function mpc_is_single_burger( $product ) {
+	return $product instanceof WC_Product && $product->is_type( 'simple' ) && has_term( 'hamburguesas', 'product_cat', $product->get_id() ) && ! mpc_is_pack( $product );
+}
+
 /** Productos de un paso del bundle: los fijados en ajustes o, si no, los más vendidos de esas categorías que cumplan el nombre. */
-function mpc_step_products( $setting, $cats, $include, $exclude, $limit ) {
+function mpc_step_products( $setting, $cats, $include, $exclude, $limit, $skip_id = 0 ) {
 	$cfg = trim( (string) mpc_opt( $setting ) );
 	if ( '' !== $cfg ) {
 		$ids = array_values( array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', $cfg ) ) ) );
@@ -129,6 +134,9 @@ function mpc_step_products( $setting, $cats, $include, $exclude, $limit ) {
 	}
 	$out = array();
 	foreach ( $ids as $id ) {
+		if ( (int) $id === (int) $skip_id ) {
+			continue;
+		}
 		$p = wc_get_product( $id );
 		if ( ! $p || ! $p->is_type( 'simple' ) || ! $p->is_purchasable() || ! $p->is_in_stock() ) {
 			continue;
@@ -145,91 +153,115 @@ function mpc_step_products( $setting, $cats, $include, $exclude, $limit ) {
 	return $out;
 }
 
-/** Definición de los pasos opcionales del bundle (filtrable). */
-function mpc_bundle_steps() {
-	$steps = array(
-		'salsa' => array(
-			'title' => '¿Quieres salsa?',
-			'hint'  => 'Elige una',
-			'mode'  => 'radio',
-			'items' => mpc_step_products( 'step_salsa', array( 'salsas-y-cremas', 'saladas' ), '/(deluxe|burger|mayo|barbacoa|ketchup|mostaza|grandmas|salsa)/i', '/(sirope|t[eé] fr[ií]o|crema)/i', 6 ),
-		),
-		'pan'   => array(
-			'title' => '¿Añades pan?',
-			'hint'  => 'Para tus hamburguesas',
-			'mode'  => 'qty',
-			'items' => mpc_step_products( 'step_pan', array( 'pan' ), '/^pan\b/i', '', 3 ),
-		),
-		'queso' => array(
-			'title' => '¿Y queso?',
-			'hint'  => 'Para fundir o picar',
-			'mode'  => 'qty',
-			'items' => mpc_step_products( 'step_queso', array( 'queso' ), '', '', 3 ),
-		),
+/**
+ * Preguntas del flujo de compra, como en una app de pedidos: cada una es un carrusel de tarjetas con «+».
+ * Pack: salsa, pan, queso. Bandeja suelta: pan, queso, salsa y «¿otra hamburguesa?».
+ */
+function mpc_bundle_steps( $product = null ) {
+	$skip  = $product instanceof WC_Product ? $product->get_id() : 0;
+	$salsa = array(
+		'title' => '¿Quieres salsa?',
+		'hint'  => 'Añade las que quieras',
+		'items' => mpc_step_products( 'step_salsa', array( 'salsas-y-cremas', 'saladas' ), '/(deluxe|burger|mayo|barbacoa|ketchup|mostaza|grandmas|salsa)/i', '/(sirope|t[eé] fr[ií]o|crema)/i', 6 ),
 	);
+	$pan   = array(
+		'title' => '¿Añades pan?',
+		'hint'  => 'Para tus hamburguesas',
+		'items' => mpc_step_products( 'step_pan', array( 'pan' ), '/^pan\b/i', '', 3 ),
+	);
+	$queso = array(
+		'title' => '¿Y queso?',
+		'hint'  => 'Para fundir o picar',
+		'items' => mpc_step_products( 'step_queso', array( 'queso' ), '', '', 3 ),
+	);
+	if ( mpc_is_single_burger( $product ) ) {
+		$steps = array(
+			'pan'   => $pan,
+			'queso' => $queso,
+			'salsa' => $salsa,
+			'otras' => array(
+				'title' => '¿Otra hamburguesa?',
+				'hint'  => 'Las más pedidas',
+				'items' => mpc_step_products( 'step_otras', array( 'hamburguesas' ), '', '/(pack|promoci)/i', 8, $skip ),
+			),
+		);
+	} else {
+		$steps = array( 'salsa' => $salsa, 'pan' => $pan, 'queso' => $queso );
+	}
 	return apply_filters( 'mpc_bundle_steps', array_filter( $steps, function ( $st ) {
 		return ! empty( $st['items'] );
-	} ) );
+	} ), $product );
 }
 
-function mpc_bundle_item_html( $p, $mode, $name_attr ) {
+/** Tarjeta de un extra: foto, nombre, precio y «+» que pasa a +/− al elegirlo. */
+function mpc_card_html( $p ) {
 	$id    = (int) $p->get_id();
 	$price = (float) wc_get_price_to_display( $p );
 	$max   = $p->managing_stock() ? max( 1, min( 10, (int) $p->get_stock_quantity() ) ) : 10;
-	$top   = mpc_addon_is_top( $p );
-	$h     = '<div class="mpc-opt' . ( 'radio' === $mode ? ' mpc-opt--radio' : '' ) . '" data-price="' . esc_attr( $price ) . '" data-name="' . esc_attr( mpc_nice_name( $p->get_name() ) ) . '">';
-	if ( 'radio' === $mode ) {
-		$h .= '<label class="mpc-opt__main" for="mpc-o-' . $id . '"><input type="radio" id="mpc-o-' . $id . '" name="mpc_sauce" value="' . $id . '">';
-	} else {
-		$h .= '<div class="mpc-opt__main">';
+	$name  = mpc_nice_name( $p->get_name() );
+	$h     = '<div class="mpc-card" data-id="' . $id . '" data-price="' . esc_attr( $price ) . '" data-name="' . esc_attr( $name ) . '" data-max="' . (int) $max . '">';
+	$h    .= '<span class="mpc-card__img">' . wp_kses_post( $p->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) );
+	$h    .= '<button type="button" class="mpc-card__add" aria-label="Añadir ' . esc_attr( $name ) . '">+</button>';
+	$h    .= '<span class="mpc-card__qty" hidden><button type="button" data-d="-1" aria-label="Quitar uno">−</button><output>0</output><button type="button" data-d="1" aria-label="Añadir uno">+</button></span></span>';
+	$h    .= '<span class="mpc-card__name">' . esc_html( $name ) . '</span>';
+	$h    .= '<span class="mpc-card__price">+ ' . wp_kses_post( wc_price( $price ) ) . '</span>';
+	if ( mpc_addon_is_top( $p ) ) {
+		$h .= '<span class="mpc-addon__tag">Más pedido</span>';
 	}
-	$h .= '<span class="mpc-opt__img">' . wp_kses_post( $p->get_image( 'woocommerce_gallery_thumbnail', array( 'alt' => '' ) ) ) . '</span>';
-	$h .= '<span class="mpc-opt__txt"><span class="mpc-opt__name">' . esc_html( mpc_nice_name( $p->get_name() ) ) . '</span>' . ( $top ? '<span class="mpc-addon__tag">Más pedido</span>' : '' ) . '<span class="mpc-opt__price">' . wp_kses_post( wc_price( $price ) ) . '</span></span>';
-	if ( 'radio' === $mode ) {
-		$h .= '<span class="mpc-opt__radio" aria-hidden="true"></span></label>';
-	} else {
-		$h .= '<span class="mpc-qty" role="group" aria-label="Cantidad de ' . esc_attr( mpc_nice_name( $p->get_name() ) ) . '"><button type="button" class="mpc-qty__b" data-d="-1" aria-label="Quitar uno" disabled>−</button><input type="number" class="mpc-qty__n" name="' . esc_attr( $name_attr ) . '[' . $id . ']" value="0" min="0" max="' . (int) $max . '" inputmode="numeric" readonly aria-label="Cantidad"><button type="button" class="mpc-qty__b" data-d="1" aria-label="Añadir uno">+</button></span></div>';
-	}
-	return $h . '</div>';
+	return $h . '<input type="hidden" name="mpc_extra[' . $id . ']" value="0"></div>';
 }
 
+/** Raíz del flujo: datos para el JS (precio base, pack al que «subir») y las preguntas. */
 add_action( 'woocommerce_before_add_to_cart_button', function () {
 	global $product;
-	if ( ! mpc_is_pack( $product ) ) {
+	$is_pack   = mpc_is_pack( $product );
+	$is_single = mpc_is_single_burger( $product );
+	if ( ! $is_pack && ! $is_single ) {
 		return;
 	}
-	$steps = mpc_bundle_steps();
-	$out   = '<div class="mpc-bundle">';
-
-	/* Paso 2: el regalo, incluido. */
-	$title  = mpc_clean_title( $product->get_name() );
-	$extras = array_slice( array_map( 'trim', explode( '+', $title ) ), 1 );
-	$gift   = (int) mpc_opt( 'gift_product' );
-	if ( $extras ) {
-		$gp   = $gift ? wc_get_product( $gift ) : null;
-		$out .= '<section class="mpc-bstep mpc-bstep--gift"><h3 class="mpc-bstep__t">Tu regalo <small>Incluido en el pack</small></h3><div class="mpc-gift">';
-		$out .= $gp ? '<span class="mpc-opt__img">' . wp_kses_post( $gp->get_image( 'woocommerce_gallery_thumbnail', array( 'alt' => '' ) ) ) . '</span>' : '<span class="mpc-gift__ico">' . mpc_icon( 'ship' ) . '</span>';
-		$out .= '<span class="mpc-gift__txt"><strong>' . esc_html( mb_strtoupper( mb_substr( $extras[0], 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $extras[0], 1, null, 'UTF-8' ) ) . '</strong><small>Sin coste, ya está en tu pedido</small></span></div></section>';
+	$base = (float) wc_get_price_to_display( $product );
+	if ( $is_pack ) {
+		$vars = $product->get_available_variations();
+		$base = $vars ? (float) $vars[0]['display_price'] : $base;
 	}
-
-	foreach ( $steps as $key => $st ) {
-		$out .= '<section class="mpc-bstep mpc-bstep--' . esc_attr( $key ) . '" data-mode="' . esc_attr( $st['mode'] ) . '"><h3 class="mpc-bstep__t">' . esc_html( $st['title'] ) . ' <small>' . esc_html( $st['hint'] ) . ' · opcional</small></h3><div class="mpc-opts">';
-		if ( 'radio' === $st['mode'] ) {
-			$out .= '<div class="mpc-opt mpc-opt--radio mpc-opt--none" data-price="0" data-name=""><label class="mpc-opt__main" for="mpc-o-none-' . esc_attr( $key ) . '"><input type="radio" id="mpc-o-none-' . esc_attr( $key ) . '" name="mpc_sauce" value="0" checked><span class="mpc-opt__txt"><span class="mpc-opt__name">Sin salsa</span></span><span class="mpc-opt__radio" aria-hidden="true"></span></label></div>';
+	$attrs = ' data-kind="' . ( $is_pack ? 'pack' : 'single' ) . '" data-base="' . esc_attr( $base ) . '" data-product="' . (int) $product->get_id() . '"';
+	if ( $is_single ) {
+		$packs = mpc_get_packs();
+		if ( $packs ) {
+			$pv    = $packs[0]->get_available_variations();
+			$attrs .= ' data-pack-url="' . esc_url( $packs[0]->get_permalink() ) . '" data-pack-price="' . esc_attr( $pv ? $pv[0]['display_price'] : (float) $packs[0]->get_price() ) . '" data-pack-name="' . esc_attr( mpc_clean_title( $packs[0]->get_name() ) ) . '"';
 		}
+		$key = array_search( (int) $product->get_id(), mpc_flavour_products(), true );
+		if ( false !== $key ) {
+			$attrs .= ' data-flavour-key="' . esc_attr( $key ) . '"';
+		}
+	}
+	$out = '<div class="mpc-bundle"' . $attrs . '>';
+
+	/* Regalo del pack: tarjeta incluida. */
+	if ( $is_pack ) {
+		$title  = mpc_clean_title( $product->get_name() );
+		$extras = array_slice( array_map( 'trim', explode( '+', $title ) ), 1 );
+		if ( $extras ) {
+			$gp    = (int) mpc_opt( 'gift_product' ) ? wc_get_product( (int) mpc_opt( 'gift_product' ) ) : null;
+			$out  .= '<section class="mpc-q mpc-q--gift"><h3 class="mpc-q__t">Tu regalo <small>Incluido en el pack</small></h3><div class="mpc-cards"><div class="mpc-card mpc-card--gift"><span class="mpc-card__img">' . ( $gp ? wp_kses_post( $gp->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ) : '<span class="mpc-gift__ico">' . mpc_icon( 'ship' ) . '</span>' ) . '<span class="mpc-card__ribbon">Gratis</span></span><span class="mpc-card__name">' . esc_html( mb_strtoupper( mb_substr( $extras[0], 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $extras[0], 1, null, 'UTF-8' ) ) . '</span><span class="mpc-card__price is-free">Incluido</span></div></div></section>';
+		}
+	}
+	foreach ( mpc_bundle_steps( $product ) as $key => $st ) {
+		$out .= '<section class="mpc-q mpc-q--' . esc_attr( $key ) . '"><h3 class="mpc-q__t">' . esc_html( $st['title'] ) . ' <small>' . esc_html( $st['hint'] ) . '</small></h3><div class="mpc-cards">';
 		foreach ( $st['items'] as $p ) {
-			$out .= mpc_bundle_item_html( $p, $st['mode'], 'mpc_extra' );
+			$out .= mpc_card_html( $p );
 		}
 		$out .= '</div></section>';
 	}
-	$out .= '<div class="mpc-bundle__sum" hidden><span class="mpc-bundle__sumt">Tu bundle: <b data-mpc-sumtxt></b></span><strong>+ <span data-mpc-extras>0,00 €</span></strong></div></div>';
+	$out .= '<div class="mpc-bundle__sum" hidden><span class="mpc-bundle__sumt">Tu pedido: <b data-mpc-sumtxt></b></span><strong>+ <span data-mpc-extras>0,00 €</span></strong></div></div>';
 	echo $out; // phpcs:ignore WordPress.Security.EscapeOutput
 }, 5 );
 
 /** Productos que se pueden pedir desde el bundle (los pasos + los extras generales). */
-function mpc_bundle_allowed_ids() {
+function mpc_bundle_allowed_ids( $product = null ) {
 	$ids = mpc_addon_ids();
-	foreach ( mpc_bundle_steps() as $st ) {
+	foreach ( mpc_bundle_steps( $product ) as $st ) {
 		foreach ( $st['items'] as $p ) {
 			$ids[] = $p->get_id();
 		}
@@ -244,7 +276,7 @@ add_action( 'woocommerce_add_to_cart', function ( $cart_key, $product_id ) {
 		return;
 	}
 	$p = wc_get_product( $product_id );
-	if ( ! $p || ! mpc_is_pack( $p ) ) {
+	if ( ! $p || ( ! mpc_is_pack( $p ) && ! mpc_is_single_burger( $p ) ) ) {
 		return;
 	}
 	$want = array(); // id => cantidad
@@ -261,7 +293,7 @@ add_action( 'woocommerce_add_to_cart', function ( $cart_key, $product_id ) {
 	if ( ! $want ) {
 		return;
 	}
-	$allowed = mpc_bundle_allowed_ids();
+	$allowed = mpc_bundle_allowed_ids( $p );
 	$busy    = true;
 	$added   = 0;
 	foreach ( $want as $id => $qty ) {

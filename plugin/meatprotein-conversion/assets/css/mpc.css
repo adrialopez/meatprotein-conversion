@@ -86,17 +86,6 @@ html.mpc-has-pack .mfn-variations-wrapper { display: none !important; }
 .mpc-info__body li { margin-bottom: .45rem; }
 .mpc-draft { padding: .7rem .9rem; border: 1px dashed var(--mpc-pink); border-radius: 8px; color: var(--mpc-pink-dark); background: #fff7fb; }
 
-/* ---------- Barra fija inferior (móvil) ---------- */
-.mpc-sticky { position: fixed; z-index: 99990; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: .8rem; padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom)); background: #fff; border-top: 1px solid var(--mpc-line); box-shadow: 0 -8px 24px rgba(11,11,11,.1); font-family: var(--mpc-sans); }
-.mpc-sticky[hidden] { display: none; }
-.mpc-sticky__txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
-.mpc-sticky__n { font-size: .95rem; }
-.mpc-sticky__p { font-size: .85rem; color: var(--mpc-soft); }
-.mpc-sticky__btn { flex: none; min-height: 48px; padding: 0 1.4rem; border: 0; border-radius: var(--mpc-radius); background: var(--mpc-ink); color: #fff; font: 400 .95rem var(--mpc-display); cursor: pointer; text-transform: none; letter-spacing: 0; }
-.mpc-sticky__btn.is-ready { background: var(--mpc-pink); }
-@media (min-width: 850px) { .mpc-sticky { left: 50%; right: auto; transform: translateX(-50%); width: min(1040px, calc(100% - 48px)); bottom: 20px !important; border: 1px solid var(--mpc-line); border-radius: 18px; padding: .75rem 1.1rem; } .mpc-sticky__btn { min-width: 220px; } }
-body.single-product { scroll-padding-bottom: 90px; }
-
 /* ---------- Barra de envío gratis ---------- */
 .mpc-ship { display: block; width: 100%; box-sizing: border-box; flex: 1 1 100%; margin: 0 0 1.2rem; padding: .85rem 1rem; background: var(--mpc-sky-soft); border: 1px solid var(--mpc-line); border-radius: var(--mpc-radius); font-family: var(--mpc-sans); }
 .mpc-ship[hidden] { display: none; }

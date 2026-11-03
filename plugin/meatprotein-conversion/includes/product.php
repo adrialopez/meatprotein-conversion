@@ -179,6 +179,29 @@ add_filter( 'the_content', function ( $content ) {
 			'open'  => true,
 		);
 	}
+	/* Bandeja suelta: ingredientes, alérgenos y valores nutricionales de esa hamburguesa, en texto. */
+	if ( mpc_is_single_burger( $product ) && ( $d = mpc_flavour_nutrition( $product->get_id() ) ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition
+		$ing  = preg_replace( '/\b([A-ZÁÉÍÓÚÑ]{3,})\b/u', '<strong>$1</strong>', esc_html( $d['ing'] ) );
+		$rows = array(
+			'Valor energético' => $d['kj'] . ' kJ / ' . $d['kcal'] . ' kcal',
+			'Grasas'           => $d['fat'] . ' g',
+			'de las cuales saturadas' => $d['sat'] . ' g',
+			'Hidratos de carbono' => $d['carb'] . ' g',
+			'de los cuales azúcares' => $d['sug'] . ' g',
+			'Proteínas'        => $d['prot'] . ' g',
+			'Sal'              => $d['salt'] . ' g',
+		);
+		$tbl = '<table class="mpc-table mpc-table--dlg"><tbody>';
+		foreach ( $rows as $k => $v ) {
+			$tbl .= '<tr><th scope="row">' . esc_html( $k ) . '</th><td>' . esc_html( $v ) . '</td></tr>';
+		}
+		$tbl     .= '</tbody></table>';
+		$blocks[] = array(
+			'title' => 'Ingredientes, alérgenos y valores nutricionales',
+			'body'  => '<p><strong>' . esc_html( $d['prot'] ) . ' g</strong> de proteína · <strong>' . esc_html( $d['kcal'] ) . ' kcal</strong> por 100 g (cada hamburguesa pesa 100 g).</p><p><b>Ingredientes:</b> ' . $ing . '</p><p><b>Peso neto:</b> ' . esc_html( $d['peso'] ) . '</p>' . $tbl,
+			'open'  => true,
+		);
+	}
 	$blocks[] = array(
 		'title' => 'Cómo llega y cómo se conserva',
 		'body'  => '<ul><li>Se envía <strong>refrigerado</strong> con SEUR, en transporte refrigerado y en 24-48 h.</li><li>Al recibirlo, <strong>congélalo</strong>: en el congelador dura 12 meses; en la nevera, unas 72 horas.</li><li>Entregamos de lunes a jueves antes de las 14:00. Los pedidos del jueves por la tarde y del viernes salen el lunes, para preservar la calidad.</li><li>Si llega en mal estado, nos hacemos cargo de la devolución o de la reposición del pedido.</li></ul>',
@@ -193,7 +216,7 @@ add_filter( 'the_content', function ( $content ) {
 	);
 	$nut_html = mpc_nutrition_table_html();
 	$nut      = trim( (string) mpc_opt( 'nutrition' ) );
-	if ( $nut_html || $nut ) {
+	if ( ! mpc_is_single_burger( $product ) && ( $nut_html || $nut ) ) {
 		$blocks[] = array(
 			'title' => 'Información nutricional y alérgenos',
 			'body'  => '<p>Pulsa «Info» junto a cada sabor en el selector para ver sus ingredientes y alérgenos.</p>' . $nut_html . ( $nut ? wpautop( $nut ) : '' ),
