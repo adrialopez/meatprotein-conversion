@@ -31,6 +31,8 @@
 
 /* ---------- Selector de sabores ---------- */
 .mpc-has-pack table.variations tr.mpc-hide, tr.mpc-hide { display: none !important; }
+/* Betheme pinta una segunda copia de los desplegables (.mfn-vr); en los packs sobra: el selector de sabores la sustituye */
+html.mpc-has-pack .mfn-variations-wrapper { display: none !important; }
 .mpc-pack { margin: 1.2rem 0 1.4rem; padding: 1.1rem 1.1rem 1.2rem; background: var(--mpc-sky-soft); border: 1px solid var(--mpc-line); border-radius: 16px; font-family: var(--mpc-sans); }
 .mpc-pack[hidden] { display: none; }
 .mpc-pack__head { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
@@ -44,8 +46,13 @@
 .mpc-pack__tools { display: flex; gap: 1.2rem; margin: 0 0 .4rem; }
 .mpc-link { background: none; border: 0; padding: .3rem 0; font: 600 .86rem var(--mpc-sans); color: var(--mpc-pink-dark); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 0; text-transform: none; letter-spacing: 0; }
 .mpc-link:hover { color: var(--mpc-ink); background: none; }
-.mpc-pack__group { border: 0; margin: .9rem 0 0; padding: 0; min-width: 0; }
-.mpc-pack__group legend { padding: 0; margin: 0 0 .45rem; font: 700 .72rem var(--mpc-sans); letter-spacing: .12em; text-transform: uppercase; color: var(--mpc-soft); }
+.mpc-pack__group { border: 0; margin: .6rem 0 0; padding: 0; min-width: 0; }
+.mpc-pack__group summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .55rem .2rem; cursor: pointer; font: 700 .78rem var(--mpc-sans); letter-spacing: .12em; text-transform: uppercase; color: var(--mpc-soft); border-bottom: 1px solid var(--mpc-line); margin-bottom: .55rem; }
+.mpc-pack__group summary::-webkit-details-marker { display: none; }
+.mpc-pack__group summary::after { content: ""; width: 9px; height: 9px; margin-left: auto; border: solid var(--mpc-ink); border-width: 0 2px 2px 0; transform: rotate(45deg); transition: transform .2s; }
+.mpc-pack__group[open] summary::after { transform: rotate(-135deg); }
+.mpc-pack__gc { font: 700 .72rem var(--mpc-sans); letter-spacing: .02em; text-transform: none; color: #fff; background: var(--mpc-pink); padding: .1rem .6rem; border-radius: 99px; }
+.mpc-pack__gc:empty { display: none; }
 .mpc-pack__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: .5rem; }
 .mpc-flavour { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .4rem .5rem .4rem .8rem; background: #fff; border: 1.5px solid var(--mpc-line); border-radius: 10px; transition: border-color .15s, box-shadow .15s; }
 .mpc-flavour.is-on { border-color: var(--mpc-pink); box-shadow: 0 0 0 1px var(--mpc-pink); }
@@ -87,7 +94,7 @@
 .mpc-sticky__p { font-size: .85rem; color: var(--mpc-soft); }
 .mpc-sticky__btn { flex: none; min-height: 48px; padding: 0 1.4rem; border: 0; border-radius: var(--mpc-radius); background: var(--mpc-ink); color: #fff; font: 400 .95rem var(--mpc-display); cursor: pointer; text-transform: none; letter-spacing: 0; }
 .mpc-sticky__btn.is-ready { background: var(--mpc-pink); }
-@media (min-width: 850px) { .mpc-sticky { display: none !important; } }
+@media (min-width: 850px) { .mpc-sticky { left: 50%; right: auto; transform: translateX(-50%); width: min(1040px, calc(100% - 48px)); bottom: 20px !important; border: 1px solid var(--mpc-line); border-radius: 18px; padding: .75rem 1.1rem; } .mpc-sticky__btn { min-width: 220px; } }
 body.single-product { scroll-padding-bottom: 90px; }
 
 /* ---------- Barra de envío gratis ---------- */

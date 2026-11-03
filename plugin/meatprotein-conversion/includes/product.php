@@ -17,6 +17,32 @@ add_action( 'woocommerce_before_variations_form', function () {
 	echo '<script>document.documentElement.classList.add("mpc-has-pack");</script>';
 } );
 
+/* Datos clave del pack bajo el precio: lo que se recibe, de un vistazo. */
+add_action( 'woocommerce_single_product_summary', function () {
+	global $product;
+	if ( ! mpc_is_pack( $product ) ) {
+		return;
+	}
+	$trays = 0;
+	foreach ( $product->get_attributes() as $attr ) {
+		if ( $attr->get_variation() && preg_match( '/^bandeja\s*\d+$/i', trim( $attr->get_name() ) ) ) {
+			$trays++;
+		}
+	}
+	$chips = array(
+		array( 'ship', $trays . ' bandejas · ' . ( $trays * 4 ) . ' hamburguesas' ),
+	);
+	if ( mpc_max_protein() ) {
+		$chips[] = array( 'check', 'Hasta ' . (int) mpc_max_protein() . ' g de proteína por hamburguesa' );
+	}
+	$chips[] = array( 'truck', 'Refrigerado · 24-48 h' );
+	echo '<ul class="mpc-facts">';
+	foreach ( $chips as $c ) {
+		echo '<li>' . mpc_icon( $c[0] ) . '<span>' . esc_html( $c[1] ) . '</span></li>'; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+	echo '</ul>';
+}, 7 );
+
 /* Ahorro del pack, bajo el precio. */
 add_action( 'woocommerce_single_product_summary', function () {
 	global $product;
@@ -186,3 +212,12 @@ add_filter( 'the_content', function ( $content ) {
 	$html .= '</div>';
 	return $content . $html;
 }, 20 );
+
+/* El título del pack en la ficha sale limpio (sin emojis, sin «PROMOCIÓN» ni erratas). Solo el título visible: no toca <title> ni el SEO. */
+add_filter( 'the_title', function ( $title, $id = 0 ) {
+	if ( ! $id || ! did_action( 'wp_head' ) || is_admin() || ! is_singular( 'product' ) || (int) $id !== (int) get_queried_object_id() || doing_filter( 'wp_head' ) || doing_filter( 'get_the_excerpt' ) ) {
+		return $title;
+	}
+	$p = wc_get_product( $id );
+	return ( $p && mpc_is_pack( $p ) ) ? mpc_clean_title( $title ) : $title;
+}, 20, 2 );

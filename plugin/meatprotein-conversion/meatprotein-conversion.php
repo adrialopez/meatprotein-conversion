@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Meatprotein Conversion
  * Description: Mejoras de conversión para meatprotein.eu: selector de sabores del pack, bloque de confianza, barra de envío gratis, página de packs, promos puntuales y checkout.
- * Version: 0.4.0
+ * Version: 0.5.0
  * Author: Adrià López
  * Author URI: https://adria-lopez.com
  * Text Domain: meatprotein-conversion
@@ -13,15 +13,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_VERSION', '0.4.0' );
+define( 'MPC_VERSION', '0.5.0' );
 define( 'MPC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MPC_URL', plugin_dir_url( __FILE__ ) );
 
 require_once MPC_DIR . 'includes/settings.php';
 require_once MPC_DIR . 'includes/helpers.php';
 require_once MPC_DIR . 'includes/flavours.php';
+require_once MPC_DIR . 'includes/components.php';
 require_once MPC_DIR . 'includes/product.php';
 require_once MPC_DIR . 'includes/cart.php';
+require_once MPC_DIR . 'includes/addons.php';
 require_once MPC_DIR . 'includes/promo.php';
 require_once MPC_DIR . 'includes/packs-page.php';
 require_once MPC_DIR . 'includes/checkout.php';
@@ -40,6 +42,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( is_product() ) {
 		wp_enqueue_script( 'mpc-pack', MPC_URL . 'assets/js/pack-builder.js', array( 'jquery', 'wc-add-to-cart-variation' ), $ver( 'assets/js/pack-builder.js' ), true );
 	}
+	wp_enqueue_script( 'mpc-cart', MPC_URL . 'assets/js/cart-ui.js', array( 'jquery' ), $ver( 'assets/js/cart-ui.js' ), true );
 	wp_enqueue_script( 'mpc-ui', MPC_URL . 'assets/js/ui.js', array( 'jquery' ), $ver( 'assets/js/ui.js' ), true );
 } );
 

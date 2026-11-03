@@ -37,6 +37,11 @@
 		return 'Otros sabores';
 	}
 
+	var INFO = {};
+	try { INFO = JSON.parse(host.getAttribute('data-flavours') || '{}') || {}; } catch (e) { INFO = {}; }
+	/* Stock de cada hamburguesa individual: s = hay stock, m = bandejas disponibles. */
+	function soldOut(k) { return !!(INFO[k] && INFO[k].s === 0); }
+	function maxOf(k) { return (INFO[k] && INFO[k].m) ? INFO[k].m : 99; }
 	var slots = selects.map(function (sel) {
 		var m = {};
 		Array.prototype.forEach.call(sel.options, function (o) { if (o.value) { m[norm(o.textContent || o.value)] = o.value; } });
@@ -50,11 +55,9 @@
 			if (!flavours[k]) { flavours[k] = { key: k, label: pretty(o.textContent || o.value, k), group: group(k) }; }
 		});
 	});
-	var keys = Object.keys(flavours);
+	var keys = Object.keys(flavours).filter(function (k) { return !soldOut(k); });
 	if (!keys.length) { return; }
 
-	var INFO = {};
-	try { INFO = JSON.parse(host.getAttribute('data-flavours') || '{}') || {}; } catch (e) { INFO = {}; }
 	var counts = {};
 	function total(c) { return Object.keys(c).reduce(function (a, k) { return a + (c[k] || 0); }, 0); }
 
@@ -84,12 +87,12 @@
 	groups.forEach(function (g) {
 		var items = keys.filter(function (k) { return flavours[k].group === g; }).sort(function (a, b) { return flavours[a].label.localeCompare(flavours[b].label, 'es'); });
 		if (!items.length) { return; }
-		html += '<fieldset class="mpc-pack__group"><legend>' + g + '</legend><div class="mpc-pack__grid">';
+		html += '<details class="mpc-pack__group" data-g="' + g + '"' + ((window.innerWidth >= 850 || g === groups[0]) ? ' open' : '') + '><summary><span>' + g + '</span><em class="mpc-pack__gc"></em></summary><div class="mpc-pack__grid">';
 		items.forEach(function (k) {
 			html += '<div class="mpc-flavour" data-k="' + k + '"><span class="mpc-flavour__name">' + flavours[k].label + (INFO[k] ? ' <button type="button" class="mpc-info-btn" data-info="' + k + '" aria-label="Información de ' + flavours[k].label + '">Info</button>' : '') + (INFO[k] && INFO[k].d ? '<small class="mpc-flavour__sub">' + INFO[k].d.prot + ' g de proteína · ' + INFO[k].d.kcal + ' kcal</small>' : '') + '</span>' +
 				'<span class="mpc-step"><button type="button" class="mpc-step__b" data-d="-1" aria-label="Quitar ' + flavours[k].label + '">−</button><output class="mpc-step__n">0</output><button type="button" class="mpc-step__b" data-d="1" aria-label="Añadir ' + flavours[k].label + '">+</button></span></div>';
 		});
-		html += '</div></fieldset>';
+		html += '</div></details>';
 	});
 	host.innerHTML = html;
 	host.hidden = false;
@@ -115,11 +118,15 @@
 		$count.html(left > 0 ? '<strong>' + t + ' de ' + S + '</strong> · faltan ' + left : '<strong>Pack completo</strong> · ' + S + ' de ' + S);
 		$barI.css('width', (t / S * 100) + '%');
 		$bar.attr('aria-valuenow', t).toggleClass('is-full', left === 0);
+		$(host).find('.mpc-pack__group').each(function () {
+			var n = 0; $(this).find('.mpc-flavour').each(function () { n += counts[this.getAttribute('data-k')] || 0; });
+			$(this).find('.mpc-pack__gc').text(n ? n + (n === 1 ? ' elegida' : ' elegidas') : '').toggleClass('is-on', n > 0);
+		});
 		$(host).find('.mpc-flavour').each(function () {
 			var k = this.getAttribute('data-k'), n = counts[k] || 0, c2 = $.extend({}, counts); c2[k] = n + 1;
 			$(this).toggleClass('is-on', n > 0).find('.mpc-step__n').text(n);
 			$(this).find('[data-d="-1"]').prop('disabled', n === 0);
-			$(this).find('[data-d="1"]').prop('disabled', t >= S || !assign(c2));
+			$(this).find('[data-d="1"]').prop('disabled', t >= S || n >= maxOf(k) || !assign(c2));
 		});
 		/* Volcado a los desplegables de WooCommerce. */
 		var a = assign(counts);
@@ -135,7 +142,7 @@
 		var k = $(this).closest('.mpc-flavour').attr('data-k'), d = parseInt(this.getAttribute('data-d'), 10);
 		counts[k] = Math.max(0, (counts[k] || 0) + d);
 		if (!counts[k]) { delete counts[k]; }
-		if (!assign(counts)) { counts[k] -= d; if (!counts[k]) { delete counts[k]; } }
+		if ((counts[k] || 0) > maxOf(k) || !assign(counts)) { counts[k] = (counts[k] || 0) - d; if (!counts[k]) { delete counts[k]; } }
 		sync();
 	});
 	/* Ficha de ingredientes y valores nutricionales de cada sabor. */
@@ -173,13 +180,47 @@
 		var guard = 0;
 		while (total(counts) < S && guard++ < 400) {
 			var k = keys[Math.floor(Math.random() * keys.length)], c2 = $.extend({}, counts); c2[k] = (c2[k] || 0) + 1;
-			if (assign(c2)) { counts = c2; }
+			if (c2[k] <= maxOf(k) && assign(c2)) { counts = c2; }
 		}
 		sync();
 	});
 	/* «Restablecer» de WooCommerce vacía también el selector. (reset_data se dispara con cada pack incompleto: no sirve.) */
 	$form.on('click', '.reset_variations', function () { counts = {}; setTimeout(sync, 0); });
 	sync();
+
+	/* ---- Bundle a medida: salsa (una), pan y queso (cantidades) ---- */
+	var fmt = function (n) { return n.toFixed(2).replace('.', ',') + ' €'; };
+	function bundle() {
+		var items = [], total = 0;
+		$form.find('.mpc-opt').each(function () {
+			var $o = $(this), price = parseFloat($o.attr('data-price')) || 0, name = $o.attr('data-name') || '', qty = 0;
+			if ($o.hasClass('mpc-opt--radio')) { var $i = $o.find('input'); qty = ($i.prop('checked') && parseInt($i.val(), 10) > 0) ? 1 : 0; }
+			else { qty = parseInt($o.find('.mpc-qty__n').val(), 10) || 0; }
+			if (qty > 0) { items.push(qty > 1 ? name + ' ×' + qty : name); total += price * qty; }
+		});
+		return { items: items, total: total };
+	}
+	var extrasTotal = function () { return bundle().total; };
+	function syncExtras() {
+		var b = bundle();
+		$form.find('[data-mpc-extras]').text(fmt(b.total));
+		$form.find('[data-mpc-sumtxt]').text(b.items.join(', '));
+		$form.find('.mpc-bundle__sum').prop('hidden', b.items.length === 0);
+		$form.find('.mpc-opt').each(function () {
+			var $o = $(this), on = $o.hasClass('mpc-opt--radio') ? ($o.find('input').prop('checked') && parseInt($o.find('input').val(), 10) > 0) : (parseInt($o.find('.mpc-qty__n').val(), 10) || 0) > 0;
+			$o.toggleClass('is-on', !!on);
+			if (!$o.hasClass('mpc-opt--radio')) {
+				var $n = $o.find('.mpc-qty__n'), v = parseInt($n.val(), 10) || 0, mx = parseInt($n.attr('max'), 10) || 10;
+				$o.find('[data-d="-1"]').prop('disabled', v <= 0); $o.find('[data-d="1"]').prop('disabled', v >= mx);
+			}
+		});
+		$(document).trigger('mpc:change');
+	}
+	$form.on('click', '.mpc-qty__b', function () {
+		var $n = $(this).siblings('.mpc-qty__n'), mx = parseInt($n.attr('max'), 10) || 10, v = (parseInt($n.val(), 10) || 0) + parseInt(this.getAttribute('data-d'), 10);
+		$n.val(Math.max(0, Math.min(mx, v))); syncExtras();
+	});
+	$form.on('change', '.mpc-opt--radio input', syncExtras); syncExtras();
 
 	/* ---- Barra fija inferior en móvil ---- */
 	var $price = $('.summary .price, .entry-summary .price').first();
@@ -201,7 +242,8 @@
 		var t = total(counts), done = t >= S;
 		$n.text(done ? 'Pack completo' : t + ' de ' + S + ' sabores');
 		var priceTxt = ($price.find('ins .amount').last().text() || $price.find('.amount').last().text() || '').trim();
-		$p.text(priceTxt);
+		var ex = extrasTotal();
+		$p.text(ex > 0 ? priceTxt + ' + ' + fmt(ex) + ' de extras' : priceTxt);
 		$b.text(done ? 'Añadir al carrito' : 'Elegir sabores').toggleClass('is-ready', done);
 	}
 	$(document).on('mpc:change', stickyText); stickyText();
@@ -209,10 +251,12 @@
 		if (total(counts) >= S && $btn.length) { $btn.trigger('click'); }
 		else { host.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 	});
+	var lastVisible = false;
 	if ('IntersectionObserver' in window && $btn.length) {
 		new IntersectionObserver(function (e) {
-			var visible = e[0].isIntersecting;
-			bar.hidden = visible || window.innerWidth > 849;
+			var visible = lastVisible = e[0].isIntersecting;
+			bar.hidden = visible || (window.scrollY < 380 && total(counts) === 0);
 		}, { threshold: 0.2 }).observe($btn[0]);
+		$(window).on('scroll', function () { bar.hidden = lastVisible || (window.scrollY < 380 && total(counts) === 0); });
 	}
 })(jQuery);

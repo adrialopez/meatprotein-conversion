@@ -103,3 +103,33 @@ add_action( 'wp_footer', function () {
 	}
 	echo '<div class="mpc-checkout-help"><p>¿Dudas con tu pedido? ' . ( $phone ? 'Llámanos al <a href="tel:' . esc_attr( preg_replace( '/\s+/', '', $phone ) ) . '">' . esc_html( $phone ) . '</a> (9:00-14:00) o escribe a <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a>.' : '' ) . '</p><p>' . implode( ' · ', $out ) . '</p></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 }, 5 );
+
+/* Menos fricción en el formulario: sin «empresa», el email primero (permite recuperar el carrito) y autocompletado del navegador. */
+add_filter( 'woocommerce_checkout_fields', function ( $f ) {
+	unset( $f['billing']['billing_company'], $f['shipping']['shipping_company'] );
+	$set = function ( &$field, $autocomplete, $inputmode = '' ) {
+		$field['autocomplete'] = $autocomplete;
+		if ( $inputmode ) {
+			$field['custom_attributes']['inputmode'] = $inputmode;
+		}
+	};
+	if ( isset( $f['billing']['billing_email'] ) ) {
+		$f['billing']['billing_email']['priority'] = 5;
+		$f['billing']['billing_email']['class']    = array( 'form-row-wide' );
+		$f['billing']['billing_email']['label']    = 'Correo electrónico';
+		$set( $f['billing']['billing_email'], 'email', 'email' );
+	}
+	foreach ( array( 'billing', 'shipping' ) as $g ) {
+		if ( isset( $f[ $g ][ $g . '_first_name' ] ) ) { $set( $f[ $g ][ $g . '_first_name' ], 'given-name' ); }
+		if ( isset( $f[ $g ][ $g . '_last_name' ] ) ) { $set( $f[ $g ][ $g . '_last_name' ], 'family-name' ); }
+		if ( isset( $f[ $g ][ $g . '_address_1' ] ) ) { $set( $f[ $g ][ $g . '_address_1' ], 'address-line1' ); }
+		if ( isset( $f[ $g ][ $g . '_address_2' ] ) ) { $set( $f[ $g ][ $g . '_address_2' ], 'address-line2' ); $f[ $g ][ $g . '_address_2' ]['placeholder'] = 'Piso, puerta, escalera… (opcional)'; }
+		if ( isset( $f[ $g ][ $g . '_postcode' ] ) ) { $set( $f[ $g ][ $g . '_postcode' ], 'postal-code', 'numeric' ); }
+		if ( isset( $f[ $g ][ $g . '_city' ] ) ) { $set( $f[ $g ][ $g . '_city' ], 'address-level2' ); }
+	}
+	if ( isset( $f['billing']['billing_phone'] ) ) {
+		$set( $f['billing']['billing_phone'], 'tel', 'tel' );
+		$f['billing']['billing_phone']['label'] = 'Teléfono (para el repartidor)';
+	}
+	return $f;
+}, 20 );

@@ -52,14 +52,16 @@ function mpc_flavours_data() {
 		if ( ! $p || 'publish' !== $p->post_status ) {
 			continue;
 		}
-		if ( ! preg_match( '/<img[^>]+src="([^"]+)"/i', $p->post_content, $m ) ) {
-			continue;
-		}
+		$m = array( '', '' );
+		preg_match( '/<img[^>]+src="([^"]+)"/i', $p->post_content, $m );
 		$out[ $key ] = array(
 			't' => html_entity_decode( wp_strip_all_tags( get_the_title( $id ) ), ENT_QUOTES, 'UTF-8' ),
 			'i' => esc_url_raw( $m[1] ),
 			'u' => get_permalink( $id ),
 		);
+		$avail          = mpc_available_trays( $id );
+		$out[ $key ]['s'] = ( null === $avail || $avail > 0 ) ? 1 : 0;
+		$out[ $key ]['m'] = null === $avail ? 99 : (int) $avail;
 		$nut = mpc_flavour_nutrition( $id );
 		if ( $nut ) {
 			$out[ $key ]['d'] = $nut;

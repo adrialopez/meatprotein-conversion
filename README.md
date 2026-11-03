@@ -17,6 +17,10 @@ Es una propuesta: se probó solo en una copia local y **no está instalado en pr
 | `[mpc_packs]` | Comparador de packs para una página «Packs». |
 | Checkout | Cupón dentro del resumen, miniatura, sabores en una línea, campos y métodos de pago como en Pifarré, cabecera y pie mínimos. |
 | Capa de diseño (`assets/css/design.css`) | Tipografía fluida (cuerpo 16-17 px, interlineado 1,65, títulos con `text-wrap: balance`), contraste AA (rosa de texto y botones #c23a7a, 5,0:1; el original #d65491 daba 3,8:1), botones de 48 px, foco visible, `prefers-reduced-motion`, transiciones entre páginas (`@view-transition`). Hero con velo oscuro y titular blanco; categorías como tarjetas en cuadrícula (el carrusel mostraba una sola diapositiva de 1300 px); tarjetas de producto con nombre/precio más grandes, proteína y kcal por hamburguesa y botón a todo el ancho; banners «Snacks» y «Pizza fit» sin texto pisado por la imagen. Los selectores `.mcb-section-XXXX` son IDs de las secciones de la portada en Betheme: si se rehace la portada hay que revisarlos. |
+| Bundle a medida (ficha del pack) | Pasos: 1 sabores, 2 regalo (incluido), 3 salsa (una, opcional), 4 pan y 5 queso (con cantidad), resumen con el total. Se añade todo al carrito de una vez (`mpc_extra[ID]`, `mpc_sauce`). Salsas, pan y queso salen solos (más vendidos con stock) o se fijan en WooCommerce > Conversión. |
+| Extras en carrito lateral, carrito y checkout | «Completa tu pedido» con los extras más vendidos que aún no están en el carrito; en el checkout, una sola sugerencia antes del pago. |
+| Pack unido a las hamburguesas | Cada «Bandeja N» es 1 bandeja del producto individual (mapa en `includes/flavours.php`). El selector oculta los sabores agotados y limita por stock; se valida al añadir y al finalizar; al pedirse se descuenta el stock de cada hamburguesa (y del regalo si se indica su ID) y se restituye al cancelar. El pedido guarda `_mpc_components` (producto, SKU, bandejas) y lo muestra en el admin. |
+| Carrito lateral, carrito y checkout | Nombres limpios, barra de envío gratis, sabores plegados, garantías, barra de pago fija en móvil; formulario sin «empresa», email primero y autocompletado del navegador. |
 | Scroll en iOS | `overflow-x: clip` en `html` y `body` (Betheme pone `hidden` en ambos y bloquea el scroll). |
 
 ## Detección de packs
@@ -49,3 +53,9 @@ hay que cotejarlos con las etiquetas reales y con la ficha técnica. Dudas detec
 - Tres etiquetas con valores idénticos (543,9 kJ / 130 kcal / 3,9 / 0,9 / 1,9 / 0,3 / 21,7 / 0,9): Pollo Cheese-Bacon, Ternera y queso, Ternera queso y trufa.
 - Tres con 505,3 kJ / 120,7 kcal / 2,7 / 0,8 / 4,8 / 1,4 / 19,3: Pavo y cebolla, Mango Protein Chicken, Pollo miel y tomate.
 - En las etiquetas de Pollo miel y tomate (mostaza) y Pollo, pepinillos y cheddar (leche, queso) los alérgenos no están en mayúsculas como en el resto.
+
+## Notas de la versión 0.5.0
+
+- Probado en local (WooCommerce, Betheme, PHP 8.3): pedido real con BACS, stock descontado y restituido al cancelar, validación con un sabor agotado.
+- Pendiente de decidir en producción: ID del producto regalo del pack (cambia con cada promo), si se quiere un descuento por extras (hoy no hay), y los textos de entrega.
+- Limitación: los reembolsos parciales no devuelven stock de los componentes; solo la cancelación/restitución completa del pedido.
