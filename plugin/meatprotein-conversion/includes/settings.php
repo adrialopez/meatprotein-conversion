@@ -18,6 +18,7 @@ function mpc_defaults() {
 	return array(
 		'free_min'     => '60',
 		'addons'       => '',
+		'snacks'       => '',
 		'gift_product' => '',
 		'step_salsa'   => '',
 		'step_pan'     => '',
@@ -104,6 +105,7 @@ function mpc_settings_page() {
 	$f( 'step_pan', 'Bundle: pan (IDs)', 'Vacío = automático.' );
 	$f( 'step_queso', 'Bundle: queso (IDs)', 'Vacío = automático.' );
 	$f( 'addons', 'Extras del pack (IDs de producto)', 'Separados por comas, en orden. Vacío = automático: el más vendido de cada categoría que no sea hamburguesas.' );
+	$f( 'snacks', 'Snacks del carrito (IDs)', 'Separados por comas, en orden. Vacío = automático: los más vendidos de la categoría «Snacks dulces».' );
 	echo '</table><h2>Promo puntual</h2><table class="form-table">';
 	$f( 'promo_text', 'Texto de la barra superior', 'Déjalo vacío para ocultar la barra.' );
 	$f( 'promo_cta', 'Texto del enlace', 'Por ejemplo: Ver el pack.' );

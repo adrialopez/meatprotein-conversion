@@ -457,6 +457,43 @@ function mpc_add_requested_extras( $cart_key, $product_id ) {
 add_action( 'woocommerce_add_to_cart', 'mpc_add_requested_extras', 20, 2 );
 
 /**
+ * Pinta una lista de productos como bloque de venta cruzada (tarjetas con foto, precio y botón «Añadir»).
+ *
+ * @param WC_Product[] $products Productos a ofrecer.
+ * @param string       $context Dónde se pinta: cart, checkout, side o snacks.
+ * @param string       $title   Título del bloque.
+ * @param string       $sub     Subtítulo opcional (HTML ya escapado).
+ * @return string HTML del bloque, o cadena vacía si no hay nada que ofrecer.
+ */
+function mpc_upsell_render( $products, $context, $title, $sub = '' ) {
+	if ( ! $products || ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+		return '';
+	}
+	$h = '<div class="mpc-upsell mpc-upsell--' . esc_attr( $context ) . '"><h4>' . esc_html( $title ) . '</h4>' . ( $sub ? '<p class="mpc-upsell__sub">' . $sub . '</p>' : '' ) . '<ul>'; // phpcs:ignore WordPress.Security.EscapeOutput -- $sub llega escapado.
+	foreach ( $products as $p ) {
+		$price = (float) wc_get_price_to_display( $p );
+		$name  = mpc_display_name( preg_replace( '/\s+(NEW!?|[0-9]+\s?g)$/iu', '', wp_strip_all_tags( $p->get_name() ) ) );
+		$h    .= '<li><span class="mpc-upsell__img">' . wp_kses_post( $p->get_image( 'woocommerce_gallery_thumbnail', array( 'alt' => '' ) ) ) . '</span>';
+		$h    .= '<span class="mpc-upsell__txt"><a href="' . esc_url( $p->get_permalink() ) . '">' . esc_html( $name ) . '</a><strong>' . wp_kses_post( wc_price( $price ) ) . '</strong></span>';
+		if ( 'side' === $context ) {
+			$h .= '<a href="' . esc_url( '?add-to-cart=' . $p->get_id() ) . '" data-quantity="1" data-product_id="' . (int) $p->get_id() . '" data-product_sku="' . esc_attr( $p->get_sku() ) . '" class="mpc-upsell__add button add_to_cart_button ajax_add_to_cart" rel="nofollow" aria-label="Añadir ' . esc_attr( $name ) . ' al carrito">Añadir</a>';
+		} else {
+			$h .= '<a href="' . esc_url(
+				add_query_arg(
+					array(
+						'add-to-cart' => $p->get_id(),
+						'mpc_up'      => 1,
+					),
+					'checkout' === $context ? wc_get_checkout_url() : wc_get_cart_url()
+				)
+			) . '" class="mpc-upsell__add button" rel="nofollow" aria-label="Añadir ' . esc_attr( $name ) . ' al pedido">Añadir</a>';
+		}
+		$h .= '</li>';
+	}
+	return $h . '</ul></div>';
+}
+
+/**
  * Bloque «Completa tu pedido» reutilizable: carrito lateral, carrito y checkout.
  *
  * @param string $context Dónde se pinta: cart, checkout o side.
@@ -464,24 +501,81 @@ add_action( 'woocommerce_add_to_cart', 'mpc_add_requested_extras', 20, 2 );
  * @return string HTML del bloque, o cadena vacía si no hay nada que ofrecer.
  */
 function mpc_upsell_html( $context = 'cart', $limit = 3 ) {
-	$list = mpc_addons_available( $limit );
-	if ( ! $list || ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+	$list = mpc_addons_available( $limit + count( mpc_snack_ids() ) );
+	if ( 'cart' === $context ) {
+		// Los snacks tienen su propio bloque en el carrito: no se repiten aquí.
+		$snacks = mpc_snack_ids();
+		$list   = array_filter(
+			$list,
+			function ( $p ) use ( $snacks ) {
+				return ! in_array( $p->get_id(), $snacks, true );
+			}
+		);
+	}
+	return mpc_upsell_render( array_slice( array_values( $list ), 0, $limit ), $context, 'Completa tu pedido' );
+}
+
+/**
+ * IDs de los snacks que se ofrecen en el carrito: los de los ajustes o, si están vacíos, los más vendidos de «Snacks dulces».
+ *
+ * @return int[]
+ */
+function mpc_snack_ids() {
+	$ids = get_transient( 'mpc_snack_ids' );
+	if ( ! is_array( $ids ) ) {
+		$ids = array_map(
+			function ( $p ) {
+				return $p->get_id();
+			},
+			mpc_step_products( 'snacks', array( 'snacks-dulces' ), '', '', 8 )
+		);
+		set_transient( 'mpc_snack_ids', $ids, 6 * HOUR_IN_SECONDS );
+	}
+	return apply_filters( 'mpc_snack_ids', $ids );
+}
+
+/**
+ * Bloque de snacks del carrito: los que aún no están en el pedido, con el envío gratis como empujón.
+ *
+ * @param int $limit Máximo de snacks.
+ * @return string
+ */
+function mpc_snacks_html( $limit = 4 ) {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 		return '';
 	}
-	$h = '<div class="mpc-upsell mpc-upsell--' . esc_attr( $context ) . '"><h4>Completa tu pedido</h4><ul>';
-	foreach ( $list as $p ) {
-		$price = (float) wc_get_price_to_display( $p );
-		$h    .= '<li><span class="mpc-upsell__img">' . wp_kses_post( $p->get_image( 'woocommerce_gallery_thumbnail', array( 'alt' => '' ) ) ) . '</span>';
-		$h    .= '<span class="mpc-upsell__txt"><a href="' . esc_url( $p->get_permalink() ) . '">' . esc_html( preg_replace( '/\s+(NEW!?|[0-9]+\s?g)$/iu', '', wp_strip_all_tags( $p->get_name() ) ) ) . '</a><strong>' . wp_kses_post( wc_price( $price ) ) . '</strong></span>';
-		if ( 'side' === $context ) {
-			$h .= '<a href="' . esc_url( '?add-to-cart=' . $p->get_id() ) . '" data-quantity="1" data-product_id="' . (int) $p->get_id() . '" data-product_sku="' . esc_attr( $p->get_sku() ) . '" class="mpc-upsell__add button add_to_cart_button ajax_add_to_cart" rel="nofollow" aria-label="Añadir ' . esc_attr( wp_strip_all_tags( $p->get_name() ) ) . ' al carrito">Añadir</a>';
-		} else {
-			$h .= '<a href="' . esc_url( add_query_arg( 'add-to-cart', $p->get_id(), 'checkout' === $context ? wc_get_checkout_url() : wc_get_cart_url() ) ) . '" class="mpc-upsell__add button" rel="nofollow" aria-label="Añadir ' . esc_attr( wp_strip_all_tags( $p->get_name() ) ) . ' al pedido">Añadir</a>';
-		}
-		$h .= '</li>';
+	$in_cart = array();
+	foreach ( WC()->cart->get_cart() as $item ) {
+		$in_cart[ (int) $item['product_id'] ] = true;
 	}
-	return $h . '</ul></div>';
+	$list = array();
+	foreach ( mpc_snack_ids() as $id ) {
+		$p = isset( $in_cart[ $id ] ) ? null : wc_get_product( $id );
+		if ( $p && $p->is_purchasable() && $p->is_in_stock() && 'publish' === get_post_status( $id ) ) {
+			$list[] = $p;
+			if ( count( $list ) >= $limit ) {
+				break;
+			}
+		}
+	}
+	$st  = mpc_free_ship_state();
+	$sub = $st && $st['min'] > 0 && $st['left'] > 0 ? 'Te faltan ' . wp_kses_post( wc_price( $st['left'] ) ) . ' para el envío gratis.' : '';
+	return mpc_upsell_render( $list, 'snacks', '¿Un snack para el camino?', $sub );
 }
+
+/**
+ * Tras añadir desde «Completa tu pedido» o los snacks, vuelve a la misma página sin el parámetro, para que recargar no lo añada otra vez.
+ * WooCommerce ya ha añadido el producto y guardado el aviso en la sesión (wp_loaded, prioridad 20).
+ *
+ * @return void
+ */
+function mpc_clean_upsell_redirect() {
+	if ( isset( $_GET['mpc_up'], $_GET['add-to-cart'] ) && ! wp_doing_ajax() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Solo decide a dónde volver; el alta la hace WooCommerce.
+		wp_safe_redirect( remove_query_arg( array( 'mpc_up', 'add-to-cart', 'quantity' ) ) );
+		exit;
+	}
+}
+add_action( 'wp_loaded', 'mpc_clean_upsell_redirect', 30 );
 
 /* Carrito lateral: el bloque vive en el pie y el JS lo coloca bajo los productos; se refresca con los fragmentos. */
 add_action(
@@ -507,6 +601,7 @@ add_filter(
 add_action(
 	'woocommerce_after_cart_table',
 	function () {
+		echo mpc_snacks_html( 4 ); // phpcs:ignore WordPress.Security.EscapeOutput
 		echo mpc_upsell_html( 'cart', 4 ); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 );

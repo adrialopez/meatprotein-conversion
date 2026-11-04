@@ -332,3 +332,21 @@ a.mpc-upsell__add.button:hover { background: var(--mpc-pink) !important; color: 
 .mpc-packban > span { display: flex; flex-direction: column; gap: .1rem; min-width: 0; }
 .mpc-packban b { font: 700 .95rem/1.25 var(--mpc-sans); }
 .mpc-packban span span { font: 500 .85rem var(--mpc-sans); color: var(--mpc-soft); }
+
+/* Snacks del carrito: tarjetas en rejilla con foto grande. */
+.mpc-upsell--snacks { margin: 1.6rem 0; padding: 1.2rem; background: #fff; border: 1px solid var(--mpc-line); border-radius: 18px; }
+.mpc-upsell--snacks h4 { font-size: 1.15rem; }
+.mpc-upsell__sub { margin: -.2rem 0 .9rem; font: 500 .88rem/1.4 var(--mpc-sans); color: var(--mpc-soft); }
+.mpc-upsell--snacks ul { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: .8rem; }
+.mpc-upsell--snacks li { display: flex; flex-direction: column; gap: .6rem; padding: .7rem; text-align: center; }
+.mpc-upsell--snacks .mpc-upsell__txt { flex: 1 1 auto; }
+.mpc-upsell--snacks .mpc-upsell__img img { width: 100%; height: auto; aspect-ratio: 1; }
+.mpc-upsell--snacks .mpc-upsell__txt { align-items: center; }
+.mpc-upsell--snacks a.mpc-upsell__add.button { justify-content: center; width: 100%; box-sizing: border-box; }
+@media (max-width: 640px) {
+	.mpc-upsell--snacks { padding: .9rem; }
+	.mpc-upsell--snacks ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+	.mpc-upsell--snacks li { padding: .5rem; }
+	.mpc-upsell--snacks .mpc-upsell__txt a { font-size: .82rem; }
+	.mpc-upsell--snacks a.mpc-upsell__add.button { min-height: 36px !important; padding: 0 .5rem !important; font-size: .82rem !important; }
+}

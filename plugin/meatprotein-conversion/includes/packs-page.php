@@ -68,6 +68,7 @@ function mpc_flush_caches() {
 	delete_transient( 'mpc_pack_ids' );
 	delete_transient( 'mpc_favs' );
 	delete_transient( 'mpc_addon_ids_auto' );
+	delete_transient( 'mpc_snack_ids' );
 }
 foreach ( array( 'save_post_product', 'woocommerce_update_product', 'woocommerce_product_set_stock', 'woocommerce_variation_set_stock', 'woocommerce_product_set_stock_status', 'woocommerce_variation_set_stock_status', 'deleted_post' ) as $mpc_hook ) {
 	add_action( $mpc_hook, 'mpc_flush_caches' );
