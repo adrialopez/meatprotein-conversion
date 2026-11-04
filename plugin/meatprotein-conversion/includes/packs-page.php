@@ -183,7 +183,6 @@ add_shortcode(
 							<span class="mpc-pack-card__per"><?php echo wp_kses_post( wc_price( $sale / 10 ) ); ?> por bandeja · <?php echo wp_kses_post( wc_price( $sale / 40 ) ); ?> por hamburguesa</span>
 						</p>
 						<a class="mpc-btn" href="<?php echo esc_url( $p->get_permalink() ); ?>">Elegir mis sabores</a>
-						<p class="mpc-pack-card__note">Si llega en mal estado, lo reponemos.</p>
 					</div>
 				</article>
 			<?php endforeach; ?>
@@ -228,7 +227,6 @@ add_shortcode(
 		<ul class="mpc-trust mpc-trust--row">
 			<li><?php mpc_the_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>24-48 h</span></li>
 			<li><?php mpc_the_icon( 'snow' ); ?><span><strong>12 meses congelado</strong>Congélalo al recibirlo</span></li>
-			<li><?php mpc_the_icon( 'shield' ); ?><span><strong>Reposición garantizada</strong>Si llega en mal estado</span></li>
 		</ul>
 		<?php if ( ! is_wp_error( $hamb_url ) ) : ?>
 			<p class="mpc-packs__alt">¿Prefieres probar primero? <a href="<?php echo esc_url( $hamb_url ); ?>">Compra bandejas sueltas</a></p>

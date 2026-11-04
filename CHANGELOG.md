@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.15.2
+- /packs/: fuera el aviso «Si llega en mal estado, lo reponemos» (tarjeta y fila de garantías).
+- Tema hijo 1.0.4: título de la ficha centrado en su banda y sin la línea de categoría.
+
 ## 0.15.1
 - Portada: más aire bajo la cabecera y entre el pack y la foto.
 - Tema hijo 1.0.3: logo centrado, iconos de cabecera claros y contador del carrito legible.

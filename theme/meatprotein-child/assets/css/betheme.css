@@ -240,7 +240,11 @@ form.cart .single_add_to_cart_button { flex: 1 1 14rem; min-height: 56px; margin
 }
 /* ---------- Cabecera de la ficha ---------- */
 body.single-product .mcb-section-8ncp0cwvq { background-image: none !important; padding-top: 1.5rem; }
-body.mpc-pack-page .mcb-section-qf2h4wk5, body.mpc-single-page .mcb-section-qf2h4wk5 { padding-bottom: 1.6rem; }
+/* Banda del título: la cabecera es absoluta y se solapa con ella, así que el hueco de arriba suma su altura y el contenido queda centrado en lo visible. */
+body.mpc-pack-page .mcb-section-qf2h4wk5, body.mpc-single-page .mcb-section-qf2h4wk5, body.mpc-basic-page .mcb-section-qf2h4wk5 { padding-top: 6.4rem !important; padding-bottom: 1rem !important; }
+@media (min-width: 768px) {
+	body.mpc-pack-page .mcb-section-qf2h4wk5, body.mpc-single-page .mcb-section-qf2h4wk5, body.mpc-basic-page .mcb-section-qf2h4wk5 { padding-top: 7.8rem !important; }
+}
 body.mpc-pack-page .column_product_title, body.mpc-single-page .column_product_title { text-align: left; }
 body.mpc-pack-page .column_product_title h1, body.mpc-single-page .column_product_title h1 { margin: 0; text-align: left; font-size: clamp(1.7rem, 1.2rem + 2.2vw, 2.8rem); line-height: 1.08; text-wrap: balance; }
 body.single-product .woocommerce-product-gallery img, body.single-product .column_product_images img { border-radius: 20px; }
@@ -347,3 +351,6 @@ body.mpc-basic-page .the_content_wrapper p { line-height: 1.65; }
 .mfn-header-tmpl .mfn-header-cart-link { --mpc-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='21' r='1'/%3E%3Ccircle cx='20' cy='21' r='1'/%3E%3Cpath d='M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6'/%3E%3C/svg%3E"); }
 .mfn-header-tmpl .header-cart-count { position: absolute; top: -8px; right: -10px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: var(--mpc-pink); color: #fff; font: 600 .75rem/20px var(--mpc-sans); letter-spacing: .02em; font-variant-numeric: tabular-nums; text-align: center; box-sizing: border-box; }
 .mfn-header-tmpl .header-cart-count:empty, .mfn-header-tmpl .header-cart-count[data-count="0"] { display: none; }
+
+/* La categoría (y el resto de la meta) no aporta nada en la ficha. */
+body.mpc-pack-page .column_product_meta, body.mpc-single-page .column_product_meta, body.mpc-basic-page .column_product_meta { display: none !important; }
