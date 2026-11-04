@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.17.1
+- El snack del checkout respeta el orden de «Snacks del carrito (IDs)»: el primero que consigue el envío gratis o, si ninguno, el primero de la lista.
+
 ## Tema hijo 1.0.7
 - Cabecera: sin el círculo de Betheme al pasar el ratón por los iconos (solo el fondo suave).
 

@@ -535,8 +535,8 @@ function mpc_snack_ids() {
 }
 
 /**
- * El snack que se sugiere en el checkout: ninguno si ya tienen el envío gratis; si no, el más barato que lo consigue
- * o, si ninguno llega, el más caro (el que más se acerca).
+ * El snack que se sugiere en el checkout: ninguno si ya tienen el envío gratis; si no, el primero de la lista de snacks
+ * que lo consigue o, si ninguno llega, el primero disponible. Así manda el orden de los ajustes.
  *
  * @return WC_Product|null
  */
@@ -549,22 +549,20 @@ function mpc_checkout_snack() {
 	foreach ( WC()->cart->get_cart() as $item ) {
 		$in_cart[ (int) $item['product_id'] ] = true;
 	}
-	$best  = null;
-	$reach = null;
+	$first = null;
 	foreach ( mpc_snack_ids() as $id ) {
 		$p = isset( $in_cart[ $id ] ) ? null : wc_get_product( $id );
 		if ( ! $p || ! $p->is_purchasable() || ! $p->is_in_stock() || 'publish' !== get_post_status( $id ) ) {
 			continue;
 		}
-		$price = (float) wc_get_price_to_display( $p );
-		if ( $price >= $st['left'] && ( ! $reach || $price < (float) wc_get_price_to_display( $reach ) ) ) {
-			$reach = $p;
+		if ( (float) wc_get_price_to_display( $p ) >= $st['left'] ) {
+			return $p;
 		}
-		if ( ! $best || $price > (float) wc_get_price_to_display( $best ) ) {
-			$best = $p;
+		if ( ! $first ) {
+			$first = $p;
 		}
 	}
-	return $reach ? $reach : $best;
+	return $first;
 }
 
 /**
