@@ -372,3 +372,5 @@ body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl { bo
 /* Con la cabecera mínima, la banda del título se centra en lo visible (65 px de cabecera en escritorio, 53 px en móvil). */
 body.woocommerce-checkout:not(.woocommerce-order-received) #Subheader { padding-top: 5.1rem !important; padding-bottom: 2rem !important; }
 @media (min-width: 768px) { body.woocommerce-checkout:not(.woocommerce-order-received) #Subheader { padding-top: 6.3rem !important; padding-bottom: 2.2rem !important; } }
+/* Sin el círculo que Betheme dibuja alrededor del icono al pasar el ratón: solo el fondo suave de la caja. */
+.mfn-header-tmpl .mfn-header-icon-box .icon-wrapper, .mfn-header-tmpl .mfn-header-icon-box:hover .icon-wrapper, .mfn-header-tmpl .mfn-header-icon-box:focus .icon-wrapper { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; }
