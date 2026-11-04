@@ -260,14 +260,12 @@ a.mpc-upsell__add.button:hover { background: var(--mpc-pink) !important; color: 
 	.mpc-hero__tiles { gap: .5rem; }
 	.mpc-tile__add { padding: .3rem .3rem .5rem; }
 }
-.mpc-hero { padding-top: 5.8rem; }
-@media (min-width: 900px) {
-	.mpc-hero { padding-top: 7.4rem; }
-}
+.mpc-hero { padding-top: 7.2rem; }
 @media (min-width: 900px) {
 	.mpc-hero h1 { font-size: clamp(2.2rem, 1rem + 3vw, 3.3rem); }
 	.mpc-tile__add img { aspect-ratio: 3 / 2; }
-	.mpc-hero { padding-top: 7rem; padding-bottom: 2.2rem; }
+	.mpc-hero { padding-top: 9.5rem; padding-bottom: 3.4rem; }
+	.mpc-hero__in { gap: 3.6rem; }
 	.mpc-hero__micro { margin-top: .6rem; }
 }
 /* ---------- Pestaña «Qué incluye» ---------- */

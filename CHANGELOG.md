@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.15.1
+- Portada: más aire bajo la cabecera y entre el pack y la foto.
+- Tema hijo 1.0.3: logo centrado, iconos de cabecera claros y contador del carrito legible.
+
 ## 0.15.0
 - Fichas de productos básicos (barra fija, «Combínalo con», garantías según tipo).
 - Diseño montado con las herramientas de Betheme (`wp mpc layout apply|restore`).
