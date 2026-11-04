@@ -486,7 +486,7 @@ function mpc_upsell_render( $products, $context, $title, $sub = '' ) {
 					),
 					'checkout' === $context ? wc_get_checkout_url() : wc_get_cart_url()
 				)
-			) . '" class="mpc-upsell__add button" rel="nofollow" aria-label="Añadir ' . esc_attr( $name ) . ' al pedido">Añadir</a>';
+			) . '" class="mpc-upsell__add button" data-product_id="' . (int) $p->get_id() . '" rel="nofollow" aria-label="Añadir ' . esc_attr( $name ) . ' al pedido">Añadir</a>';
 		}
 		$h .= '</li>';
 	}
@@ -532,6 +532,55 @@ function mpc_snack_ids() {
 		set_transient( 'mpc_snack_ids', $ids, 6 * HOUR_IN_SECONDS );
 	}
 	return apply_filters( 'mpc_snack_ids', $ids );
+}
+
+/**
+ * El snack que se sugiere en el checkout: ninguno si ya tienen el envío gratis; si no, el más barato que lo consigue
+ * o, si ninguno llega, el más caro (el que más se acerca).
+ *
+ * @return WC_Product|null
+ */
+function mpc_checkout_snack() {
+	$st = mpc_free_ship_state();
+	if ( ! $st || $st['min'] <= 0 || $st['left'] <= 0 || 0 === $st['count'] ) {
+		return null;
+	}
+	$in_cart = array();
+	foreach ( WC()->cart->get_cart() as $item ) {
+		$in_cart[ (int) $item['product_id'] ] = true;
+	}
+	$best  = null;
+	$reach = null;
+	foreach ( mpc_snack_ids() as $id ) {
+		$p = isset( $in_cart[ $id ] ) ? null : wc_get_product( $id );
+		if ( ! $p || ! $p->is_purchasable() || ! $p->is_in_stock() || 'publish' !== get_post_status( $id ) ) {
+			continue;
+		}
+		$price = (float) wc_get_price_to_display( $p );
+		if ( $price >= $st['left'] && ( ! $reach || $price < (float) wc_get_price_to_display( $reach ) ) ) {
+			$reach = $p;
+		}
+		if ( ! $best || $price > (float) wc_get_price_to_display( $best ) ) {
+			$best = $p;
+		}
+	}
+	return $reach ? $reach : $best;
+}
+
+/**
+ * Tarjeta de snack del checkout, con el envío gratis como motivo.
+ *
+ * @return string
+ */
+function mpc_checkout_snack_html() {
+	$p  = mpc_checkout_snack();
+	$st = mpc_free_ship_state();
+	if ( ! $p || ! $st ) {
+		return '';
+	}
+	$reaches = (float) wc_get_price_to_display( $p ) >= $st['left'];
+	$sub     = $reaches ? 'Con este snack tu envío sale gratis.' : 'Te faltan ' . wp_kses_post( wc_price( $st['left'] ) ) . ' para el envío gratis.';
+	return mpc_upsell_render( array( $p ), 'checkout', '¿Un snack para el camino?', $sub );
 }
 
 /**
@@ -606,11 +655,11 @@ add_action(
 	}
 );
 
-/* Checkout: una sola sugerencia, justo antes del pago, la de menor precio de las más vendidas. */
+/* Checkout: una sola sugerencia (un snack) justo antes del pago, solo si aún no tienen el envío gratis. */
 add_action(
 	'woocommerce_review_order_before_payment',
 	function () {
-		echo mpc_upsell_html( 'checkout', 1 ); // phpcs:ignore WordPress.Security.EscapeOutput
+		echo mpc_checkout_snack_html(); // phpcs:ignore WordPress.Security.EscapeOutput
 	},
 	5
 );

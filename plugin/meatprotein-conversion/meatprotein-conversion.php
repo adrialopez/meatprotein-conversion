@@ -3,7 +3,7 @@
  * Plugin Name:       Meatprotein Conversion
  * Plugin URI:        https://github.com/adrialopez/meatprotein-conversion
  * Description:       Mejoras de conversión para meatprotein.eu: pack a medida, bandejas y productos básicos, carrito, pago, portada y menú.
- * Version:           0.16.0
+ * Version:           0.17.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_VERSION', '0.16.0' );
+define( 'MPC_VERSION', '0.17.0' );
 define( 'MPC_FILE', __FILE__ );
 define( 'MPC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MPC_URL', plugin_dir_url( __FILE__ ) );
@@ -137,6 +137,9 @@ function mpc_enqueue_assets() {
 	if ( is_product() ) {
 		wp_enqueue_script( 'mpc-bundle', MPC_URL . 'assets/js/bundle.js', array( 'jquery' ), mpc_asset_version( 'assets/js/bundle.js' ), $defer );
 		wp_enqueue_script( 'mpc-pack', MPC_URL . 'assets/js/pack-builder.js', array( 'jquery', 'wc-add-to-cart-variation' ), mpc_asset_version( 'assets/js/pack-builder.js' ), $defer );
+	}
+	if ( is_checkout() && ! is_order_received_page() ) {
+		wp_enqueue_script( 'mpc-checkout', MPC_URL . 'assets/js/checkout.js', array( 'jquery' ), mpc_asset_version( 'assets/js/checkout.js' ), $defer );
 	}
 	if ( mpc_hero_enabled() ) {
 		wp_enqueue_script( 'mpc-hero', MPC_URL . 'assets/js/hero.js', array(), mpc_asset_version( 'assets/js/hero.js' ), $defer );

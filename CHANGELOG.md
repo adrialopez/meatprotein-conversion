@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.17.0
+- Checkout: una sola tarjeta de snack antes del pago (solo si aún no tienen el envío gratis: el más barato que lo consigue o el que más se acerca), que se añade con un clic sin recargar y refresca el resumen.
+- Tema hijo 1.0.6: cabecera mínima en el checkout (logo pequeño y centrado, sin menú, iconos, botón de productos ni barra promo) y banda del título centrada. La confirmación del pedido conserva la cabecera completa.
+
 ## 0.16.0
 - Carrito: bloque «¿Un snack para el camino?» con los más vendidos de «Snacks dulces» (o los IDs de los ajustes), con el envío gratis como empujón. «Completa tu pedido» ya no repite snacks.
 - Al añadir desde esos bloques se vuelve al carrito sin `?add-to-cart=` (recargar ya no duplica).

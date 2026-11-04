@@ -350,3 +350,6 @@ a.mpc-upsell__add.button:hover { background: var(--mpc-pink) !important; color: 
 	.mpc-upsell--snacks .mpc-upsell__txt a { font-size: .82rem; }
 	.mpc-upsell--snacks a.mpc-upsell__add.button { min-height: 36px !important; padding: 0 .5rem !important; font-size: .82rem !important; }
 }
+.mpc-upsell--checkout .mpc-upsell__sub { margin: 0 0 .6rem; }
+.mpc-upsell__done { margin: 0; font: 600 .92rem/1.4 var(--mpc-sans); color: var(--mpc-ok); }
+a.mpc-upsell__add.is-busy { opacity: .6; pointer-events: none; }

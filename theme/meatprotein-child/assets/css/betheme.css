@@ -360,3 +360,15 @@ body.mpc-pack-page .column_product_meta, body.mpc-single-page .column_product_me
 .mfn-woocommerce-tabs-content .mpc-faq { flex: 1 1 100%; width: 100%; min-width: 0; }
 .mfn-woocommerce-tabs-content .mpc-faq__list { width: 100%; max-width: 46rem; margin: 0; }
 .mfn-woocommerce-tabs-content .mpc-faq--tab { padding: .4rem clamp(1rem, 3vw, 1.94rem) 1.2rem; box-sizing: border-box; }
+
+/* Checkout: solo el logo pequeño y centrado, sin menú, iconos, botón de productos ni barra promo (foco en pagar). La confirmación del pedido conserva la cabecera completa. */
+body.woocommerce-checkout:not(.woocommerce-order-received) .mpc-promo,
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mcb-wrap-9v8epji49,
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mcb-wrap-npfqnbg8p { display: none !important; }
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mcb-header-section > .section_wrapper { grid-template-columns: 1fr; justify-items: center; }
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mcb-header-section > .section_wrapper > .mcb-header-wrap:nth-child(2) { grid-column: 1; justify-self: center; }
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .logo-wrapper img { width: 64px !important; height: auto !important; max-height: none; }
+body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl { box-shadow: 0 1px 0 rgba(11, 11, 11, .08); background: #fff !important; }
+/* Con la cabecera mínima, la banda del título se centra en lo visible (65 px de cabecera en escritorio, 53 px en móvil). */
+body.woocommerce-checkout:not(.woocommerce-order-received) #Subheader { padding-top: 5.1rem !important; padding-bottom: 2rem !important; }
+@media (min-width: 768px) { body.woocommerce-checkout:not(.woocommerce-order-received) #Subheader { padding-top: 6.3rem !important; padding-bottom: 2.2rem !important; } }
