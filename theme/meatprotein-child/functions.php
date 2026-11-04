@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_CHILD_VERSION', '1.0.4' );
+define( 'MPC_CHILD_VERSION', '1.0.5' );
 
 /**
  * Hoja de estilos de la adaptación a Betheme. Va después de la del plugin (que define las variables --mpc-*)

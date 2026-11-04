@@ -354,3 +354,9 @@ body.mpc-basic-page .the_content_wrapper p { line-height: 1.65; }
 
 /* La categoría (y el resto de la meta) no aporta nada en la ficha. */
 body.mpc-pack-page .column_product_meta, body.mpc-single-page .column_product_meta, body.mpc-basic-page .column_product_meta { display: none !important; }
+
+/* Preguntas: el contenido de cada pestaña vive en un contenedor flex de Betheme y la lista se encogía a su contenido (240 px, centrada). */
+.mfn-woocommerce-tabs-nav-top .mfn-woocommerce-tabs-content, .mfn-woocommerce-tabs-content > .section_wrapper { flex: 1 1 100%; width: 100%; min-width: 0; }
+.mfn-woocommerce-tabs-content .mpc-faq { flex: 1 1 100%; width: 100%; min-width: 0; }
+.mfn-woocommerce-tabs-content .mpc-faq__list { width: 100%; max-width: 46rem; margin: 0; }
+.mfn-woocommerce-tabs-content .mpc-faq--tab { padding: .4rem clamp(1rem, 3vw, 1.94rem) 1.2rem; box-sizing: border-box; }

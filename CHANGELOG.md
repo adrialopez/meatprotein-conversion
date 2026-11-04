@@ -2,7 +2,7 @@
 
 ## 0.15.2
 - /packs/: fuera el aviso «Si llega en mal estado, lo reponemos» (tarjeta y fila de garantías).
-- Tema hijo 1.0.4: título de la ficha centrado en su banda y sin la línea de categoría.
+- Tema hijo 1.0.5: título de la ficha centrado en su banda y sin la línea de categoría; las preguntas ocupan el ancho de la pestaña (antes se encogían a 240 px).
 
 ## 0.15.1
 - Portada: más aire bajo la cabecera y entre el pack y la foto.
