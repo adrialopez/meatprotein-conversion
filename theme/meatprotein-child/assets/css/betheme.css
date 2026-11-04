@@ -369,8 +369,7 @@ body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mcb
 body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .mcb-header-section > .section_wrapper > .mcb-header-wrap:nth-child(2) { grid-column: 1; justify-self: center; }
 body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl .logo-wrapper img { width: 64px !important; height: auto !important; max-height: none; }
 body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-header-tmpl { box-shadow: 0 1px 0 rgba(11, 11, 11, .08); background: #fff !important; }
-/* Con la cabecera mínima, la banda del título se centra en lo visible (65 px de cabecera en escritorio, 53 px en móvil). */
-body.woocommerce-checkout:not(.woocommerce-order-received) #Subheader { padding-top: 5.1rem !important; padding-bottom: 2rem !important; }
-@media (min-width: 768px) { body.woocommerce-checkout:not(.woocommerce-order-received) #Subheader { padding-top: 6.3rem !important; padding-bottom: 2.2rem !important; } }
-/* Sin el círculo que Betheme dibuja alrededor del icono al pasar el ratón: solo el fondo suave de la caja. */
-.mfn-header-tmpl .mfn-header-icon-box .icon-wrapper, .mfn-header-tmpl .mfn-header-icon-box:hover .icon-wrapper, .mfn-header-tmpl .mfn-header-icon-box:focus .icon-wrapper { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; }
+/* Checkout limpio: sin banda de título ni pasos; el contenido arranca justo bajo el logo (la cabecera es absoluta: 65 px en escritorio, 53 px en móvil). */
+body.woocommerce-checkout:not(.woocommerce-order-received) #Subheader, body.woocommerce-checkout:not(.woocommerce-order-received) .mfn-checkout-steps { display: none !important; }
+body.woocommerce-checkout:not(.woocommerce-order-received) #Content { padding-top: 3.1rem; }
+@media (min-width: 768px) { body.woocommerce-checkout:not(.woocommerce-order-received) #Content { padding-top: 4.1rem; } }

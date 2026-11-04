@@ -1,5 +1,8 @@
 # Cambios
 
+## Tema hijo 1.0.8
+- Checkout: solo el logo; fuera la banda con el título y los pasos (Carrito > Finalizar compra > Pedido). La confirmación del pedido no cambia.
+
 ## 0.17.1
 - El snack del checkout respeta el orden de «Snacks del carrito (IDs)»: el primero que consigue el envío gratis o, si ninguno, el primero de la lista.
 
