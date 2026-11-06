@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.18.1
+- Páginas de texto en el alcance: FAQs, Envíos y devoluciones y Controles de calidad con diseño de lectura (tema hijo 1.0.10, clase `mpc-text-page`, filtro `mpc_text_pages`).
+- `wp mpc pages fix|revert`: limpia las FAQs (erratas, mayúsculas, estructura) y corrige la tabla y el párrafo de gastos de envío de Envíos y devoluciones (decían 50 €) con la regla vigente; guarda el contenido anterior para revertir.
+
 ## 0.18.0
 - **Alcance de la primera iteración:** hamburguesas, pack, portada, carrito, carrito lateral y pago. Fichas de otros productos, listados, nombres del resto del catálogo y páginas de texto quedan como estaban (Betheme). Se activan con **WooCommerce > Conversión > Alcance** (segunda iteración).
 - `wp mpc products fix` solo toca hamburguesas y pack salvo `--all`.

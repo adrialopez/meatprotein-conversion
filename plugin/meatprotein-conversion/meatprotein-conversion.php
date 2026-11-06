@@ -3,7 +3,7 @@
  * Plugin Name:       Meatprotein Conversion
  * Plugin URI:        https://github.com/adrialopez/meatprotein-conversion
  * Description:       Mejoras de conversión para meatprotein.eu: pack a medida, bandejas y productos básicos, carrito, pago, portada y menú.
- * Version:           0.18.0
+ * Version:           0.18.1
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_VERSION', '0.18.0' );
+define( 'MPC_VERSION', '0.18.1' );
 define( 'MPC_FILE', __FILE__ );
 define( 'MPC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MPC_URL', plugin_dir_url( __FILE__ ) );
@@ -70,6 +70,7 @@ function mpc_bootstrap() {
 	}
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		require_once MPC_DIR . 'includes/class-mpc-products-command.php';
+		require_once MPC_DIR . 'includes/class-mpc-pages-command.php';
 	}
 	add_action( 'wp_enqueue_scripts', 'mpc_enqueue_assets' );
 }

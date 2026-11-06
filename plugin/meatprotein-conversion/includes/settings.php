@@ -146,6 +146,18 @@ add_filter(
 		if ( mpc_scope_all() ) {
 			$classes[] = 'mpc-scope-all';
 		}
+		if ( is_page( mpc_text_pages() ) ) {
+			$classes[] = 'mpc-text-page';
+		}
 		return $classes;
 	}
 );
+
+/**
+ * Páginas de texto dentro del alcance de la primera iteración (por slug).
+ *
+ * @return string[]
+ */
+function mpc_text_pages() {
+	return apply_filters( 'mpc_text_pages', array( 'faqs', 'envios-y-devoluciones', 'controles-de-calidad' ) );
+}
