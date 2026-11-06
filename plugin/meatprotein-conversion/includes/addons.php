@@ -560,50 +560,35 @@ function mpc_snack_ids() {
 }
 
 /**
- * El snack que se sugiere en el checkout: ninguno si ya tienen el envío gratis; si no, el primero de la lista de snacks
- * que lo consigue o, si ninguno llega, el primero disponible. Así manda el orden de los ajustes.
+ * El snack que se sugiere en el checkout: el primero de la lista de snacks que no esté ya en el pedido (manda el orden de los ajustes).
  *
  * @return WC_Product|null
  */
 function mpc_checkout_snack() {
-	$st = mpc_free_ship_state();
-	if ( ! $st || $st['min'] <= 0 || $st['left'] <= 0 || 0 === $st['count'] ) {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
 		return null;
 	}
 	$in_cart = array();
 	foreach ( WC()->cart->get_cart() as $item ) {
 		$in_cart[ (int) $item['product_id'] ] = true;
 	}
-	$first = null;
 	foreach ( mpc_snack_ids() as $id ) {
 		$p = isset( $in_cart[ $id ] ) ? null : wc_get_product( $id );
-		if ( ! $p || ! $p->is_purchasable() || ! $p->is_in_stock() || 'publish' !== get_post_status( $id ) ) {
-			continue;
-		}
-		if ( (float) wc_get_price_to_display( $p ) >= $st['left'] ) {
+		if ( $p && $p->is_purchasable() && $p->is_in_stock() && 'publish' === get_post_status( $id ) ) {
 			return $p;
 		}
-		if ( ! $first ) {
-			$first = $p;
-		}
 	}
-	return $first;
+	return null;
 }
 
 /**
- * Tarjeta de snack del checkout, con el envío gratis como motivo.
+ * Tarjeta de snack del checkout.
  *
  * @return string
  */
 function mpc_checkout_snack_html() {
-	$p  = mpc_checkout_snack();
-	$st = mpc_free_ship_state();
-	if ( ! $p || ! $st ) {
-		return '';
-	}
-	$reaches = (float) wc_get_price_to_display( $p ) >= $st['left'];
-	$sub     = $reaches ? 'Con este snack tu envío sale gratis.' : 'Te faltan ' . wp_kses_post( wc_price( $st['left'] ) ) . ' para el envío gratis.';
-	return mpc_upsell_render( array( $p ), 'checkout', '¿Un snack para el camino?', $sub );
+	$p = mpc_checkout_snack();
+	return $p ? mpc_upsell_render( array( $p ), 'checkout', '¿Un snack para el camino?', 'Se envía junto con tu pedido.' ) : '';
 }
 
 /**
@@ -630,9 +615,7 @@ function mpc_snacks_html( $limit = 4 ) {
 			}
 		}
 	}
-	$st  = mpc_free_ship_state();
-	$sub = $st && $st['min'] > 0 && $st['left'] > 0 ? 'Te faltan ' . wp_kses_post( wc_price( $st['left'] ) ) . ' para el envío gratis.' : '';
-	return mpc_upsell_render( $list, 'snacks', '¿Un snack para el camino?', $sub );
+	return mpc_upsell_render( $list, 'snacks', '¿Un snack para el camino?', 'Se envía junto con tu pedido.' );
 }
 
 /**

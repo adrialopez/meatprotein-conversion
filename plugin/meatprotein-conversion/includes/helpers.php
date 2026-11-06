@@ -94,7 +94,7 @@ function mpc_faq_html( $context = 'burger' ) {
 	if ( 'basic' === $context ) {
 		$items = array(
 			'¿Cuándo sale mi pedido?'           => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
-			'¿Cuándo es gratis el envío?'       => 'Con 10 bandejas de hamburguesas o más, o en pedidos desde ' . (int) mpc_opt( 'free_min' ) . ' €. Por debajo, el envío cuesta ' . (int) mpc_opt( 'ship_cost' ) . ' € a toda la Península.',
+			'¿Cuándo es gratis el envío?'       => 'Cuando compras el pack o 10 bandejas de hamburguesas o más. En cualquier otro pedido, el envío cuesta ' . (int) mpc_opt( 'ship_cost' ) . ' € a toda la Península.',
 			'¿Puedo juntarlo con hamburguesas?' => 'Sí. Todo va en el mismo pedido y el mismo envío.',
 			'¿Qué pasa si algo llega mal?'      => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
 		);

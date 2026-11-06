@@ -93,7 +93,6 @@ add_action(
 	'woocommerce_after_add_to_cart_form',
 	function () {
 		global $product;
-		$free  = (int) mpc_opt( 'free_min' );
 		$ship  = (int) mpc_opt( 'ship_cost' );
 		$phone = trim( mpc_opt( 'phone' ) );
 		$wa    = preg_replace( '/\D+/', '', (string) mpc_opt( 'whatsapp' ) );
@@ -110,7 +109,7 @@ add_action(
 	<ul class="mpc-trust">
 		<li><?php mpc_the_icon( 'truck' ); ?><span><strong><?php echo $cold ? 'Llega refrigerado con SEUR' : 'Envío con SEUR en 24-48 h'; ?></strong><?php echo $cold ? 'En 24-48 h, de lunes a jueves antes de las 14:00.' : 'Enviamos de lunes a jueves antes de las 14:00.'; ?></span></li>
 		<?php if ( ! mpc_is_pack( $product ) ) : ?>
-		<li><?php mpc_the_icon( 'ship' ); ?><span><strong>Envío gratis con 10 bandejas o desde <?php echo esc_html( $free ); ?> €</strong>Por debajo, <?php echo esc_html( $ship ); ?> € a toda la Península.</span></li>
+		<li><?php mpc_the_icon( 'ship' ); ?><span><strong>Envío gratis con el pack o 10 bandejas</strong>En el resto de pedidos, <?php echo esc_html( $ship ); ?> € a toda la Península.</span></li>
 		<?php endif; ?>
 		<li><?php mpc_the_icon( 'shield' ); ?><span><strong>Si llega en mal estado, lo reponemos</strong>O te devolvemos el dinero del pedido.</span></li>
 		<?php if ( $cold ) : ?>

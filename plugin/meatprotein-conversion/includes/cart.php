@@ -30,29 +30,29 @@ function mpc_cart_trays() {
 	return $n;
 }
 
-/** Estado del envío gratis: gratis con 10 bandejas o más, o a partir del importe mínimo (productos, con descuentos). */
+/**
+ * Regla de envío gratis: solo cuando compran el pack o 10 bandejas de hamburguesas (el pack cuenta como 10).
+ * Cualquier otro pedido paga el envío. Lo aplica el plugin Advanced Dynamic Pricing; aquí solo se calcula para mostrarlo.
+ *
+ * @return string
+ */
+function mpc_free_ship_rule() {
+	return 'Gratis con el pack o con 10 bandejas de hamburguesas';
+}
+
+/** Estado del envío gratis: gratis con el pack o con 10 bandejas o más. */
 function mpc_free_ship_state() {
 	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 		return null;
 	}
-	$min   = (float) mpc_opt( 'free_min' );
-	$cnt   = (int) WC()->cart->get_cart_contents_count();
 	$trays = mpc_cart_trays();
-	$sub   = (float) WC()->cart->get_displayed_subtotal();
-	if ( WC()->cart->display_prices_including_tax() ) {
-		$sub -= (float) WC()->cart->get_discount_tax();
-	}
-	$sub  = max( 0, $sub - (float) WC()->cart->get_discount_total() );
-	$free = $trays >= 10 || ( $min > 0 && $sub >= $min );
-	$pct  = $free ? 100 : (int) min( 99, round( max( $min > 0 ? $sub / $min : 0, $trays / 10 ) * 100 ) );
+	$free  = $trays >= 10;
 	return array(
-		'min'        => $min,
-		'sub'        => $sub,
-		'left'       => $free ? 0 : max( 0, $min - $sub ),
+		'free'       => $free,
 		'trays'      => $trays,
 		'trays_left' => max( 0, 10 - $trays ),
-		'pct'        => $pct,
-		'count'      => $cnt,
+		'pct'        => $free ? 100 : (int) min( 99, round( $trays / 10 * 100 ) ),
+		'count'      => (int) WC()->cart->get_cart_contents_count(),
 	);
 }
 
@@ -63,11 +63,11 @@ function mpc_free_ship_state() {
  * @return string
  */
 function mpc_free_ship_text( $st ) {
-	if ( $st['left'] <= 0 ) {
+	if ( $st['free'] ) {
 		return '<strong>Envío gratis conseguido</strong>';
 	}
 	$bandejas = $st['trays_left'] . ( 1 === $st['trays_left'] ? ' bandeja más' : ' bandejas más' );
-	return 'Te faltan <strong>' . wc_price( $st['left'] ) . '</strong> o <strong>' . $bandejas . '</strong> para el envío gratis';
+	return 'Te faltan <strong>' . $bandejas . '</strong> para el envío gratis';
 }
 
 /**
@@ -77,10 +77,10 @@ function mpc_free_ship_text( $st ) {
  */
 function mpc_free_ship_html() {
 	$st = mpc_free_ship_state();
-	if ( ! $st || $st['min'] <= 0 || 0 === $st['count'] ) {
+	if ( ! $st || 0 === $st['count'] ) {
 		return '';
 	}
-	return '<div class="mpc-ship' . ( $st['left'] > 0 ? '' : ' is-done' ) . '"><p>' . mpc_free_ship_text( $st ) . '</p><span class="mpc-ship__bar"><i style="width:' . (int) $st['pct'] . '%"></i></span></div>';
+	return '<div class="mpc-ship' . ( $st['free'] ? ' is-done' : '' ) . '"><p>' . mpc_free_ship_text( $st ) . '</p><span class="mpc-ship__bar"><i style="width:' . (int) $st['pct'] . '%"></i></span></div>';
 }
 
 /** Datos mínimos para que el JS pinte la barra en el carrito lateral de Betheme (se refrescan con los fragmentos de WooCommerce). */
@@ -89,7 +89,7 @@ function mpc_cartdata_html() {
 	if ( ! $st ) {
 		return '<span class="mpc-cartdata" hidden></span>';
 	}
-	return '<span class="mpc-cartdata" hidden data-count="' . (int) $st['count'] . '" data-min="' . esc_attr( $st['min'] ) . '" data-pct="' . (int) $st['pct'] . '" data-left="' . esc_attr( wp_strip_all_tags( wc_price( $st['left'] ) ) ) . '" data-trays-left="' . (int) $st['trays_left'] . '" data-done="' . ( $st['left'] > 0 ? '0' : '1' ) . '"></span>';
+	return '<span class="mpc-cartdata" hidden data-count="' . (int) $st['count'] . '" data-pct="' . (int) $st['pct'] . '" data-trays-left="' . (int) $st['trays_left'] . '" data-done="' . ( $st['free'] ? '1' : '0' ) . '"></span>';
 }
 add_action(
 	'wp_footer',

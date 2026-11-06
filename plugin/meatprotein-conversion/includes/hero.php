@@ -46,7 +46,6 @@ function mpc_hero_html() {
 	$parts     = array_map( 'trim', explode( '+', mpc_clean_title( $pack->get_name() ) ) );
 	$gift      = mpc_gift_text( isset( $parts[1] ) ? $parts[1] : '' );
 	$favs      = mpc_fav_flavours( 8 );
-	$free      = (int) mpc_opt( 'free_min' );
 	$prot      = mpc_max_protein();
 	$photo     = apply_filters( 'mpc_hero_image', 'https://meatprotein.eu/wp-content/uploads/2024/06/meat-protein-home-scaled.jpg' );
 	$pimg      = wp_get_attachment_image_url( $pack->get_image_id(), 'woocommerce_thumbnail' );
@@ -114,14 +113,13 @@ function mpc_hero_html() {
  * @return string
  */
 function mpc_strip_html() {
-	$free    = (int) mpc_opt( 'free_min' );
 	$quality = mpc_page_url( 'controles-de-calidad' );
 	ob_start();
 	?>
 	<div class="mpc-strip-wrap"><ul class="mpc-strip">
 		<li><?php mpc_the_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>En 24-48 h</span></li>
 		<li><?php mpc_the_icon( 'shield' ); ?><span><strong>Reposición garantizada</strong>Si llega en mal estado</span></li>
-		<li><?php mpc_the_icon( 'ship' ); ?><span><strong>Envío gratis</strong>Con 10 bandejas o desde <?php echo esc_html( $free ); ?> €</span></li>
+		<li><?php mpc_the_icon( 'ship' ); ?><span><strong>Envío gratis</strong>Con el pack o 10 bandejas</span></li>
 		<li><?php mpc_the_icon( 'lab' ); ?><span><strong><?php echo $quality ? '<a href="' . esc_url( $quality ) . '">Controles de calidad</a>' : 'Controles de calidad'; ?></strong>En cada pedido</span></li>
 	</ul></div>
 	<?php
@@ -192,7 +190,7 @@ function mpc_menu_foot_html() {
 	$phone = trim( (string) mpc_opt( 'phone' ) );
 	$href  = preg_replace( '/[^\d+]/', '', $phone ? ( 0 === strpos( $phone, '+' ) ? $phone : '+34' . $phone ) : '' );
 	$ship  = mpc_page_url( 'envios-y-devoluciones' );
-	$h     = '<div class="mpc-sm-foot"><p class="mpc-sm-free">Envío gratis con 10 bandejas o desde ' . (int) mpc_opt( 'free_min' ) . ' €</p>';
+	$h     = '<div class="mpc-sm-foot"><p class="mpc-sm-free">Envío gratis con el pack o 10 bandejas</p>';
 	if ( $phone && $href ) {
 		$h .= '<a class="mpc-sm-call" href="tel:' . esc_attr( $href ) . '"><span>Llámanos</span><strong>' . esc_html( $phone ) . '</strong></a>';
 	}
@@ -274,7 +272,7 @@ function mpc_nav_data( $packs_url ) {
 		'packs'     => $packs_url,
 		'phone'     => $phone,
 		'phoneHref' => $href,
-		'free'      => 'Envío gratis con 10 bandejas o desde ' . (int) mpc_opt( 'free_min' ) . ' €',
+		'free'      => 'Envío gratis con el pack o 10 bandejas',
 		'ship'      => mpc_page_url( 'envios-y-devoluciones' ),
 	);
 }

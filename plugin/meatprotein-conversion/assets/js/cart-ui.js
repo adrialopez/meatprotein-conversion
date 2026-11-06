@@ -41,7 +41,7 @@
 			if (content && data) {
 				var bar = content.querySelector('.mpc-ship--sc');
 				var count = parseInt(data.getAttribute('data-count') || '0', 10);
-				if (!count || !parseFloat(data.getAttribute('data-min') || '0')) {
+				if (!count) {
 					if (bar) { bar.remove(); }
 				} else {
 					var done = data.getAttribute('data-done') === '1';
@@ -52,7 +52,7 @@
 						content.insertBefore(bar, content.firstChild);
 					}
 					bar.classList.toggle('is-done', done);
-					bar.querySelector('p').innerHTML = done ? '<strong>Envío gratis conseguido</strong>' : (function () { var t = parseInt(data.getAttribute('data-trays-left') || '10', 10); return 'Te faltan <strong>' + data.getAttribute('data-left') + '</strong> o <strong>' + t + (t === 1 ? ' bandeja más' : ' bandejas más') + '</strong> para el envío gratis'; })();
+					bar.querySelector('p').innerHTML = done ? '<strong>Envío gratis conseguido</strong>' : (function () { var t = parseInt(data.getAttribute('data-trays-left') || '10', 10); return 'Te faltan <strong>' + t + (t === 1 ? ' bandeja más' : ' bandejas más') + '</strong> para el envío gratis'; })();
 					bar.querySelector('i').style.width = data.getAttribute('data-pct') + '%';
 				}
 			}
@@ -93,7 +93,7 @@
 		later();
 	}).observe(holder, { childList: true, subtree: true });
 	var data0 = document.querySelector('.mpc-cartdata');
-	if (data0) { new MutationObserver(later).observe(data0.parentNode || document.body, { childList: true, attributes: true, subtree: true, attributeFilter: ['data-count', 'data-pct', 'data-left', 'data-done'] }); }
+	if (data0) { new MutationObserver(later).observe(data0.parentNode || document.body, { childList: true, attributes: true, subtree: true, attributeFilter: ['data-count', 'data-pct', 'data-trays-left', 'data-done'] }); }
 	if (window.jQuery) { jQuery(document.body).on('wc_fragments_refreshed wc_fragments_loaded added_to_cart removed_from_cart updated_cart_totals', later); }
 	enhance();
 })();

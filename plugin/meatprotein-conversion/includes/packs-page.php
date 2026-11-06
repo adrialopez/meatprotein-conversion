@@ -122,7 +122,6 @@ add_shortcode(
 		if ( ! $packs ) {
 			return '';
 		}
-		$free     = (int) mpc_opt( 'free_min' );
 		$maxprot  = mpc_max_protein();
 		$favs     = mpc_fav_flavours();
 		$hamb_url = get_term_link( 'hamburguesas', 'product_cat' );

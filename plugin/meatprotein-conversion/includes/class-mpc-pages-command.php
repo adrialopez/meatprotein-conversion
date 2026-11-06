@@ -21,7 +21,6 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 		 * @return string
 		 */
 		private function faqs_html() {
-			$free = (int) mpc_opt( 'free_min' );
 			$cost = number_format_i18n( (float) mpc_opt( 'ship_cost' ), 2 );
 			return '<p>Aquí aclaramos las preguntas más frecuentes sobre nuestra política de envío.</p>
 <h2>Pedidos</h2>
@@ -33,7 +32,7 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 <li>En la nevera, aproximadamente 72 horas.</li>
 </ul>
 <h2>Gastos de envío</h2>
-<p>Los gastos de envío para pedidos en Península y Portugal son de ' . esc_html( $cost ) . ' €. Son gratis con 10 bandejas de hamburguesas o más, o en pedidos desde ' . $free . ' €.</p>
+<p>Los gastos de envío para pedidos en Península y Portugal son de ' . esc_html( $cost ) . ' €. Son gratis cuando compras el pack o 10 bandejas de hamburguesas o más; en cualquier otro pedido se pagan.</p>
 <p>Por el momento quedan excluidos como zona de envío Ceuta, Melilla, Islas Canarias y Baleares.</p>
 <ul>
 <li>No es compatible con otros vales de descuento.</li>
@@ -59,13 +58,12 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 		 * @return array<string,string> Texto actual => texto nuevo.
 		 */
 		private function envios_replacements() {
-			$free = (int) mpc_opt( 'free_min' );
 			$cost = number_format_i18n( (float) mpc_opt( 'ship_cost' ), 2 );
 			return array(
 				'<tr><td>Zona</td><td>&lt;50€</td><td>&gt;10 bandejas</td><td>Plazos de entrega (*)</td></tr><tr><td>Península</td><td>9,00€</td><td>GRATIS</td><td>24-48 horas</td></tr>' =>
-					'<tr><td>Zona</td><td>Gastos de envío</td><td>Gratis con</td><td>Plazos de entrega (*)</td></tr><tr><td>Península</td><td>' . $cost . ' €</td><td>10 bandejas o más, o desde ' . $free . ' €</td><td>24-48 horas</td></tr>',
+					'<tr><td>Zona</td><td>Gastos de envío</td><td>Gratis con</td><td>Plazos de entrega (*)</td></tr><tr><td>Península</td><td>' . $cost . ' €</td><td>El pack o 10 bandejas de hamburguesas o más</td><td>24-48 horas</td></tr>',
 				'en los que el importe de todos los productos sea superior a 50.00€, (el equivalente a 10 bandejas de hamburguesas), los gastos de envío serán gratuitos.' =>
-					'en los que el pedido lleve 10 bandejas de hamburguesas o más, o el importe de los productos sea de ' . $free . ' € o más, los gastos de envío serán gratuitos.',
+					'en los que el pedido incluya el pack o 10 bandejas de hamburguesas o más, los gastos de envío serán gratuitos. En el resto de pedidos se aplican los gastos de envío indicados en la tabla.',
 			);
 		}
 

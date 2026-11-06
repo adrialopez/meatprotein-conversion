@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.18.2
+- **Envío gratis confirmado: solo con el pack o con 10 bandejas de hamburguesas; el resto de pedidos paga el envío.** Fuera la regla de «desde 60 €» (nunca existió en producción, donde la aplica el plugin Advanced Dynamic Pricing): ajuste `free_min` eliminado, barra de progreso solo con bandejas, textos de portada, ficha, FAQs, Envíos y devoluciones y promo actualizados.
+- Los snacks del carrito y del checkout ya no se presentan como ayuda para el envío gratis; el del checkout es el primero de la lista que no esté en el pedido.
+
 ## 0.18.1
 - Páginas de texto en el alcance: FAQs, Envíos y devoluciones y Controles de calidad con diseño de lectura (tema hijo 1.0.10, clase `mpc-text-page`, filtro `mpc_text_pages`).
 - `wp mpc pages fix|revert`: limpia las FAQs (erratas, mayúsculas, estructura) y corrige la tabla y el párrafo de gastos de envío de Envíos y devoluciones (decían 50 €) con la regla vigente; guarda el contenido anterior para revertir.
