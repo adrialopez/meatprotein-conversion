@@ -133,10 +133,12 @@ function mpc_nice_name( $name ) {
  * Producto básico: simple, y ni el pack ni una bandeja de hamburguesas.
  *
  * @param WC_Product|null $product Producto.
+ * Fuera del alcance de la primera iteración (ver mpc_scope_all()): sin él, estos productos conservan la ficha de Betheme.
+ *
  * @return bool
  */
 function mpc_is_basic( $product ) {
-	return $product instanceof WC_Product && $product->is_type( 'simple' ) && ! mpc_is_pack( $product ) && ! mpc_is_single_burger( $product );
+	return mpc_scope_all() && $product instanceof WC_Product && $product->is_type( 'simple' ) && ! mpc_is_pack( $product ) && ! mpc_is_single_burger( $product );
 }
 
 /**
@@ -317,6 +319,27 @@ function mpc_card_html( $p ) {
 	return $h . '<input type="hidden" name="mpc_extra[' . $id . ']" value="0"></div>';
 }
 
+/**
+ * Paso «Elige tu regalo»: una tarjeta por regalo, con el primero con stock marcado.
+ *
+ * @param WC_Product[] $choices Regalos publicados.
+ * @return string
+ */
+function mpc_gift_pick_html( $choices ) {
+	$default = mpc_pick_gift( 0 );
+	$h       = '<section class="mpc-q mpc-q--gift mpc-q--giftpick"><h3 class="mpc-q__t">Elige tu regalo <small>1 bandeja incluida en el pack</small></h3><div class="mpc-giftpick" role="radiogroup">';
+	foreach ( $choices as $p ) {
+		$id    = $p->get_id();
+		$avail = mpc_available_trays( $id );
+		$gone  = null !== $avail && $avail <= 0;
+		$name  = mpc_display_name( wp_strip_all_tags( $p->get_name() ) );
+		$h    .= '<label class="mpc-giftopt' . ( $gone ? ' is-out' : '' ) . '"><input type="radio" name="mpc_gift" value="' . (int) $id . '"' . checked( $id === $default, true, false ) . disabled( $gone, true, false ) . '>';
+		$h    .= '<span class="mpc-giftopt__img">' . wp_kses_post( $p->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ) . '</span>';
+		$h    .= '<span class="mpc-giftopt__name">' . esc_html( $name ) . '</span><span class="mpc-giftopt__tag">' . ( $gone ? 'Agotado' : 'Regalo' ) . '</span></label>';
+	}
+	return $h . '</div></section>';
+}
+
 /** Raíz del flujo: datos para el JS (precio base, pack al que «subir») y las preguntas. */
 add_action(
 	'woocommerce_before_add_to_cart_button',
@@ -336,8 +359,8 @@ add_action(
 		$attrs = ' data-kind="' . ( $is_pack ? 'pack' : ( $is_basic ? 'basic' : 'single' ) ) . '" data-base="' . esc_attr( $base ) . '" data-product="' . (int) $product->get_id() . '"';
 		if ( $is_pack ) {
 			$gift_parts = array_slice( array_map( 'trim', explode( '+', mpc_clean_title( $product->get_name() ) ) ), 1 );
-			if ( $gift_parts ) {
-				$attrs .= ' data-gift="' . esc_attr( $gift_parts[0] ) . '"';
+			if ( $gift_parts || mpc_gift_multi() ) {
+				$attrs .= ' data-gift="' . esc_attr( mpc_gift_multi() ? 'una bandeja de regalo a tu elección' : ( $gift_parts[0] ?? '' ) ) . '"';
 			}
 			$all_packs = mpc_get_packs();
 			if ( $all_packs && (int) $all_packs[0]->get_id() === (int) $product->get_id() && $product->get_total_sales() > 0 ) {
@@ -361,7 +384,9 @@ add_action(
 		if ( $is_pack ) {
 			$title  = mpc_clean_title( $product->get_name() );
 			$extras = array_slice( array_map( 'trim', explode( '+', $title ) ), 1 );
-			if ( $extras ) {
+			if ( mpc_gift_multi() ) {
+				$out .= mpc_gift_pick_html( mpc_gift_choices() );
+			} elseif ( $extras ) {
 				$gp   = (int) mpc_opt( 'gift_product' ) ? wc_get_product( (int) mpc_opt( 'gift_product' ) ) : null;
 				$out .= '<section class="mpc-q mpc-q--gift"><h3 class="mpc-q__t">Tu regalo <small>Incluido en el pack</small></h3><div class="mpc-cards"><div class="mpc-card mpc-card--gift"><span class="mpc-card__img">' . ( $gp ? wp_kses_post( $gp->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ) : '<span class="mpc-gift__ico">' . mpc_icon( 'ship' ) . '</span>' ) . '<span class="mpc-card__ribbon">Gratis</span></span><span class="mpc-card__name">' . esc_html( mb_strtoupper( mb_substr( $extras[0], 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $extras[0], 1, null, 'UTF-8' ) ) . '</span><span class="mpc-card__price is-free">Incluido</span></div></div></section>';
 			}

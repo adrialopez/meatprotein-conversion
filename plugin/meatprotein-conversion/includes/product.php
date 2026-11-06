@@ -236,8 +236,11 @@ add_filter(
 		}
 		if ( $is_pack ) {
 			$gift_one = $extras ? mb_strtolower( preg_replace( '/\s+de regalo$/iu', '', $extras[0] ), 'UTF-8' ) : '';
-			$prot     = mpc_max_protein();
-			$tiles    = array(
+			if ( mpc_gift_multi() ) {
+				$gift_one = 'bandeja a tu elección';
+			}
+			$prot  = mpc_max_protein();
+			$tiles = array(
 				array( 'check', '10', 'bandejas a tu elección, puedes repetir sabores' ),
 				array( 'ship', '40', 'hamburguesas de 100 g (4 por bandeja)' ),
 			);

@@ -1,5 +1,14 @@
 # Cambios
 
+## 0.18.0
+- **Alcance de la primera iteración:** hamburguesas, pack, portada, carrito, carrito lateral y pago. Fichas de otros productos, listados, nombres del resto del catálogo y páginas de texto quedan como estaban (Betheme). Se activan con **WooCommerce > Conversión > Alcance** (segunda iteración).
+- `wp mpc products fix` solo toca hamburguesas y pack salvo `--all`.
+- **Varios regalos:** «Regalos del pack (IDs)» admite una lista; con más de uno, el cliente elige (paso «Elige tu regalo»). El elegido se guarda en la línea del carrito y del pedido («Regalo»), el stock se descuenta del elegido y se devuelve al cancelar. Con un solo regalo todo sigue igual.
+- Con varios regalos, el nombre del pack en carrito, pago y pedido no nombra ninguno.
+
+## Tema hijo 1.0.9
+- Las reglas de listados (tienda, categorías) y de páginas de texto solo se aplican con el alcance completo (`body.mpc-scope-all`).
+
 ## Tema hijo 1.0.8
 - Checkout: solo el logo; fuera la banda con el título y los pasos (Carrito > Finalizar compra > Pedido). La confirmación del pedido no cambia.
 

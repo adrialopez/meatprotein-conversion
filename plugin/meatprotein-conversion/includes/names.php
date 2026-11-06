@@ -158,6 +158,20 @@ function mpc_display_name( $name ) {
 }
 
 /**
+ * Primera iteración: los nombres se normalizan en hamburguesas y pack siempre, y en el resto solo dentro del carrito, el pago y el mini carrito.
+ *
+ * @param int $product_id ID de producto.
+ * @return bool
+ */
+function mpc_name_in_scope( $product_id ) {
+	if ( mpc_scope_all() || is_cart() || is_checkout() || wp_doing_ajax() || doing_action( 'woocommerce_mini_cart_contents' ) || did_action( 'woocommerce_before_mini_cart' ) > did_action( 'woocommerce_after_mini_cart' ) ) {
+		return true;
+	}
+	$p = wc_get_product( $product_id );
+	return $p && ( mpc_is_pack( $p ) || mpc_is_single_burger( $p ) );
+}
+
+/**
  * Indica si hay que normalizar nombres en esta petición (solo parte pública).
  *
  * @return bool
@@ -180,7 +194,7 @@ function mpc_should_normalize_names() {
  * @return string
  */
 function mpc_filter_product_title( $title, $post_id = 0 ) {
-	if ( ! $post_id || ! mpc_should_normalize_names() || 'product' !== get_post_type( $post_id ) ) {
+	if ( ! $post_id || ! mpc_should_normalize_names() || 'product' !== get_post_type( $post_id ) || ! mpc_name_in_scope( $post_id ) ) {
 		return $title;
 	}
 	return mpc_display_name( $title );
@@ -195,9 +209,14 @@ add_filter( 'the_title', 'mpc_filter_product_title', 5, 2 );
  * @return string
  */
 function mpc_filter_product_name( $name, $product ) {
-	if ( ! $product instanceof WC_Product || ! mpc_should_normalize_names() ) {
+	if ( ! $product instanceof WC_Product || ! mpc_should_normalize_names() || ! mpc_name_in_scope( $product->get_id() ) ) {
 		return $name;
 	}
-	return mpc_display_name( $name );
+	$name = mpc_display_name( $name );
+	// Con varios regalos, el título del pack no nombra ninguno: el elegido va en «Regalo».
+	if ( mpc_gift_multi() && mpc_is_pack( $product ) ) {
+		$name = trim( explode( '+', $name, 2 )[0] );
+	}
+	return $name;
 }
 add_filter( 'woocommerce_product_get_name', 'mpc_filter_product_name', 20, 2 );

@@ -26,12 +26,95 @@ function mpc_flavour_key( $text ) {
 }
 
 /**
+ * IDs de los productos de regalo configurados (uno o varios, separados por comas).
+ *
+ * @return int[]
+ */
+function mpc_gift_ids() {
+	$raw = trim( (string) mpc_opt( 'gift_product' ) );
+	if ( '' === $raw ) {
+		return array();
+	}
+	return array_values( array_unique( array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', $raw ) ) ) ) );
+}
+
+/**
+ * Hay más de un regalo y el cliente puede elegir.
+ *
+ * @return bool
+ */
+function mpc_gift_multi() {
+	return count( mpc_gift_ids() ) > 1;
+}
+
+/**
+ * Regalos publicados, en el orden de los ajustes.
+ *
+ * @return WC_Product[]
+ */
+function mpc_gift_choices() {
+	$out = array();
+	foreach ( mpc_gift_ids() as $id ) {
+		$p = wc_get_product( $id );
+		if ( $p && 'publish' === get_post_status( $id ) ) {
+			$out[] = $p;
+		}
+	}
+	return $out;
+}
+
+/**
+ * Regalo que se aplica: el pedido por el cliente si está en la lista blanca o, si no, el primero con stock.
+ *
+ * @param int $requested ID elegido (0 = ninguno).
+ * @return int ID de producto, o 0 si no hay regalo configurado.
+ */
+function mpc_pick_gift( $requested = 0 ) {
+	$ids       = mpc_gift_ids();
+	$requested = (int) $requested;
+	if ( ! $ids ) {
+		return 0;
+	}
+	if ( $requested && in_array( $requested, $ids, true ) ) {
+		return $requested;
+	}
+	foreach ( $ids as $id ) {
+		$avail = mpc_available_trays( $id );
+		if ( null === $avail || $avail > 0 ) {
+			return $id;
+		}
+	}
+	return $ids[0];
+}
+
+/**
+ * Regalo elegido en el formulario de la ficha (el formulario de WooCommerce no lleva nonce; se sanea y la lista blanca decide).
+ *
+ * @return int
+ */
+function mpc_requested_gift() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- Ver el comentario de la función.
+	return isset( $_REQUEST['mpc_gift'] ) ? absint( wp_unslash( $_REQUEST['mpc_gift'] ) ) : 0;
+}
+
+/**
+ * Texto del regalo para titulares y listas: con varios regalos no se nombra uno concreto.
+ *
+ * @param string $named Texto con el regalo concreto (el del título del pack).
+ * @return string
+ */
+function mpc_gift_text( $named ) {
+	return mpc_gift_multi() ? '1 bandeja de regalo a tu elección' : $named;
+}
+
+/**
  * Bandejas elegidas en un pack, a partir de sus atributos.
  *
- * @param array $attrs Atributos de variación.
+ * @param array $attrs   Atributos de variación.
+ * @param int   $gift_id Regalo elegido (0 = el primero con stock).
  * @return mixed Resultado.
  */
-function mpc_components_from_attributes( $attrs ) {
+function mpc_components_from_attributes( $attrs, $gift_id = 0 ) {
 	$map  = mpc_flavour_products();
 	$out  = array();
 	$miss = array();
@@ -47,7 +130,7 @@ function mpc_components_from_attributes( $attrs ) {
 			$miss[] = (string) $value;
 		}
 	}
-	$gift = (int) mpc_opt( 'gift_product' );
+	$gift = mpc_pick_gift( $gift_id );
 	if ( $gift && $out ) {
 		$out[ $gift ] = ( $out[ $gift ] ?? 0 ) + 1;
 	}
@@ -89,7 +172,7 @@ function mpc_cart_tray_demand( $skip_key = '' ) {
 		$qty = (int) $item['quantity'];
 		$p   = wc_get_product( $item['product_id'] );
 		if ( $p && mpc_is_pack( $p ) ) {
-			list( $comp ) = mpc_components_from_attributes( $item['variation'] ?? array() );
+			list( $comp ) = mpc_components_from_attributes( $item['variation'] ?? array(), $item['mpc_gift'] ?? 0 );
 			foreach ( $comp as $id => $n ) {
 				$need[ $id ] = ( $need[ $id ] ?? 0 ) + $n * $qty;
 			}
@@ -136,7 +219,7 @@ add_filter(
 		if ( ! $p || ! mpc_is_pack( $p ) ) {
 			return $ok;
 		}
-		list( $comp ) = mpc_components_from_attributes( $variation );
+		list( $comp ) = mpc_components_from_attributes( $variation, mpc_requested_gift() );
 		$msg          = mpc_check_components( $comp, max( 1, (int) $qty ), mpc_cart_tray_demand() );
 		if ( $msg ) {
 			wc_add_notice( $msg, 'error' );
@@ -177,7 +260,7 @@ add_action(
 		if ( ! $p || ! mpc_is_pack( $p ) ) {
 			return;
 		}
-		list( $comp, $miss ) = mpc_components_from_attributes( $values['variation'] ?? array() );
+		list( $comp, $miss ) = mpc_components_from_attributes( $values['variation'] ?? array(), $values['mpc_gift'] ?? 0 );
 		if ( ! $comp ) {
 			return;
 		}
@@ -192,6 +275,13 @@ add_action(
 			);
 		}
 		$item->add_meta_data( '_mpc_components', $rows );
+		if ( mpc_gift_multi() ) {
+			// El título del pack nombra un regalo concreto; con elección, la línea del pedido va sin él y el elegido en «Regalo».
+			$item->set_name( mpc_display_name( trim( explode( '+', mpc_clean_title( $item->get_name() ), 2 )[0] ) ) );
+		}
+		if ( ! empty( $values['mpc_gift'] ) ) {
+			$item->add_meta_data( 'Regalo', mpc_display_name( wp_strip_all_tags( get_the_title( (int) $values['mpc_gift'] ) ) ) );
+		}
 		if ( $miss ) {
 			$item->add_meta_data( '_mpc_unmapped', $miss );
 		}
@@ -271,4 +361,32 @@ add_action(
 			$order->add_order_note( 'Stock de las hamburguesas del pack restituido.' );
 		}
 	}
+);
+
+/* ---- Varios regalos: el elegido va en la línea del carrito (líneas distintas por regalo), se ve en carrito y pedido ---- */
+add_filter(
+	'woocommerce_add_cart_item_data',
+	function ( $data, $product_id ) {
+		$p = wc_get_product( $product_id );
+		if ( $p && mpc_is_pack( $p ) && mpc_gift_multi() ) {
+			$data['mpc_gift'] = mpc_pick_gift( mpc_requested_gift() );
+		}
+		return $data;
+	},
+	10,
+	2
+);
+add_filter(
+	'woocommerce_get_item_data',
+	function ( $data, $cart_item ) {
+		if ( ! empty( $cart_item['mpc_gift'] ) ) {
+			$data[] = array(
+				'key'   => 'Regalo',
+				'value' => mpc_display_name( wp_strip_all_tags( get_the_title( (int) $cart_item['mpc_gift'] ) ) ),
+			);
+		}
+		return $data;
+	},
+	20,
+	2
 );

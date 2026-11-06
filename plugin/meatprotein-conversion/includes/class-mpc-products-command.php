@@ -24,6 +24,17 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	class MPC_Products_Command {
 
 		/**
+		 * Producto de la primera iteración: hamburguesa o pack.
+		 *
+		 * @param int $id ID de producto.
+		 * @return bool
+		 */
+		private function in_first_scope( $id ) {
+			$p = wc_get_product( $id );
+			return has_term( 'hamburguesas', 'product_cat', $id ) || ( $p && mpc_is_pack( $p ) );
+		}
+
+		/**
 		 * Informe de calidad de datos del catálogo. No modifica nada.
 		 *
 		 * ## OPTIONS
@@ -57,6 +68,9 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		 * [--dry-run]
 		 * : Muestra qué cambiaría, sin guardar nada.
 		 *
+		 * [--all]
+		 * : Aplica también a los productos fuera de la primera iteración (por defecto solo hamburguesas y pack).
+		 *
 		 * [--only=<reglas>]
 		 * : Reglas separadas por comas: titulos, slugs, pizzas. Por defecto, todas.
 		 *
@@ -72,6 +86,9 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			foreach ( $this->product_ids() as $id ) {
 				$post = get_post( $id );
 				if ( ! $post ) {
+					continue;
+				}
+				if ( ! isset( $assoc_args['all'] ) && ! $this->in_first_scope( $id ) ) {
 					continue;
 				}
 				$update = array();

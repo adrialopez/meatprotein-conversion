@@ -73,3 +73,8 @@ El diseño se monta con Betheme, no encima de él:
 Aplicar en una instalación: **WooCommerce > Conversión > Aplicar diseño** (o `wp mpc layout apply`). Guarda una copia de lo anterior; **Restaurar el original** (o `wp mpc layout restore`) lo deja como estaba. Es idempotente.
 
 Productos básicos (pizzas, panes, salsas, snacks...): barra de compra fija con cantidad, «Combínalo con», garantías según el tipo de producto (lo de «refrigerado» y «congélalo» solo en hamburguesas y pizzas), fecha de salida, banner del pack y pestañas «Detalles» y «Preguntas».
+
+## Alcance y regalos (0.18.0)
+
+- **Primera iteración:** hamburguesas, pack, portada, carrito, carrito lateral y pago. El resto del catálogo, los listados y las páginas de texto se quedan con Betheme. **WooCommerce > Conversión > Alcance** (o el filtro `mpc_scope_all`) lo amplía para la segunda iteración.
+- **Regalos:** `Regalos del pack (IDs)` acepta uno o varios IDs separados por comas. Con uno, va incluido sin elegir. Con varios, la ficha del pack muestra «Elige tu regalo» (el primero con stock va marcado), el elegido se guarda como dato de la línea (`mpc_gift`) y como meta visible «Regalo» en el pedido, y el stock se descuenta de ese producto.

@@ -44,7 +44,7 @@ function mpc_hero_html() {
 	$reg       = $vars ? (float) $vars[0]['display_regular_price'] : (float) $pack->get_regular_price();
 	$sale      = $vars ? (float) $vars[0]['display_price'] : (float) $pack->get_price();
 	$parts     = array_map( 'trim', explode( '+', mpc_clean_title( $pack->get_name() ) ) );
-	$gift      = isset( $parts[1] ) ? $parts[1] : '';
+	$gift      = mpc_gift_text( isset( $parts[1] ) ? $parts[1] : '' );
 	$favs      = mpc_fav_flavours( 8 );
 	$free      = (int) mpc_opt( 'free_min' );
 	$prot      = mpc_max_protein();
