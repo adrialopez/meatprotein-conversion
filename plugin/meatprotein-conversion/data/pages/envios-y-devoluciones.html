@@ -26,7 +26,7 @@
 .mp-text details>summary{cursor:pointer;list-style:none;padding:.95rem 2rem .95rem 0;font-weight:700;position:relative;line-height:1.4}
 .mp-text details>summary::-webkit-details-marker{display:none}
 .mp-text details>summary::after{content:"+";position:absolute;right:.2rem;top:.8rem;font-size:1.4rem;font-weight:400;color:#b8306f}
-.mp-text details[open]>summary::after{content:"\2212"}
+.mp-text details[open]>summary::after{content:"−"}
 .mp-text details>*:not(summary){margin-left:0}
 .mp-text details[open]{padding-bottom:.4rem}
 @media (max-width:600px){.mp-text{padding:24px 16px 56px;font-size:1rem}.mp-text th,.mp-text td{padding:.6rem .55rem;font-size:.92rem}.mp-text h2{font-size:1.4rem;margin-top:2.2rem}.mp-text .mp-fact strong{font-size:1.2rem}}
@@ -37,15 +37,19 @@
 <div class="wp-block-group mp-text">
 
 <!-- wp:paragraph -->
-<p class="mp-lead">Aquí tienes cómo enviamos, cuándo llega tu pedido y qué hacemos si algo no sale bien. Trabajamos con producto fresco refrigerado, por eso las reglas son estas.</p>
+<p class="mp-lead">Aquí te explicamos cómo enviamos tu pedido, cuándo lo recibirás y qué hacemos si surge algún problema.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Trabajamos con producto fresco refrigerado y cuidamos especialmente el transporte para que recibas tus hamburguesas en las mejores condiciones.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:html -->
-<div class="mp-facts"><div class="mp-fact"><strong>13:00</strong><span>Hora de corte para cada pedido</span></div><div class="mp-fact"><strong>Antes de las 14:00</strong><span>Hora de entrega, con SEUR refrigerado</span></div><div class="mp-fact"><strong>Pack o 10 bandejas</strong><span>Envío gratis a la Península</span></div><div class="mp-fact"><strong>24 a 72 h</strong><span>Reposición si llega en mal estado</span></div></div>
+<div class="mp-facts"><div class="mp-fact"><strong>13:00 h</strong><span>Hora límite para realizar pedidos con envío según el calendario habitual.</span></div><div class="mp-fact"><strong>Antes de las 14:00 h</strong><span>Hora prevista de entrega con SEUR refrigerado.</span></div><div class="mp-fact"><strong>Pack o 10 bandejas o más</strong><span>Envío gratis a la Península.</span></div><div class="mp-fact"><strong>24 a 72 h</strong><span>Plazo habitual de reposición cuando un producto llega en mal estado y corresponde su sustitución.</span></div></div>
 <!-- /wp:html -->
 
 <!-- wp:html -->
-<ul class="mp-toc"><li><a href="#envios">Envíos</a></li><li><a href="#plazos">Plazos de entrega</a></li><li><a href="#cancelacion">Cancelación y modificación</a></li><li><a href="#garantia">Garantía y mal estado</a></li><li><a href="#desistimiento">Desistimiento</a></li><li><a href="#clausulas">Cláusulas adicionales</a></li></ul>
+<ul class="mp-toc"><li><a href="#envios">Envíos</a></li><li><a href="#plazos">Plazos de entrega</a></li><li><a href="#cancelacion">Cancelación y modificación</a></li><li><a href="#garantia">Garantía y producto en mal estado</a></li><li><a href="#desistimiento">Derecho de desistimiento</a></li><li><a href="#clausulas">Cláusulas adicionales</a></li></ul>
 <!-- /wp:html -->
 
 <!-- wp:heading {"anchor":"envios"} -->
@@ -53,35 +57,59 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Los gastos de envío van a cargo del cliente y se indican con el coste total antes del pago, durante el proceso de compra. Dependen del lugar de entrega. Enviamos a la Península y a Portugal; Canarias, Baleares, Ceuta, Melilla y el resto de destinos quedan excluidos por el momento. Para garantizar que cada pedido llegue en perfectas condiciones, contamos con el apoyo de partners especializados en logística ecommerce.</p>
+<p>Preparamos y enviamos tus pedidos con transporte refrigerado para mantener la cadena de frío durante todo el trayecto.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Únicamente realizamos envíos con entrega a domicilio. Se indica el importe, con IVA, de los gastos de envío para los productos acumulados.</p>
+<p>Actualmente realizamos entregas a domicilio en la Península y Portugal. Por el momento, no enviamos a Baleares, Canarias, Ceuta, Melilla ni otros destinos fuera de estas zonas.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Gastos de envío</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Los gastos de envío dependen del destino y se muestran durante el proceso de compra, antes de realizar el pago. Todos los importes incluyen IVA.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:table -->
-<figure class="wp-block-table"><table><thead><tr><th>Zona</th><th>Gastos de envío</th><th>Gratis con</th></tr></thead><tbody><tr><td>Península</td><td>9,00 €</td><td>El pack o 10 bandejas de hamburguesas o más</td></tr><tr><td>Portugal</td><td>15,00 €</td><td>No hay envío gratis a Portugal, tampoco con el pack</td></tr></tbody></table></figure>
+<figure class="wp-block-table"><table><thead><tr><th>Zona</th><th>Gastos de envío</th><th>Envío gratis</th></tr></thead><tbody><tr><td>Península</td><td>9,00 €</td><td>Con el pack o 10 bandejas de hamburguesas o más</td></tr><tr><td>Portugal</td><td>15,00 €</td><td>No disponible</td></tr></tbody></table></figure>
 <!-- /wp:table -->
 
 <!-- wp:paragraph -->
-<p>Para pedidos con destino en la Península en los que el pedido incluya el pack o 10 bandejas de hamburguesas o más, los gastos de envío serán gratuitos. En el resto de pedidos se aplican los gastos de envío indicados en la tabla. Los envíos a Portugal tienen siempre los gastos indicados, también cuando el pedido incluye el pack.</p>
+<p>En los pedidos con destino a la Península, el envío es gratuito cuando incluyen el pack o al menos 10 bandejas de hamburguesas.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Los lugares de entrega únicamente serán los que se indican expresamente en la tabla de gastos de envío. Cualquier pedido con dirección de envío distinta a estas áreas geográficas será cancelado y se procederá a la devolución de los importes recibidos. No se admiten apartados de correos como direcciones válidas de envío a domicilio.</p>
+<p>En Portugal, los gastos de envío son siempre de 15 €, independientemente de los productos o de la cantidad que incluya el pedido. El envío gratuito no se aplica a este destino, tampoco cuando se compra el pack.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>El envío de productos refrigerados o congelados se realiza en la modalidad idónea para no romper con la cadena de frío de los productos del pedido. Podrás seguir tu pedido cuando haya sido entregado a la empresa de transporte y hayas recibido el código de seguimiento.</p>
+<p>Los envíos se realizan exclusivamente a domicilio. No admitimos apartados de correos como dirección de entrega.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>No asumimos responsabilidad alguna respecto de la entrega del pedido que no pudiera realizarse como consecuencia de datos falsos, inexactos o incompletos proporcionados por el usuario o consumidor o bien, cuando la entrega no pueda efectuarse por causas ajenas a la empresa de transporte, como puede ser la ausencia del destinatario en el domicilio.</p>
+<p>Si recibimos un pedido con una dirección fuera de las zonas de reparto indicadas, tendremos que cancelarlo y devolveremos el importe abonado.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Transporte refrigerado y seguimiento</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Los productos refrigerados o congelados se envían mediante transporte preparado para mantener la cadena de frío durante el trayecto.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Para poder tramitar con celeridad cualquier incidente relacionado con el envío, rogamos que nos lo comuniques en el menor plazo posible (a poder ser en menos de 24 horas), indicando si se trata de falta o pérdida de alguno de los productos, si están dañados, si el empaque está abierto, etc. Puedes hacerlo desde <a href="/reportar-incidencia/">Reportar incidencia</a>.</p>
+<p>Cuando entreguemos tu pedido a la empresa de transporte, recibirás un código de seguimiento para consultar su estado.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Si detectas algún problema con la entrega, falta algún producto o el embalaje llega abierto o dañado, comunícanoslo lo antes posible, preferiblemente en las primeras 24 horas. Puedes hacerlo desde nuestra página de <a href="https://meatprotein.eu/reportar-incidencia/">Reportar incidencia</a>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Es importante que los datos de entrega sean correctos y estén completos. Si el transportista no puede entregar el pedido por una dirección incorrecta, la ausencia del destinatario u otra causa ajena a Meatprotein, pueden producirse retrasos o gastos adicionales de transporte.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"anchor":"plazos"} -->
@@ -89,15 +117,35 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Enviamos de lunes a jueves, con SEUR y en transporte refrigerado, y entregamos antes de las 14:00. La hora de corte es las 13:00 (hora peninsular). Los viernes no enviamos, para que el producto refrigerado no pase el fin de semana en tránsito.</p>
+<p>Enviamos de lunes a jueves mediante SEUR y transporte refrigerado. La entrega está prevista para el día siguiente a la expedición, antes de las 14:00 h.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>La hora límite para realizar un pedido y que salga según el calendario habitual es las <strong>13:00 h (hora peninsular)</strong>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Estos son los plazos habituales:</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:list -->
-<ul class="wp-block-list"><li>Pedidos de lunes a jueves <strong>antes de las 13:00</strong>: lo recibes al día siguiente, antes de las 14:00.</li><li>Pedidos de lunes a miércoles <strong>después de las 13:00</strong>: lo recibes dos días después, antes de las 14:00.</li><li>Pedidos <strong>desde el jueves a las 13:00 hasta el lunes a las 13:00</strong>: lo recibes el martes, antes de las 14:00.</li></ul>
+<ul class="wp-block-list"><li><strong>Pedidos de lunes a jueves antes de las 13:00 h:</strong> recibirás tu pedido al día siguiente, antes de las 14:00 h.</li><li><strong>Pedidos de lunes a miércoles después de las 13:00 h:</strong> recibirás tu pedido dos días después, antes de las 14:00 h.</li><li><strong>Pedidos desde el jueves a las 13:00 h hasta el lunes a las 13:00 h:</strong> recibirás tu pedido el martes, antes de las 14:00 h.</li></ul>
 <!-- /wp:list -->
 
 <!-- wp:paragraph -->
-<p>Si tu población se encuentra alejada de un gran núcleo urbano o ciudad, o tiene menos de 5.000 habitantes, puede que tenga una posible demora. En semanas con festivo no enviamos ese día ni el anterior, porque la entrega caería en festivo.</p>
+<p>No expedimos pedidos los viernes para evitar que los productos refrigerados pasen el fin de semana en tránsito.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Si tu dirección está en una población alejada de los principales núcleos urbanos o con menos de 5.000 habitantes, la entrega puede sufrir alguna demora.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>En las semanas con festivos tampoco expedimos pedidos el día festivo ni el día anterior, ya que la entrega podría coincidir con un día sin reparto.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Los plazos indicados son estimados y pueden variar por circunstancias ajenas al servicio habitual de transporte.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"anchor":"cancelacion"} -->
@@ -105,39 +153,87 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Puedes cancelar o modificar tu pedido (cambiar la dirección, retirar productos, reducir la cantidad o sustituirlos por otros) como máximo hasta las <strong>11:00 del día en que sale el pedido</strong>, que es el día anterior a la entrega. Escríbenos por WhatsApp al +34 944 99 91 94, a <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a> o hazlo desde tu área personal.</p>
+<p>¿Necesitas cambiar algo de tu pedido? Puedes hacerlo hasta las <strong>11:00 h del día en que está prevista su salida</strong>, es decir, el día anterior a la entrega.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Si la modificación sube el importe del pedido, pagarás la diferencia; si lo baja, te reembolsaremos la diferencia. El vendedor se reserva el derecho a rechazar modificaciones por razones organizativas.</p>
+<p>Puedes solicitar:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li>Un cambio en la dirección de entrega.</li><li>Retirar algún producto.</li><li>Reducir cantidades.</li><li>Sustituir productos por otros.</li><li>Añadir productos al pedido.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Para solicitar cualquier cambio, puedes escribirnos por WhatsApp al <strong>+34 944 99 91 94</strong>, enviarnos un correo a <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a> o gestionarlo desde tu área personal.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Si el cambio aumenta el importe del pedido, tendrás que abonar la diferencia. Si lo reduce, te devolveremos el importe correspondiente.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Ten en cuenta que algunas modificaciones pueden no ser posibles una vez iniciado el proceso de preparación. En ese caso, te informaremos.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"anchor":"garantia"} -->
 <h2 class="wp-block-heading" id="garantia">Garantía y producto en mal estado</h2>
 <!-- /wp:heading -->
 
+<!-- wp:paragraph -->
+<p>Trabajamos para que todos los pedidos lleguen en perfectas condiciones. Si algo no va bien, queremos saberlo y solucionarlo.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">¿Qué pasa si el pedido llega en mal estado?</h3>
+<!-- /wp:heading -->
+
 <!-- wp:html -->
-<div class="mp-note"><p><strong>Producto en mal estado.</strong> Si tu pedido llega con las bandejas infladas o en malas condiciones, Meatprotein se hace responsable y te repone un pedido igual en unas 24 a 72 horas. Si por un error nuestro recibes un sabor distinto al que pediste, lo compensamos en tu siguiente pedido.</p></div>
+<div class="mp-note"><p>Si recibes bandejas infladas o productos en malas condiciones, Meatprotein se hace cargo de la incidencia y, cuando corresponda, te enviará una reposición del pedido en un plazo aproximado de <strong>24 a 72 horas</strong>.</p></div>
 <!-- /wp:html -->
 
 <!-- wp:paragraph -->
-<p>Salvo prueba en contrario, se entenderá que los productos son conformes con el contrato siempre que cumplan todos los requisitos que se expresan a continuación, salvo que por las circunstancias del caso alguno de ellos no resulte aplicable:</p>
+<p>Si recibes un sabor distinto al que habías pedido por un error nuestro, compensaremos el producto afectado en tu siguiente pedido.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">¿Cómo comunico una incidencia?</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Si algún producto no llega en las condiciones esperadas, falta algún artículo o has recibido algo diferente a lo que compraste, ponte en contacto con nosotros cuanto antes.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Puedes hacerlo de cualquiera de estas formas:</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:list -->
-<ul class="wp-block-list"><li>Se ajusten a la descripción realizada por el vendedor y posean las cualidades del producto que el vendedor haya presentado al consumidor y usuario en forma de muestra o modelo.</li><li>Sean aptos para los usos a que ordinariamente se destinen los productos del mismo tipo.</li><li>Sean aptos para cualquier uso especial requerido por el consumidor y usuario cuando lo haya puesto en conocimiento del vendedor en el momento de celebración del contrato, siempre que éste haya admitido que el producto es apto para dicho uso.</li><li>Presenten la calidad y prestaciones habituales de un producto del mismo tipo que el consumidor y usuario pueda fundadamente esperar.</li></ul>
+<ul class="wp-block-list"><li>WhatsApp: <strong>+34 944 99 91 94</strong></li><li>Email: <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a></li><li><a href="https://meatprotein.eu/reportar-incidencia/">Reportar incidencia</a></li></ul>
 <!-- /wp:list -->
 
 <!-- wp:paragraph -->
-<p>Si el producto no fuera conforme con el contrato, el consumidor y usuario podrá optar entre exigir la reparación del producto, su sustitución, la rebaja del precio o la resolución del contrato.</p>
+<p>Indícanos el número de pedido y qué productos están afectados. Si puedes, adjunta fotografías para que podamos valorar el problema más rápidamente.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>El vendedor no se hace responsable de los daños en los productos de un mal uso de los mismos, así como de actos u omisiones del usuario que no se ajusten a las especificaciones de cada producto o de los daños causados por terceros que no estén vinculados al vendedor.</p>
+<p>Te responderemos en un plazo de 24 a 48 horas y, si procede, gestionaremos la reposición en unas 24 a 72 horas.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Garantía legal</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Todos nuestros productos están sujetos a las garantías de conformidad previstas en la legislación vigente.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Si algún producto no es conforme con el contrato o llega en mal estado, comunícalo cuanto antes por WhatsApp al +34 944 99 91 94, en <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a> o desde <a href="/reportar-incidencia/">Reportar incidencia</a>, indicando tu pedido y los productos afectados. Te contestamos en un plazo de 24 a 48 horas y, si procede, te reponemos un pedido igual en unas 24 a 72 horas.</p>
+<p>Si un producto no se corresponde con lo que has comprado, presenta algún defecto o no cumple las condiciones acordadas, tienes derecho a las soluciones que establece la normativa aplicable.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>La garantía no cubre los daños derivados de un uso inadecuado, de no seguir las indicaciones de conservación del producto o de actuaciones de terceros ajenos a Meatprotein, cuando legalmente corresponda.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"anchor":"desistimiento"} -->
@@ -145,15 +241,23 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Los productos que vendemos son alimentos frescos, que pueden deteriorarse o caducar con rapidez. Por eso no tienen derecho de desistimiento y no se admiten devoluciones de pedidos sin defecto, de acuerdo con el artículo 103 del Real Decreto Legislativo 1/2007, de 16 de noviembre, que excluye el derecho de desistimiento en:</p>
+<p>Nuestros productos son alimentos frescos que necesitan mantenerse refrigerados y pueden deteriorarse o caducar rápidamente. Por este motivo, <strong>no se admite el desistimiento ni la devolución de pedidos que estén en perfectas condiciones</strong>, de acuerdo con las excepciones previstas en el artículo 103 del Real Decreto Legislativo 1/2007, de 16 de noviembre.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Esta excepción contempla, entre otros supuestos:</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:list -->
-<ul class="wp-block-list"><li>El suministro de bienes que puedan deteriorarse o caducar con rapidez.</li><li>El suministro de bienes precintados que no sean aptos para ser devueltos por razones de protección de la salud o de higiene y que hayan sido desprecintados tras la entrega.</li><li>El suministro de bienes que después de su entrega y teniendo en cuenta su naturaleza se hayan mezclado de forma indisociable con otros bienes.</li></ul>
+<ul class="wp-block-list"><li>El suministro de bienes que puedan deteriorarse o caducar con rapidez.</li><li>El suministro de bienes precintados que no sean aptos para su devolución por razones de protección de la salud o de higiene y que hayan sido desprecintados tras la entrega.</li><li>El suministro de bienes que, después de su entrega y teniendo en cuenta su naturaleza, se hayan mezclado de forma indisociable con otros bienes.</li></ul>
 <!-- /wp:list -->
 
 <!-- wp:paragraph -->
-<p>Si tu pedido llega en mal estado, consulta el apartado «Garantía y producto en mal estado».</p>
+<p>Esto no afecta a tus derechos cuando un producto llega defectuoso, en mal estado o no se corresponde con lo que has comprado.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Si tienes algún problema con tu pedido, consulta el apartado <a href="#garantia">Garantía y producto en mal estado</a> y comunícanos la incidencia.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"anchor":"clausulas"} -->
@@ -161,31 +265,39 @@
 <!-- /wp:heading -->
 
 <!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Responsabilidad y exoneración de responsabilidad</h3>
+<h3 class="wp-block-heading">Responsabilidad</h3>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>No obstante, y salvo disposición legal en sentido contrario, no aceptaremos ninguna responsabilidad por las siguientes pérdidas, con independencia de su origen:</p>
+<p>Meatprotein responde de las obligaciones que le corresponden como vendedor conforme a la legislación vigente.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>En la medida permitida por la ley, no asumimos responsabilidad por pérdidas indirectas o consecuencias económicas que no sean una consecuencia directa y previsible de nuestro incumplimiento, como pérdidas de ingresos, ventas, negocio, contratos, ahorros previstos o datos.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Tampoco seremos responsables de retrasos o incumplimientos cuando se deban a circunstancias ajenas a nuestro control razonable, siempre dentro de los límites establecidos por la legislación aplicable.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Fuerza mayor</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Se consideran causas de fuerza mayor aquellas circunstancias excepcionales que escapan a nuestro control y que impiden o dificultan el cumplimiento de nuestras obligaciones.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Entre ellas se encuentran:</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:list -->
-<ul class="wp-block-list"><li>Pérdidas de ingresos o ventas.</li><li>Pérdida de negocio.</li><li>Lucro cesante o pérdida de contratos.</li><li>Pérdida de ahorros previstos.</li><li>Pérdida de datos.</li><li>Pérdida de tiempo de gestión o de horario de oficina.</li></ul>
+<ul class="wp-block-list"><li>Huelgas, cierres patronales y otros conflictos laborales.</li><li>Disturbios, revueltas, invasiones, amenazas terroristas o situaciones de guerra.</li><li>Incendios, explosiones, tormentas, inundaciones, terremotos, epidemias y otros desastres naturales.</li><li>Interrupciones o imposibilidad de utilizar medios de transporte públicos o privados.</li><li>Fallos o interrupciones de los sistemas de telecomunicaciones.</li><li>Actos, decretos, leyes, normativas o restricciones de las autoridades públicas.</li></ul>
 <!-- /wp:list -->
 
 <!-- wp:paragraph -->
-<p>No seremos responsables por ningún incumplimiento o retraso en el cumplimiento de alguna de las obligaciones asumidas, cuando el mismo se deba a acontecimientos que están fuera de nuestro control razonable («causa de fuerza mayor»).</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>Las causas de fuerza mayor incluirán cualquier acto, acontecimiento, falta de ejercicio, omisión o accidente que esté fuera de nuestro control razonable. A continuación se indica una lista de ejemplos, sin carácter exhaustivo ni limitativo:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:list -->
-<ul class="wp-block-list"><li>Huelgas, cierres patronales u otras medidas reivindicativas.</li><li>Conmoción civil, revuelta, invasión, amenaza o ataque terrorista, guerra (declarada o no) o amenaza o preparativos de guerra.</li><li>Incendio, explosión, tormenta, inundación, terremoto, hundimiento, epidemia o cualquier otro desastre natural.</li><li>Imposibilidad de uso de trenes, barcos, aviones, transportes de motor u otros medios de transporte, públicos o privados.</li><li>Imposibilidad de utilizar sistemas públicos o privados de telecomunicaciones.</li><li>Actos, decretos, legislación, normativa o restricciones de cualquier gobierno o autoridad pública.</li></ul>
-<!-- /wp:list -->
-
-<!-- wp:paragraph -->
-<p>Se entenderá que las obligaciones quedarán suspendidas durante el período en que la causa de fuerza mayor continúe, y dispondremos de una ampliación en el plazo para cumplir dichas obligaciones por un periodo de tiempo igual al que dure la causa de fuerza mayor.</p>
+<p>Mientras se mantenga una situación de fuerza mayor, las obligaciones afectadas podrán quedar suspendidas durante el tiempo que dure dicha circunstancia. Los plazos de cumplimiento se ampliarán en consecuencia, siempre de acuerdo con la legislación aplicable.</p>
 <!-- /wp:paragraph -->
 
 </div>

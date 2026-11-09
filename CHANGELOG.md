@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.19.6
+- «Envíos y devoluciones» con el texto redactado por el cliente (estructura en tarjetas, índice y secciones); «Meatprotein» unificado.
+- Corregido el signo de los desplegables abiertos de las FAQs (aparecía «2212»): `wp_update_post` quita las barras invertidas del CSS, ahora se guarda con `wp_slash` y el signo es un carácter directo.
 ## 0.19.5
 - **Páginas de texto maquetadas** (FAQs, Envíos y devoluciones, Reportar incidencia): columna de lectura centrada, resumen con datos clave, índice por secciones, FAQs en desplegables, tabla de tarifas sin desbordar en móvil y aviso destacado de «producto en mal estado». El contenido final vive en `data/pages/*.html` (se generan con `data/pages/build_pages.py`) y `wp mpc pages fix` lo aplica; ya está en producción.
 - Formulario de incidencias: texto de ayuda con plazos y mensajes del formulario en español.

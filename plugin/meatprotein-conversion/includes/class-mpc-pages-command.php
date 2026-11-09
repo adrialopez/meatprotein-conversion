@@ -59,9 +59,11 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 					$log[ $id ] = $post->post_content;
 				}
 				wp_update_post(
-					array(
-						'ID'           => $id,
-						'post_content' => $content,
+					wp_slash(
+						array(
+							'ID'           => $id,
+							'post_content' => $content,
+						)
 					)
 				);
 			}
@@ -80,9 +82,11 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 			$log = (array) get_option( 'mpc_pages_fix_log', array() );
 			foreach ( $log as $id => $content ) {
 				wp_update_post(
-					array(
-						'ID'           => (int) $id,
-						'post_content' => $content,
+					wp_slash(
+						array(
+							'ID'           => (int) $id,
+							'post_content' => $content,
+						)
 					)
 				);
 			}
