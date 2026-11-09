@@ -133,7 +133,7 @@ add_action(
 		foreach ( array_filter( $links ) as $l => $u ) {
 			$out[] = '<a href="' . esc_url( $u ) . '">' . esc_html( $l ) . '</a>';
 		}
-		echo '<div class="mpc-checkout-help"><p>¿Dudas con tu pedido? ' . ( $phone ? 'Llámanos al <a href="tel:' . esc_attr( preg_replace( '/\s+/', '', $phone ) ) . '">' . esc_html( $phone ) . '</a> (9:00-14:00) o escribe a <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a>.' : '' ) . '</p><p>' . implode( ' · ', $out ) . '</p></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		echo '<div class="mpc-checkout-help"><p>¿Dudas con tu pedido? ' . ( $phone ? 'Llámanos al <a href="tel:' . esc_attr( preg_replace( '/\s+/', '', $phone ) ) . '">' . esc_html( $phone ) . '</a> (lunes a viernes, 9:30-13:00) o escribe a <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a>.' : '' ) . '</p><p>' . implode( ' · ', $out ) . '</p></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 	},
 	5
 );

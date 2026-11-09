@@ -145,7 +145,7 @@ function mpc_assure_html() {
 	);
 	$cards  = array(
 		array( 'snow', 'Cadena de frío', 'Sale refrigerado de lunes a jueves y llega con SEUR antes de las 14:00. Al recibirlo, lo congelas y dura 12 meses.' ),
-		array( 'shield', 'Si algo llega mal, lo reponemos', 'Nos hacemos cargo de la reposición o te devolvemos el dinero. Sin discusiones.' ),
+		array( 'shield', 'Si algo llega mal, lo reponemos', 'Si llega con las bandejas infladas o en malas condiciones, te reponemos el pedido en unas 24 a 72 horas.' ),
 		array( 'lab', 'Controles de calidad', 'Revisamos las materias primas, la producción y cada pedido antes de enviarlo.' ),
 		array( 'check', 'Pago seguro', 'Paga con tarjeta, PayPal o Bizum.' ),
 	);

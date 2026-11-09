@@ -1,5 +1,7 @@
 # Cambios
 
+## 0.19.2
+- **Producto en mal estado, errores y contacto, según el cliente:** bandejas infladas o en malas condiciones → reposición de un pedido igual en unas 24 a 72 horas (ya no «o te devolvemos el dinero» en portada, ficha, carrito, FAQs y reseñas rápidas); sabor equivocado por su error → regalo en el siguiente pedido; error del cliente → se modifica por WhatsApp. Atención de lunes a viernes de 9:30 a 13:00, con mensaje de WhatsApp contestado en 24-48 h.
 ## 0.19.1
 - **Festivos en el cálculo de entrega.** Ajuste nuevo «Festivos y días sin envío» (WooCommerce > Conversión): una fecha por línea o un rango para vacaciones, ya con los festivos nacionales de fin de 2026 y 2027. No se envía en festivo ni el día antes (la entrega caería en festivo); el aviso salta al siguiente día válido.
 - El aviso da el día de llegada con fecha («el miércoles 11/11 antes de las 14:00») en vez de «mañana» o «pasado mañana».

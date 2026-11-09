@@ -48,10 +48,15 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 <p>Si tu población está alejada de un gran núcleo urbano o ciudad, o tiene menos de 5000 habitantes, puede haber una posible demora.</p>
 <p>En semanas con festivo no enviamos ese día ni el anterior, porque la entrega caería en festivo. La fecha exacta de entrega aparece siempre en el aviso de tu pedido.</p>
 <p>Si no te encuentras en tu domicilio, la empresa de transporte te enviará un SMS al teléfono que has indicado en el pedido, para que te pongas en contacto con ellos y acordéis el momento y el horario de entrega que mejor te vengan.</p>
-<h2>Devoluciones</h2>
-<p>Si el producto te llega en mal estado, Meatprotein se hace cargo de la devolución de tu pedido o de su reposición.</p>
+<h2>Producto en mal estado</h2>
+<p>Si tu pedido llega con las bandejas infladas o en malas condiciones, Meatprotein se hace responsable y te repone un pedido igual en unas 24 a 72 horas.</p>
+<h2>Errores en el pedido</h2>
+<ul>
+<li>Si nos equivocamos y te enviamos un sabor distinto al que pediste, solemos darte un regalo en tu siguiente pedido.</li>
+<li>Si te equivocas tú al hacer el pedido, escríbenos por WhatsApp y lo modificamos.</li>
+</ul>
 <h2>Servicio de atención al cliente</h2>
-<p>Para cualquier incidencia, reclamación o ejercicio de tus derechos puedes escribirnos a <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a>, llamar a la central, 944 999 194, de 9:00 a 14:00, o escribir por WhatsApp al 944 999 194 de 10:00 a 18:00.</p>';
+<p>Para cualquier incidencia, reclamación o ejercicio de tus derechos puedes escribirnos a <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a> o contactar con nosotros por teléfono o WhatsApp en el 944 999 194, de lunes a viernes, de 9:30 a 13:00. Si no nos encuentras, déjanos un mensaje por WhatsApp y te contestamos en 24 a 48 horas.</p>';
 		}
 
 		/**

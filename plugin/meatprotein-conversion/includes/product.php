@@ -111,7 +111,7 @@ add_action(
 		<?php if ( ! mpc_is_pack( $product ) ) : ?>
 		<li><?php mpc_the_icon( 'ship' ); ?><span><strong>Envío gratis con el pack o 10 bandejas</strong>En el resto de pedidos, <?php echo esc_html( $ship ); ?> € a la Península y <?php echo esc_html( (int) mpc_opt( 'ship_cost_pt' ) ); ?> € a Portugal.</span></li>
 		<?php endif; ?>
-		<li><?php mpc_the_icon( 'shield' ); ?><span><strong>Si llega en mal estado, lo reponemos</strong>O te devolvemos el dinero del pedido.</span></li>
+		<li><?php mpc_the_icon( 'shield' ); ?><span><strong>Si llega en mal estado, lo reponemos</strong>Te reponemos un pedido igual en unas 24 a 72 horas.</span></li>
 		<?php if ( $cold ) : ?>
 		<li><?php mpc_the_icon( 'snow' ); ?><span><strong>Congélalas al recibirlas</strong>Duran 12 meses en el congelador y unas 72 h en la nevera.</span></li>
 		<?php endif; ?>
@@ -290,7 +290,7 @@ add_filter(
 		if ( $cold ) {
 			$flow .= '<li>' . mpc_icon( 'snow' ) . '<span><strong>Congélalo al recibirlo</strong>12 meses en el congelador; en la nevera, unas 72 horas.</span></li>';
 		}
-		$flow    .= '<li>' . mpc_icon( 'shield' ) . '<span><strong>Si llega mal, lo reponemos</strong>Nos hacemos cargo de la devolución o de la reposición del pedido.</span></li>';
+		$flow    .= '<li>' . mpc_icon( 'shield' ) . '<span><strong>Si llega mal, lo reponemos</strong>Te reponemos un pedido igual en unas 24 a 72 horas.</span></li>';
 		$blocks[] = array(
 			'title' => 'Cómo llega' . ( $cold ? ' y cómo se conserva' : '' ),
 			'body'  => '<ul class="mpc-flow">' . $flow . '</ul>',

@@ -87,7 +87,7 @@ function mpc_faq_html( $context = 'burger' ) {
 		'¿Puedo repetir sabores?'      => 'Sí. Eliges 10 bandejas entre todos los sabores disponibles y puedes repetir los que más te gusten.',
 		'¿Cómo llega el pedido?'       => 'Refrigerado con SEUR, de lunes a jueves, con entrega antes de las 14:00. Al recibirlo, congela lo que no vayas a comer esos días.',
 		'¿Cuánto duran congeladas?'    => 'Hasta 12 meses en el congelador y unas 72 horas en la nevera.',
-		'¿Qué pasa si algo llega mal?' => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
+		'¿Qué pasa si algo llega mal?' => 'Si llega con las bandejas infladas o en malas condiciones, te reponemos un pedido igual en unas 24 a 72 horas. Escríbenos por WhatsApp.',
 		'¿Y si se agota un sabor?'     => 'Solo aparecen los sabores con stock en ese momento, así que no pedirás nada que no podamos enviarte.',
 		'¿Cuándo sale mi pedido?'      => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
 	);
@@ -96,7 +96,7 @@ function mpc_faq_html( $context = 'burger' ) {
 			'¿Cuándo sale mi pedido?'           => 'Enviamos de lunes a jueves. Lo que pidas el jueves por la tarde o el viernes sale el lunes, para que llegue en perfecto estado.',
 			'¿Cuándo es gratis el envío?'       => 'Cuando compras el pack o 10 bandejas de hamburguesas o más. En cualquier otro pedido, el envío cuesta ' . (int) mpc_opt( 'ship_cost' ) . ' € a la Península y ' . (int) mpc_opt( 'ship_cost_pt' ) . ' € a Portugal (a Portugal siempre se paga, también con el pack).',
 			'¿Puedo juntarlo con hamburguesas?' => 'Sí. Todo va en el mismo pedido y el mismo envío.',
-			'¿Qué pasa si algo llega mal?'      => 'Lo reponemos o te devolvemos el dinero. Cuéntanoslo desde la página de incidencias.',
+			'¿Qué pasa si algo llega mal?'      => 'Si llega con las bandejas infladas o en malas condiciones, te reponemos un pedido igual en unas 24 a 72 horas. Escríbenos por WhatsApp.',
 		);
 	}
 	$h = '<div class="mpc-faq__list">';

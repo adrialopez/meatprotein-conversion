@@ -218,7 +218,7 @@ add_filter(
 add_action(
 	'woocommerce_after_cart_totals',
 	function () {
-		echo '<ul class="mpc-sc-trust mpc-sc-trust--cart"><li>Envío refrigerado con SEUR, entrega antes de las 14:00</li><li>Pago seguro con tarjeta, PayPal o Bizum</li><li>Si llega en mal estado, lo reponemos o te devolvemos el dinero</li></ul>';
+		echo '<ul class="mpc-sc-trust mpc-sc-trust--cart"><li>Envío refrigerado con SEUR, entrega antes de las 14:00</li><li>Pago seguro con tarjeta, PayPal o Bizum</li><li>Si llega en mal estado, te reponemos el pedido</li></ul>';
 	}
 );
 
