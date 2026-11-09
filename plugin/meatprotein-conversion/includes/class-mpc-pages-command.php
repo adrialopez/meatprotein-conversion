@@ -141,6 +141,8 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 			} else {
 				WP_CLI::warning( 'Envíos y devoluciones: no se encontró el procedimiento de incidencias de la garantía (¿ya está cambiado?).' );
 			}
+			// 5) Sin garantía de dos años: son alimentos frescos.
+			$content = preg_replace( '#<!-- wp:paragraph -->\s*<p>Si usted es consumidor, todos los productos cuentan con una garantía de dos \(2\) años.*?</p>\s*<!-- /wp:paragraph -->\s*#su', '', $content );
 			return $content;
 		}
 
