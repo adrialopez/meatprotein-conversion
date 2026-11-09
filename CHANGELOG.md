@@ -1,5 +1,7 @@
 # Cambios
 
+## 0.18.3
+- Catálogo del pack: «Pollo y trufa» y «Pollo sabor jamón ibérico» descatalogadas (en borrador); «Pollo de corral» entra como sabor del pack (mapa de sabores y etiqueta nutricional). En producción las 10 bandejas del pack ya comparten la misma lista de 26 sabores.
 ## 0.18.2
 - **Envío gratis confirmado: solo con el pack o con 10 bandejas de hamburguesas; el resto de pedidos paga el envío.** Fuera la regla de «desde 60 €» (nunca existió en producción, donde la aplica el plugin Advanced Dynamic Pricing): ajuste `free_min` eliminado, barra de progreso solo con bandejas, textos de portada, ficha, FAQs, Envíos y devoluciones y promo actualizados.
 - Los snacks del carrito y del checkout ya no se presentan como ayuda para el envío gratis; el del checkout es el primero de la lista que no esté en el pedido.

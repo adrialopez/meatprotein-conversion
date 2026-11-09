@@ -298,5 +298,17 @@
   "prot": "18,8",
   "salt": "0,2",
   "peso": "400 g/bandeja"
+ },
+ "2497": {
+  "ing": "pechuga de pollo campero 96%, antioxidante (ácido cítrico), dextrina, especias, clara de HUEVO deshidratada, fibra vegetal. (Puede contener trazas de gluten)",
+  "kj": "539,7",
+  "kcal": "129",
+  "fat": "2,9",
+  "sat": "1,3",
+  "carb": "1,6",
+  "sug": "0",
+  "prot": "22,4",
+  "salt": "0,2",
+  "peso": "100 g/unidad · 400 g/bandeja de 4 unidades"
  }
 }

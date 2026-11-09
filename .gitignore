@@ -10,3 +10,4 @@ propuesta/
 # Dependencias de desarrollo del plugin
 plugin/meatprotein-conversion/vendor/
 plugin/meatprotein-conversion/.phpcs.json
+docs/

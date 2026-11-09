@@ -26,7 +26,7 @@ function mpc_flavour_products() {
 			'potro'                         => 2458,
 			'espinacas y queso'             => 2427,
 			'albondigas'                    => 2500,
-			'pollo trufa'                   => 18999,
+			'pollo de corral'               => 2497,
 			'miel y tomate'                 => 43882,
 			'miel con tomate'               => 43882,
 			'pizza'                         => 2455,
