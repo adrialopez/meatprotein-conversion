@@ -49,25 +49,28 @@
 
 /**
  * Aviso de entrega con cuenta atrás. Se envía de lunes a jueves; hora de corte 13:00 (Madrid) y entrega
- * al día siguiente del envío antes de las 14:00. El envío es el primer día lunes-jueves cuyo corte no ha pasado:
- * lun-jue antes de las 13 → mañana; lun-mié después de las 13 → pasado mañana; jue 13:00 a lun 13:00 → el martes.
+ * al día siguiente del envío antes de las 14:00. El envío es el primer día lunes-jueves cuyo corte no ha pasado,
+ * que no sea festivo y cuyo día siguiente tampoco lo sea (SEUR no entrega en festivo y el refrigerado no espera).
+ * Los festivos salen del ajuste «Festivos y días sin envío» (window.mpcCfg.holidays, AAAA-MM-DD).
+ * Ejemplos: lun-jue antes de las 13 → mañana; lun-mié después de las 13 → pasado mañana; jue 13:00 a lun 13:00 → el martes.
  */
 (function () {
 	'use strict';
 	var DAYS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+	var HOL = {};
+	((window.mpcCfg && window.mpcCfg.holidays) || []).forEach(function (h) { HOL[h] = true; });
 	function madrid() {
 		try { return new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })); } catch (e) { return new Date(); }
 	}
 	function pad(n) { return (n < 10 ? '0' : '') + n; }
+	function key(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
 	function calc(now) {
-		for (var k = 0; k < 8; k++) {
+		for (var k = 0; k < 40; k++) {
 			var cut = new Date(now.getFullYear(), now.getMonth(), now.getDate() + k, 13, 0, 0);
 			var dw = cut.getDay();
-			if (dw >= 1 && dw <= 4 && now < cut) {
-				var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-				var arrive = new Date(cut.getFullYear(), cut.getMonth(), cut.getDate() + 1);
-				var off = Math.round((arrive - today) / 864e5);
-				return { ms: cut - now, when: off === 1 ? 'mañana' : (off === 2 && arrive.getDay() !== 2) ? 'pasado mañana' : 'el ' + DAYS[arrive.getDay()] };
+			var arrive = new Date(cut.getFullYear(), cut.getMonth(), cut.getDate() + 1);
+			if (dw >= 1 && dw <= 4 && now < cut && !HOL[key(cut)] && !HOL[key(arrive)]) {
+				return { ms: cut - now, when: 'el ' + DAYS[arrive.getDay()] + ' ' + pad(arrive.getDate()) + '/' + pad(arrive.getMonth() + 1) };
 			}
 		}
 		return null;

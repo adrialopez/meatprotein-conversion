@@ -46,6 +46,7 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 <li>Si compras desde el jueves a las 13:00 hasta el lunes a las 13:00, lo recibes el martes antes de las 14:00.</li>
 </ul>
 <p>Si tu población está alejada de un gran núcleo urbano o ciudad, o tiene menos de 5000 habitantes, puede haber una posible demora.</p>
+<p>En semanas con festivo no enviamos ese día ni el anterior, porque la entrega caería en festivo. La fecha exacta de entrega aparece siempre en el aviso de tu pedido.</p>
 <p>Si no te encuentras en tu domicilio, la empresa de transporte te enviará un SMS al teléfono que has indicado en el pedido, para que te pongas en contacto con ellos y acordéis el momento y el horario de entrega que mejor te vengan.</p>
 <h2>Devoluciones</h2>
 <p>Si el producto te llega en mal estado, Meatprotein se hace cargo de la devolución de tu pedido o de su reposición.</p>
@@ -76,7 +77,7 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 <!-- /wp:list -->
 
 <!-- wp:paragraph -->
-<p>Si tu población se encuentra alejada de un gran núcleo urbano o ciudad, o tiene menos de 5000 habitantes, puede que tenga una posible demora.',
+<p>Si tu población se encuentra alejada de un gran núcleo urbano o ciudad, o tiene menos de 5000 habitantes, puede que tenga una posible demora. En semanas con festivo no enviamos ese día ni el anterior, porque la entrega caería en festivo; la fecha exacta de entrega aparece siempre en el aviso de tu pedido.',
 			);
 		}
 

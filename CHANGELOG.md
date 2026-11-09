@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.19.1
+- **Festivos en el cálculo de entrega.** Ajuste nuevo «Festivos y días sin envío» (WooCommerce > Conversión): una fecha por línea o un rango para vacaciones, ya con los festivos nacionales de fin de 2026 y 2027. No se envía en festivo ni el día antes (la entrega caería en festivo); el aviso salta al siguiente día válido.
+- El aviso da el día de llegada con fecha («el miércoles 11/11 antes de las 14:00») en vez de «mañana» o «pasado mañana».
 ## 0.19.0
 - **Horario y zonas de envío del cliente:** hora de corte 13:00 (Madrid), se envía de lunes a jueves y se entrega antes de las 14:00. Aviso con cuenta atrás en ficha, pack, carrito y pago («Tienes 02:14:09 para pedir y recibirlo mañana antes de las 14:00»): lun-jue antes de las 13 → mañana; lun-mié después de las 13 → pasado mañana; jueves 13:00 a lunes 13:00 → el martes. Sustituye al «sale hoy… 24-48 h».
 - **Portugal:** 15 € de envío y nunca gratis, tampoco con el pack. La barra de envío del carrito, del carrito lateral y del pago lo avisa cuando el país es Portugal. Ajuste nuevo «Coste de envío a Portugal».

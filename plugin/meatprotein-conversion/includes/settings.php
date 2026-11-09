@@ -25,6 +25,7 @@ function mpc_defaults() {
 		'step_queso'   => '',
 		'ship_cost'    => '9',
 		'ship_cost_pt' => '15',
+		'holidays'     => "2026-12-08 Inmaculada\n2026-12-25 Navidad\n2027-01-01 Año Nuevo\n2027-01-06 Reyes\n2027-03-26 Viernes Santo\n2027-05-01 Día del Trabajo\n2027-08-15 Asunción\n2027-10-12 Fiesta Nacional\n2027-11-01 Todos los Santos\n2027-12-06 Constitución\n2027-12-08 Inmaculada\n2027-12-25 Navidad",
 		'promo_text'   => 'Envío refrigerado, entrega antes de las 14:00 · Gratis con el pack o 10 bandejas',
 		'promo_url'    => '',
 		'promo_ends'   => '',
@@ -66,7 +67,11 @@ add_action(
 					$out = array();
 					foreach ( mpc_defaults() as $k => $d ) {
 						$v = isset( $in[ $k ] ) ? wp_unslash( $in[ $k ] ) : '';
-						$out[ $k ] = in_array( $k, array( 'nutrition', 'origin', 'certs' ), true ) ? wp_kses_post( $v ) : sanitize_text_field( $v );
+						if ( 'holidays' === $k ) {
+							$out[ $k ] = sanitize_textarea_field( $v );
+						} else {
+							$out[ $k ] = in_array( $k, array( 'nutrition', 'origin', 'certs' ), true ) ? wp_kses_post( $v ) : sanitize_text_field( $v );
+						}
 					}
 					return $out;
 				},
@@ -102,6 +107,7 @@ function mpc_settings_page() {
 	settings_fields( 'mpc' );
 	echo '<h2>Envío</h2><table class="form-table">';
 	$f( 'ship_cost', 'Coste de envío a la Península (€)', 'Solo informativo, para los textos.', 'number' );
+	$f( 'holidays', 'Festivos y días sin envío', 'Una fecha por línea (AAAA-MM-DD), con un texto opcional detrás; un rango se escribe AAAA-MM-DD..AAAA-MM-DD (para vacaciones). Ni se envía ese día ni se envía el día antes (la entrega caería en festivo). Llevan los festivos nacionales; añade los locales de Bilbao o los de tu almacén si hace falta.', 'textarea' );
 	$f( 'ship_cost_pt', 'Coste de envío a Portugal (€)', 'Solo informativo, para los textos. Portugal siempre paga, también con el pack.', 'number' );
 	$f( 'gift_product', 'Regalos del pack (IDs de producto)', 'Si el pack incluye una bandeja de regalo que es un producto de la tienda, indica su ID y su stock se descontará con cada pack. Con varios IDs separados por comas el cliente elige uno al comprar (el primero con stock va marcado). Cámbialo cuando cambie el regalo de la promo.' );
 	$f( 'step_salsa', 'Bundle: salsas (IDs)', 'Vacío = automático: salsas más vendidas con stock.' );
@@ -160,4 +166,29 @@ add_filter(
  */
 function mpc_text_pages() {
 	return apply_filters( 'mpc_text_pages', array( 'faqs', 'envios-y-devoluciones', 'controles-de-calidad' ) );
+}
+
+
+/**
+ * Fechas sin envío (festivos y cierres) en formato AAAA-MM-DD, a partir del ajuste «Festivos y días sin envío».
+ * Admite una fecha por línea con texto opcional y rangos AAAA-MM-DD..AAAA-MM-DD (máximo 60 días).
+ *
+ * @return string[]
+ */
+function mpc_holidays() {
+	$out = array();
+	foreach ( preg_split( '/\R/', (string) mpc_opt( 'holidays' ) ) as $line ) {
+		if ( ! preg_match( '/^\s*(\d{4}-\d{2}-\d{2})(?:\s*\.\.\s*(\d{4}-\d{2}-\d{2}))?/', $line, $m ) ) {
+			continue;
+		}
+		$a = strtotime( $m[1] . ' 12:00:00 UTC' );
+		$b = isset( $m[2] ) ? strtotime( $m[2] . ' 12:00:00 UTC' ) : $a;
+		if ( ! $a || ! $b || $b < $a ) {
+			continue;
+		}
+		for ( $t = $a, $n = 0; $t <= $b && $n < 60; $t += DAY_IN_SECONDS, $n++ ) {
+			$out[ gmdate( 'Y-m-d', $t ) ] = true;
+		}
+	}
+	return array_keys( $out );
 }
