@@ -21,7 +21,8 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 		 * @return string
 		 */
 		private function faqs_html() {
-			$cost = number_format_i18n( (float) mpc_opt( 'ship_cost' ), 2 );
+			$cost    = number_format_i18n( (float) mpc_opt( 'ship_cost' ), 2 );
+			$cost_pt = number_format_i18n( (float) mpc_opt( 'ship_cost_pt' ), 2 );
 			return '<p>Aquí aclaramos las preguntas más frecuentes sobre nuestra política de envío.</p>
 <h2>Pedidos</h2>
 <p>Si es la primera vez que compras en <strong>Meatprotein</strong>, rellena todos los campos del pedido. Si tienes algún problema, escríbenos a <a href="mailto:info@meatprotein.eu">info@meatprotein.eu</a>.</p>
@@ -32,19 +33,19 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 <li>En la nevera, aproximadamente 72 horas.</li>
 </ul>
 <h2>Gastos de envío</h2>
-<p>Los gastos de envío para pedidos en Península y Portugal son de ' . esc_html( $cost ) . ' €. Son gratis cuando compras el pack o 10 bandejas de hamburguesas o más; en cualquier otro pedido se pagan.</p>
+<p>Enviamos a toda la Península y a Portugal. Los gastos de envío a la Península son de ' . esc_html( $cost ) . ' € y son gratis cuando compras el pack o 10 bandejas de hamburguesas o más; en cualquier otro pedido se pagan. A Portugal el envío cuesta ' . esc_html( $cost_pt ) . ' € y siempre se paga, también cuando compras el pack.</p>
 <p>Por el momento quedan excluidos como zona de envío Ceuta, Melilla, Islas Canarias y Baleares.</p>
 <ul>
 <li>No es compatible con otros vales de descuento.</li>
 </ul>
 <h2>Entregas</h2>
+<p>Enviamos de lunes a jueves, con SEUR y en transporte refrigerado, y entregamos antes de las 14:00. La hora de corte es las 13:00 (hora peninsular). Los viernes no enviamos, para que el producto refrigerado no pase el fin de semana en tránsito.</p>
 <ul>
-<li>Si compras el lunes a partir de las 15:00, la entrega se hará en 48 a 72 horas aproximadamente.</li>
-<li>Si compras el lunes por la mañana, antes de las 15:00, te lo entregamos al día siguiente, en menos de 24 horas.</li>
-<li>Si compras el miércoles o el jueves, lo recibes en menos de 24 horas.</li>
-<li>Si compras el jueves a partir de las 15:00, te lo entregamos el martes por la mañana.</li>
+<li>Si compras de lunes a jueves antes de las 13:00, lo recibes al día siguiente antes de las 14:00.</li>
+<li>Si compras de lunes a miércoles después de las 13:00, lo recibes dos días después antes de las 14:00.</li>
+<li>Si compras desde el jueves a las 13:00 hasta el lunes a las 13:00, lo recibes el martes antes de las 14:00.</li>
 </ul>
-<p>La entrega se realiza de lunes a jueves, con SEUR, antes de las 14:00 y en transporte refrigerado. Si tu población está alejada de un gran núcleo urbano o ciudad, o tiene menos de 5000 habitantes, puede haber una posible demora.</p>
+<p>Si tu población está alejada de un gran núcleo urbano o ciudad, o tiene menos de 5000 habitantes, puede haber una posible demora.</p>
 <p>Si no te encuentras en tu domicilio, la empresa de transporte te enviará un SMS al teléfono que has indicado en el pedido, para que te pongas en contacto con ellos y acordéis el momento y el horario de entrega que mejor te vengan.</p>
 <h2>Devoluciones</h2>
 <p>Si el producto te llega en mal estado, Meatprotein se hace cargo de la devolución de tu pedido o de su reposición.</p>
@@ -58,12 +59,24 @@ if ( ! class_exists( 'MPC_Pages_Command' ) ) {
 		 * @return array<string,string> Texto actual => texto nuevo.
 		 */
 		private function envios_replacements() {
-			$cost = number_format_i18n( (float) mpc_opt( 'ship_cost' ), 2 );
+			$cost    = number_format_i18n( (float) mpc_opt( 'ship_cost' ), 2 );
+			$cost_pt = number_format_i18n( (float) mpc_opt( 'ship_cost_pt' ), 2 );
+			$when    = 'Antes de las 14:00 (ver plazos más abajo)';
 			return array(
+				'Los pedidos a Canarias, Ceuta y Melilla o internacionales podrán estar sujetos a cargos de despacho de aduanas, así como por impuestos que graven su importación en dichos territorios, que también irán cargo del cliente.' =>
+					'Enviamos a la Península y a Portugal. Canarias, Baleares, Ceuta, Melilla y el resto de destinos quedan excluidos por el momento.',
 				'<tr><td>Zona</td><td>&lt;50€</td><td>&gt;10 bandejas</td><td>Plazos de entrega (*)</td></tr><tr><td>Península</td><td>9,00€</td><td>GRATIS</td><td>24-48 horas</td></tr>' =>
-					'<tr><td>Zona</td><td>Gastos de envío</td><td>Gratis con</td><td>Plazos de entrega (*)</td></tr><tr><td>Península</td><td>' . $cost . ' €</td><td>El pack o 10 bandejas de hamburguesas o más</td><td>24-48 horas</td></tr>',
-				'en los que el importe de todos los productos sea superior a 50.00€, (el equivalente a 10 bandejas de hamburguesas), los gastos de envío serán gratuitos.' =>
-					'en los que el pedido incluya el pack o 10 bandejas de hamburguesas o más, los gastos de envío serán gratuitos. En el resto de pedidos se aplican los gastos de envío indicados en la tabla.',
+					'<tr><td>Zona</td><td>Gastos de envío</td><td>Gratis con</td><td>Plazos de entrega (*)</td></tr><tr><td>Península</td><td>' . $cost . ' €</td><td>El pack o 10 bandejas de hamburguesas o más</td><td>' . $when . '</td></tr><tr><td>Portugal</td><td>' . $cost_pt . ' €</td><td>No hay envío gratis a Portugal, tampoco con el pack</td><td>' . $when . '</td></tr>',
+				'Para pedidos con destino/entrega en península, en los que el importe de todos los productos sea superior a 50.00€, (el equivalente a 10 bandejas de hamburguesas), los gastos de envío serán gratuitos.<br><br><strong>(*)</strong> Los pedidos realizados después de las 08.00h, se envían al día siguiente hábil, por lo que el plazo de entrega debe computarse a partir de la fecha en la que enviamos el pedido.<br><br>Si tu población se encuentra alejada de un gran núcleo urbano o ciudad, o tiene menos de 5000 habitantes, puede que tenga una posible demora. Los pedidos recibidos los jueves después de las 8h y viernes que sean fuera de Madrid serán enviados a partir del lunes para preservar la calidad del producto.' =>
+					'Para pedidos con destino en la Península en los que el pedido incluya el pack o 10 bandejas de hamburguesas o más, los gastos de envío serán gratuitos. En el resto de pedidos se aplican los gastos de envío indicados en la tabla. Los envíos a Portugal tienen siempre los gastos indicados, también cuando el pedido incluye el pack.<br><br><strong>(*)</strong> Enviamos de lunes a jueves, con SEUR y en transporte refrigerado, y entregamos antes de las 14:00. La hora de corte es las 13:00 (hora peninsular). Los viernes no enviamos, para que el producto refrigerado no pase el fin de semana en tránsito.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul><li>Pedidos de lunes a jueves antes de las 13:00: lo recibes al día siguiente antes de las 14:00.</li><li>Pedidos de lunes a miércoles después de las 13:00: lo recibes dos días después antes de las 14:00.</li><li>Pedidos desde el jueves a las 13:00 hasta el lunes a las 13:00: lo recibes el martes antes de las 14:00.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Si tu población se encuentra alejada de un gran núcleo urbano o ciudad, o tiene menos de 5000 habitantes, puede que tenga una posible demora.',
 			);
 		}
 

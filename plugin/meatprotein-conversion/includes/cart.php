@@ -45,9 +45,12 @@ function mpc_free_ship_state() {
 	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 		return null;
 	}
-	$trays = mpc_cart_trays();
-	$free  = $trays >= 10;
+	$trays   = mpc_cart_trays();
+	$country = WC()->customer ? WC()->customer->get_shipping_country() : '';
+	$pt      = 'PT' === $country;
+	$free    = ! $pt && $trays >= 10;
 	return array(
+		'pt'         => $pt,
 		'free'       => $free,
 		'trays'      => $trays,
 		'trays_left' => max( 0, 10 - $trays ),
@@ -63,6 +66,9 @@ function mpc_free_ship_state() {
  * @return string
  */
 function mpc_free_ship_text( $st ) {
+	if ( ! empty( $st['pt'] ) ) {
+		return 'Envío a <strong>Portugal: ' . esc_html( number_format_i18n( (float) mpc_opt( 'ship_cost_pt' ), 2 ) ) . ' €</strong>, también con el pack';
+	}
 	if ( $st['free'] ) {
 		return '<strong>Envío gratis conseguido</strong>';
 	}
@@ -80,6 +86,9 @@ function mpc_free_ship_html() {
 	if ( ! $st || 0 === $st['count'] ) {
 		return '';
 	}
+	if ( $st['pt'] ) {
+		return '<div class="mpc-ship is-pt"><p>' . mpc_free_ship_text( $st ) . '</p></div>';
+	}
 	return '<div class="mpc-ship' . ( $st['free'] ? ' is-done' : '' ) . '"><p>' . mpc_free_ship_text( $st ) . '</p><span class="mpc-ship__bar"><i style="width:' . (int) $st['pct'] . '%"></i></span></div>';
 }
 
@@ -89,7 +98,7 @@ function mpc_cartdata_html() {
 	if ( ! $st ) {
 		return '<span class="mpc-cartdata" hidden></span>';
 	}
-	return '<span class="mpc-cartdata" hidden data-count="' . (int) $st['count'] . '" data-pct="' . (int) $st['pct'] . '" data-trays-left="' . (int) $st['trays_left'] . '" data-done="' . ( $st['free'] ? '1' : '0' ) . '"></span>';
+	return '<span class="mpc-cartdata" hidden data-count="' . (int) $st['count'] . '" data-pct="' . (int) $st['pct'] . '" data-trays-left="' . (int) $st['trays_left'] . '" data-done="' . ( $st['free'] ? '1' : '0' ) . '" data-pt="' . ( $st['pt'] ? esc_attr( number_format_i18n( (float) mpc_opt( 'ship_cost_pt' ), 2 ) ) : '' ) . '"></span>';
 }
 add_action(
 	'wp_footer',
@@ -113,6 +122,25 @@ add_action(
 		echo mpc_free_ship_html(); // phpcs:ignore WordPress.Security.EscapeOutput
 	},
 	4
+);
+
+/** Aviso de entrega con cuenta atrás: lo rellena ui.js según la hora de Madrid (ver `data-mpc-eta`). */
+function mpc_eta_html() {
+	return '<p class="mpc-eta mpc-eta--cart" data-mpc-eta hidden>' . mpc_icon( 'truck' ) . '<span></span></p>';
+}
+add_action(
+	'woocommerce_before_cart',
+	function () {
+		echo mpc_eta_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+	},
+	11
+);
+add_action(
+	'woocommerce_checkout_order_review',
+	function () {
+		echo mpc_eta_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+	},
+	5
 );
 add_filter(
 	'woocommerce_add_to_cart_fragments',
@@ -190,7 +218,7 @@ add_filter(
 add_action(
 	'woocommerce_after_cart_totals',
 	function () {
-		echo '<ul class="mpc-sc-trust mpc-sc-trust--cart"><li>Envío refrigerado con SEUR en 24-48 h</li><li>Pago seguro con tarjeta, PayPal o Bizum</li><li>Si llega en mal estado, lo reponemos o te devolvemos el dinero</li></ul>';
+		echo '<ul class="mpc-sc-trust mpc-sc-trust--cart"><li>Envío refrigerado con SEUR, entrega antes de las 14:00</li><li>Pago seguro con tarjeta, PayPal o Bizum</li><li>Si llega en mal estado, lo reponemos o te devolvemos el dinero</li></ul>';
 	}
 );
 

@@ -47,23 +47,55 @@
 })();
 
 
-/** «Sale hoy / mañana / el lunes» según la hora de Madrid (se envía de lunes a jueves; el jueves por la tarde y el viernes salen el lunes). */
+/**
+ * Aviso de entrega con cuenta atrás. Se envía de lunes a jueves; hora de corte 13:00 (Madrid) y entrega
+ * al día siguiente del envío antes de las 14:00. El envío es el primer día lunes-jueves cuyo corte no ha pasado:
+ * lun-jue antes de las 13 → mañana; lun-mié después de las 13 → pasado mañana; jue 13:00 a lun 13:00 → el martes.
+ */
 (function () {
 	'use strict';
-	var el = document.querySelector('[data-mpc-eta]');
-	if (!el) { return; }
-	var now;
-	try { now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })); } catch (e) { now = new Date(); }
-	var d = now.getDay(), h = now.getHours(), when;
-	if (d >= 1 && d <= 4 && h < 14) { when = 'sale hoy'; }
-	else if (d >= 1 && d <= 3) { when = 'sale mañana'; }
-	else { when = 'sale el lunes'; }
-	var span = el.querySelector('span');
-	span.innerHTML = '';
-	span.appendChild(document.createTextNode('Pídelo ahora y '));
-	var b = document.createElement('strong'); b.textContent = when; span.appendChild(b);
-	span.appendChild(document.createTextNode('. Lo recibes en 24-48 h' + (el.getAttribute('data-cold') === '1' ? ', refrigerado.' : '.')));
-	el.hidden = false;
+	var DAYS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+	function madrid() {
+		try { return new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })); } catch (e) { return new Date(); }
+	}
+	function pad(n) { return (n < 10 ? '0' : '') + n; }
+	function calc(now) {
+		for (var k = 0; k < 8; k++) {
+			var cut = new Date(now.getFullYear(), now.getMonth(), now.getDate() + k, 13, 0, 0);
+			var dw = cut.getDay();
+			if (dw >= 1 && dw <= 4 && now < cut) {
+				var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+				var arrive = new Date(cut.getFullYear(), cut.getMonth(), cut.getDate() + 1);
+				var off = Math.round((arrive - today) / 864e5);
+				return { ms: cut - now, when: off === 1 ? 'mañana' : (off === 2 && arrive.getDay() !== 2) ? 'pasado mañana' : 'el ' + DAYS[arrive.getDay()] };
+			}
+		}
+		return null;
+	}
+	window.mpcEta = function (d) { return calc(d); };
+	function paint() {
+		var els = document.querySelectorAll('[data-mpc-eta]');
+		if (!els.length) { return; }
+		var r = calc(madrid());
+		if (!r) { return; }
+		var s = Math.floor(r.ms / 1000), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+		var left = (d ? d + ' d ' : '') + pad(h) + ':' + pad(m) + ':' + pad(s % 60);
+		for (var i = 0; i < els.length; i++) {
+			var span = els[i].querySelector('span');
+			if (!span) { continue; }
+			var key = r.when + (els[i].getAttribute('data-cold') || '');
+			if (span.getAttribute('data-w') !== key) {
+				span.innerHTML = 'Tienes <strong class="mpc-eta__t">' + left + '</strong> para pedir y recibirlo <strong>' + r.when + '</strong> antes de las 14:00' + (els[i].getAttribute('data-cold') === '1' ? ', refrigerado.' : '.');
+				span.setAttribute('data-w', key);
+			} else {
+				var t = span.querySelector('.mpc-eta__t');
+				if (t) { t.textContent = left; }
+			}
+			els[i].hidden = false;
+		}
+	}
+	paint();
+	setInterval(paint, 1000);
 })();
 
 

@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.19.0
+- **Horario y zonas de envío del cliente:** hora de corte 13:00 (Madrid), se envía de lunes a jueves y se entrega antes de las 14:00. Aviso con cuenta atrás en ficha, pack, carrito y pago («Tienes 02:14:09 para pedir y recibirlo mañana antes de las 14:00»): lun-jue antes de las 13 → mañana; lun-mié después de las 13 → pasado mañana; jueves 13:00 a lunes 13:00 → el martes. Sustituye al «sale hoy… 24-48 h».
+- **Portugal:** 15 € de envío y nunca gratis, tampoco con el pack. La barra de envío del carrito, del carrito lateral y del pago lo avisa cuando el país es Portugal. Ajuste nuevo «Coste de envío a Portugal».
+- Textos de portada, ficha, pack, carrito, FAQs y Envíos y devoluciones sin «24-48 h»; `wp mpc pages fix` reescribe plazos, tabla (con fila Portugal) y quita «fuera de Madrid» y el párrafo de aduanas.
 ## 0.18.3
 - Catálogo del pack: «Pollo y trufa» y «Pollo sabor jamón ibérico» descatalogadas (en borrador); «Pollo de corral» entra como sabor del pack (mapa de sabores y etiqueta nutricional). En producción las 10 bandejas del pack ya comparten la misma lista de 26 sabores.
 ## 0.18.2

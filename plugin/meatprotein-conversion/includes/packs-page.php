@@ -228,7 +228,7 @@ add_shortcode(
 		</section>
 
 		<ul class="mpc-trust mpc-trust--row">
-			<li><?php mpc_the_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>24-48 h</span></li>
+			<li><?php mpc_the_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>Entrega antes de las 14:00</span></li>
 			<li><?php mpc_the_icon( 'snow' ); ?><span><strong>12 meses congelado</strong>Congélalo al recibirlo</span></li>
 		</ul>
 		<?php if ( ! is_wp_error( $hamb_url ) ) : ?>

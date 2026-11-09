@@ -147,3 +147,8 @@
 .mpc-table--dlg tr:nth-child(3) th, .mpc-table--dlg tr:nth-child(5) th { padding-left: 1.4rem; color: var(--mpc-soft); }
 .mpc-table-wrap { overflow-x: auto; margin: .4rem 0 .5rem; }
 .mpc-table__note { font-size: .82rem; color: var(--mpc-soft); }
+.mpc-ship.is-pt p { margin: 0; }
+.mpc-eta__t { font-variant-numeric: tabular-nums; }
+.mpc-eta--cart { display: flex; align-items: center; gap: .6rem; box-sizing: border-box; width: 100%; flex: 1 1 100%; margin: 0 0 1.2rem; padding: .7rem .9rem; border-radius: 12px; background: #eaf6ef; color: #14573b; font: 500 .92rem/1.35 var(--mpc-sans, inherit); }
+.mpc-eta--cart[hidden] { display: none; }
+.mpc-eta--cart .mpc-i { flex: none; width: 22px; height: 22px; }

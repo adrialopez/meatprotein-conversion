@@ -43,7 +43,7 @@ add_action(
 		if ( mpc_max_protein() ) {
 			$chips[] = array( 'check', 'Hasta ' . (int) mpc_max_protein() . ' g de proteína por hamburguesa' );
 		}
-		$chips[] = array( 'truck', 'Refrigerado · 24-48 h' );
+		$chips[] = array( 'truck', 'Refrigerado · llega antes de las 14:00' );
 		echo '<ul class="mpc-facts">';
 		foreach ( $chips as $c ) {
 			echo '<li>' . mpc_icon( $c[0] ) . '<span>' . esc_html( $c[1] ) . '</span></li>'; // phpcs:ignore WordPress.Security.EscapeOutput
@@ -107,9 +107,9 @@ add_action(
 		<?php $cold = $product instanceof WC_Product && has_term( array( 'hamburguesas', 'pizza-fitness' ), 'product_cat', $product->get_id() ); ?>
 	<p class="mpc-eta" data-mpc-eta<?php echo $cold ? ' data-cold="1"' : ''; ?> hidden><?php mpc_the_icon( 'truck' ); ?><span></span></p>
 	<ul class="mpc-trust">
-		<li><?php mpc_the_icon( 'truck' ); ?><span><strong><?php echo $cold ? 'Llega refrigerado con SEUR' : 'Envío con SEUR en 24-48 h'; ?></strong><?php echo $cold ? 'En 24-48 h, de lunes a jueves antes de las 14:00.' : 'Enviamos de lunes a jueves antes de las 14:00.'; ?></span></li>
+		<li><?php mpc_the_icon( 'truck' ); ?><span><strong><?php echo $cold ? 'Llega refrigerado con SEUR' : 'Envío con SEUR, antes de las 14:00'; ?></strong><?php echo $cold ? 'Enviamos de lunes a jueves y entregamos antes de las 14:00.' : 'Enviamos de lunes a jueves antes de las 14:00.'; ?></span></li>
 		<?php if ( ! mpc_is_pack( $product ) ) : ?>
-		<li><?php mpc_the_icon( 'ship' ); ?><span><strong>Envío gratis con el pack o 10 bandejas</strong>En el resto de pedidos, <?php echo esc_html( $ship ); ?> € a toda la Península.</span></li>
+		<li><?php mpc_the_icon( 'ship' ); ?><span><strong>Envío gratis con el pack o 10 bandejas</strong>En el resto de pedidos, <?php echo esc_html( $ship ); ?> € a la Península y <?php echo esc_html( (int) mpc_opt( 'ship_cost_pt' ) ); ?> € a Portugal.</span></li>
 		<?php endif; ?>
 		<li><?php mpc_the_icon( 'shield' ); ?><span><strong>Si llega en mal estado, lo reponemos</strong>O te devolvemos el dinero del pedido.</span></li>
 		<?php if ( $cold ) : ?>
@@ -285,7 +285,7 @@ add_filter(
 				);
 		}
 		$cold = has_term( array( 'hamburguesas', 'pizza-fitness' ), 'product_cat', $product->get_id() );
-		$flow = '<li>' . mpc_icon( 'truck' ) . '<span><strong>' . ( $cold ? 'Refrigerado con SEUR' : 'Envío con SEUR' ) . '</strong>' . ( $cold ? 'En transporte refrigerado y en 24-48 h.' : 'En 24-48 h.' ) . '</span></li>'
+		$flow = '<li>' . mpc_icon( 'truck' ) . '<span><strong>' . ( $cold ? 'Refrigerado con SEUR' : 'Envío con SEUR' ) . '</strong>' . ( $cold ? 'En transporte refrigerado, antes de las 14:00.' : 'Antes de las 14:00.' ) . '</span></li>'
 		. '<li>' . mpc_icon( 'ship' ) . '<span><strong>Envíos de lunes a jueves</strong>Lo que pidas el jueves por la tarde o el viernes sale el lunes, para preservar la calidad.</span></li>';
 		if ( $cold ) {
 			$flow .= '<li>' . mpc_icon( 'snow' ) . '<span><strong>Congélalo al recibirlo</strong>12 meses en el congelador; en la nevera, unas 72 horas.</span></li>';

@@ -51,8 +51,10 @@
 						bar.innerHTML = '<p></p><span class="mpc-ship__bar"><i></i></span>';
 						content.insertBefore(bar, content.firstChild);
 					}
+					var pt = data.getAttribute('data-pt');
+					bar.classList.toggle('is-pt', !!pt);
 					bar.classList.toggle('is-done', done);
-					bar.querySelector('p').innerHTML = done ? '<strong>Envío gratis conseguido</strong>' : (function () { var t = parseInt(data.getAttribute('data-trays-left') || '10', 10); return 'Te faltan <strong>' + t + (t === 1 ? ' bandeja más' : ' bandejas más') + '</strong> para el envío gratis'; })();
+					bar.querySelector('p').innerHTML = pt ? 'Envío a <strong>Portugal: ' + pt + ' €</strong>, también con el pack' : done ? '<strong>Envío gratis conseguido</strong>' : (function () { var t = parseInt(data.getAttribute('data-trays-left') || '10', 10); return 'Te faltan <strong>' + t + (t === 1 ? ' bandeja más' : ' bandejas más') + '</strong> para el envío gratis'; })();
 					bar.querySelector('i').style.width = data.getAttribute('data-pct') + '%';
 				}
 			}
@@ -69,7 +71,7 @@
 			if (footer && !footer.querySelector('.mpc-sc-trust')) {
 				var t = document.createElement('ul');
 				t.className = 'mpc-sc-trust';
-				t.innerHTML = '<li>Refrigerado 24-48 h</li><li>Pago seguro</li><li>Reposición si llega mal</li>';
+				t.innerHTML = '<li>Refrigerado, antes de las 14:00</li><li>Pago seguro</li><li>Reposición si llega mal</li>';
 				footer.appendChild(t);
 			}
 			// 5) «Seguir comprando» cierra el panel

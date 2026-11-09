@@ -117,7 +117,7 @@ function mpc_strip_html() {
 	ob_start();
 	?>
 	<div class="mpc-strip-wrap"><ul class="mpc-strip">
-		<li><?php mpc_the_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>En 24-48 h</span></li>
+		<li><?php mpc_the_icon( 'truck' ); ?><span><strong>Refrigerado con SEUR</strong>Entrega antes de las 14:00</span></li>
 		<li><?php mpc_the_icon( 'shield' ); ?><span><strong>Reposición garantizada</strong>Si llega en mal estado</span></li>
 		<li><?php mpc_the_icon( 'ship' ); ?><span><strong>Envío gratis</strong>Con el pack o 10 bandejas</span></li>
 		<li><?php mpc_the_icon( 'lab' ); ?><span><strong><?php echo $quality ? '<a href="' . esc_url( $quality ) . '">Controles de calidad</a>' : 'Controles de calidad'; ?></strong>En cada pedido</span></li>
@@ -144,7 +144,7 @@ function mpc_assure_html() {
 		)
 	);
 	$cards  = array(
-		array( 'snow', 'Cadena de frío', 'Sale refrigerado y llega en 24-48 h con SEUR. Al recibirlo, lo congelas y dura 12 meses.' ),
+		array( 'snow', 'Cadena de frío', 'Sale refrigerado de lunes a jueves y llega con SEUR antes de las 14:00. Al recibirlo, lo congelas y dura 12 meses.' ),
 		array( 'shield', 'Si algo llega mal, lo reponemos', 'Nos hacemos cargo de la reposición o te devolvemos el dinero. Sin discusiones.' ),
 		array( 'lab', 'Controles de calidad', 'Revisamos las materias primas, la producción y cada pedido antes de enviarlo.' ),
 		array( 'check', 'Pago seguro', 'Paga con tarjeta, PayPal o Bizum.' ),

@@ -24,7 +24,8 @@ function mpc_defaults() {
 		'step_pan'     => '',
 		'step_queso'   => '',
 		'ship_cost'    => '9',
-		'promo_text'   => 'Envío refrigerado en 24-48 h · Gratis con el pack o 10 bandejas',
+		'ship_cost_pt' => '15',
+		'promo_text'   => 'Envío refrigerado, entrega antes de las 14:00 · Gratis con el pack o 10 bandejas',
 		'promo_url'    => '',
 		'promo_ends'   => '',
 		'promo_cta'    => '',
@@ -100,7 +101,8 @@ function mpc_settings_page() {
 	echo '<form method="post" action="options.php">';
 	settings_fields( 'mpc' );
 	echo '<h2>Envío</h2><table class="form-table">';
-	$f( 'ship_cost', 'Coste de envío si no llega (€)', 'Solo informativo, para los textos.', 'number' );
+	$f( 'ship_cost', 'Coste de envío a la Península (€)', 'Solo informativo, para los textos.', 'number' );
+	$f( 'ship_cost_pt', 'Coste de envío a Portugal (€)', 'Solo informativo, para los textos. Portugal siempre paga, también con el pack.', 'number' );
 	$f( 'gift_product', 'Regalos del pack (IDs de producto)', 'Si el pack incluye una bandeja de regalo que es un producto de la tienda, indica su ID y su stock se descontará con cada pack. Con varios IDs separados por comas el cliente elige uno al comprar (el primero con stock va marcado). Cámbialo cuando cambie el regalo de la promo.' );
 	$f( 'step_salsa', 'Bundle: salsas (IDs)', 'Vacío = automático: salsas más vendidas con stock.' );
 	$f( 'step_pan', 'Bundle: pan (IDs)', 'Vacío = automático.' );
