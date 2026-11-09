@@ -1,5 +1,7 @@
 # Cambios
 
+## 0.19.3
+- **Políticas y FAQs revisadas con lo que ha confirmado el cliente:** sin desistimiento (alimento fresco, art. 103); sabor equivocado por su error → se compensa en el siguiente pedido, no se reenvía; cancelar o modificar hasta las 11:00 del día de envío (fuera el mínimo de 27 € y las ventanas de las 08:00); incidencias → reposición en 24-72 h; WhatsApp a cualquier hora con respuesta en 24-48 h y teléfono de lunes a viernes 9:30-13:00. `wp mpc pages fix` reescribe esas secciones y quita «recogida», «aduanas» y el procedimiento de devolución con reembolso.
 ## 0.19.2
 - **Producto en mal estado, errores y contacto, según el cliente:** bandejas infladas o en malas condiciones → reposición de un pedido igual en unas 24 a 72 horas (ya no «o te devolvemos el dinero» en portada, ficha, carrito, FAQs y reseñas rápidas); sabor equivocado por su error → regalo en el siguiente pedido; error del cliente → se modifica por WhatsApp. Atención de lunes a viernes de 9:30 a 13:00, con mensaje de WhatsApp contestado en 24-48 h.
 ## 0.19.1
