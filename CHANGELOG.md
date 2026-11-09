@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.19.5
+- **Páginas de texto maquetadas** (FAQs, Envíos y devoluciones, Reportar incidencia): columna de lectura centrada, resumen con datos clave, índice por secciones, FAQs en desplegables, tabla de tarifas sin desbordar en móvil y aviso destacado de «producto en mal estado». El contenido final vive en `data/pages/*.html` (se generan con `data/pages/build_pages.py`) y `wp mpc pages fix` lo aplica; ya está en producción.
+- Formulario de incidencias: texto de ayuda con plazos y mensajes del formulario en español.
 ## 0.19.4
 - `wp mpc pages fix` quita de «Envíos y devoluciones» el párrafo de la garantía de dos años (alimentos frescos); ya aplicado en producción.
 
