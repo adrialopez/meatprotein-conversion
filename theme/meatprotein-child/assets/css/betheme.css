@@ -519,3 +519,7 @@ body.single-product .woocommerce-product-gallery .woocommerce-product-gallery__i
 body.woocommerce-checkout .mfn-footer-stickymenu, body.woocommerce-checkout .joinchat { display: none !important; }
 body.woocommerce-checkout { padding-bottom: 0 !important; }
 body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
+
+/* Pago: aire entre el aviso de entrega, el cupón y la lista de productos. */
+.woocommerce-checkout .mpc-eta { margin-bottom: 1rem; }
+.woocommerce-checkout .mpc-coupon { margin-top: 1rem; margin-bottom: 1.2rem; }
