@@ -542,3 +542,11 @@ body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
 .mfn-woocommerce-tabs-nav .mpc-tabind { top: auto !important; bottom: -1px !important; height: 3px; border-radius: 0 !important; background: var(--mpc-pink, #c23a7a) !important; }
 .mfn-woocommerce-tabs-nav:not(.has-ind) li.active a { box-shadow: inset 0 -3px 0 var(--mpc-pink, #c23a7a) !important; }
 @media (max-width: 767px) { .mfn-woocommerce-tabs-nav { gap: 1.4rem !important; } }
+
+/* Pestañas de la ficha: la caja tiene aire propio (antes las pestañas y las tarjetas tocaban los bordes). */
+.mfn-woocommerce-tabs.mfn-woocommerce-tabs-nav-top { padding: 1.4rem 1.6rem 1.8rem !important; }
+.mfn-woocommerce-tabs-nav { margin-bottom: 1.4rem !important; }
+.mfn-woocommerce-tabs-content { padding: 0 !important; }
+@media (max-width: 767px) {
+	.mfn-woocommerce-tabs.mfn-woocommerce-tabs-nav-top { padding: 1rem 1rem 1.2rem !important; }
+}
