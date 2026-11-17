@@ -386,3 +386,24 @@ body.mpc-text-page .the_content_wrapper table { width: 100%; border-collapse: co
 body.mpc-text-page .the_content_wrapper th, body.mpc-text-page .the_content_wrapper td { padding: .7rem .8rem; border: 1px solid var(--mpc-line); text-align: left; vertical-align: top; }
 body.mpc-text-page .the_content_wrapper th { background: var(--mpc-sky-soft); font: 700 .95rem var(--mpc-sans); }
 body.mpc-text-page .the_content_wrapper figure.wp-block-table { overflow-x: auto; margin: 0; }
+
+/* ==========================================================================
+   Ficha de producto: galería a sangre (sin márgenes), más grande y con flechas
+   ========================================================================== */
+.single-product .woocommerce-product-gallery { position: relative; }
+.single-product .woocommerce-product-gallery .flex-viewport { position: relative; aspect-ratio: 4 / 3; height: auto !important; background: #fff; }
+.single-product .woocommerce-product-gallery .woocommerce-product-gallery__wrapper,
+.single-product .woocommerce-product-gallery .woocommerce-product-gallery__image { height: 100%; }
+.single-product .woocommerce-product-gallery .woocommerce-product-gallery__image a { display: block; height: 100%; }
+.single-product .woocommerce-product-gallery .woocommerce-product-gallery__image img { width: 100% !important; height: 100% !important; object-fit: cover; display: block; }
+.mp-gal-btn { position: absolute; top: 50%; z-index: 6; display: grid; place-items: center; width: 42px; height: 42px; margin: -21px 0 0; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .92); color: var(--mpc-ink, #1d1d1f); box-shadow: 0 2px 10px rgba(0, 0, 0, .18); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.mp-gal-btn:active { transform: scale(.94); }
+.mp-gal-prev { left: 10px; }
+.mp-gal-next { right: 10px; }
+.mp-gal-count { position: absolute; right: 10px; bottom: 10px; z-index: 6; padding: .2rem .6rem; border-radius: 999px; background: rgba(0, 0, 0, .55); color: #fff; font: 600 .8rem/1.4 var(--mpc-sans, sans-serif); }
+@media (max-width: 767px) {
+	.single-product .mfn-product-images-wrapper { margin: -24px -20px 0; }
+	.single-product .woocommerce-product-gallery .flex-control-thumbs { display: none; }
+}
+.mp-gal-btn:hover, .mp-gal-btn:focus, .mp-gal-btn:focus-visible { background: #fff; color: var(--mpc-ink, #1d1d1f); outline: 0; }
+.mp-gal-btn:focus-visible { box-shadow: 0 0 0 3px var(--mpc-pink, #c23a7a), 0 2px 10px rgba(0, 0, 0, .18); }

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_CHILD_VERSION', '1.0.11' );
+define( 'MPC_CHILD_VERSION', '1.0.12' );
 
 /**
  * Hoja de estilos de la adaptación a Betheme. Va después de la del plugin (que define las variables --mpc-*)
@@ -28,6 +28,19 @@ function mpc_child_enqueue_styles() {
 	wp_enqueue_style( 'mpc-child-betheme', get_stylesheet_directory_uri() . '/assets/css/betheme.css', $deps, $ver );
 }
 add_action( 'wp_enqueue_scripts', 'mpc_child_enqueue_styles', 20 );
+
+/**
+ * Flechas y contador de la galería de la ficha de producto.
+ *
+ * @return void
+ */
+function mpc_child_enqueue_gallery() {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return;
+	}
+	wp_enqueue_script( 'mpc-child-gallery', get_stylesheet_directory_uri() . '/assets/js/gallery.js', array(), MPC_CHILD_VERSION, true );
+}
+add_action( 'wp_enqueue_scripts', 'mpc_child_enqueue_gallery', 21 );
 
 /**
  * Textos traducibles del tema hijo.
