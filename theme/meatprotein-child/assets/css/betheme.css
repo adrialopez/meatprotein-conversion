@@ -581,3 +581,12 @@ li.product .onsale, li.product .mfn-product-badges-left .onsale { text-align: le
 .single-product p.stock.in-stock, .single-product .stock.in-stock { display: none !important; }
 .mp-sellos { margin: .5rem 0 !important; }
 .mp-sellos img { height: 48px !important; width: auto !important; margin-right: 12px !important; }
+
+/* Carrito lateral: «Ver tus sabores» a todo el ancho de la fila, con el nombre del pack entero y el regalo etiquetado. */
+.mfn-cart-holder .mfn-ch-product:has(.mpc-sc-flavours) { grid-template-areas: "img info price" "flav flav flav" "foot foot foot"; }
+.mfn-cart-holder .mfn-ch-product:has(.mpc-sc-flavours) .mfn-chp-info { display: contents; }
+.mfn-cart-holder .mfn-ch-product:has(.mpc-sc-flavours) .mfn-chp-name { grid-area: info; display: block; -webkit-line-clamp: unset; overflow: visible; }
+.mfn-cart-holder .mfn-ch-product:has(.mpc-sc-flavours) .mpc-sc-flavours { grid-area: flav; margin: .35rem 0 0; padding: .6rem .8rem; border-radius: 12px; background: var(--mpc-sky-soft, #eef6fa); }
+.mfn-cart-holder .mpc-sc-flavours dt { float: none !important; width: 100% !important; display: block !important; margin: .5rem 0 .1rem; font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mpc-soft, #5b6670); }
+.mfn-cart-holder .mpc-sc-flavours dt:first-of-type { display: none !important; }
+.mfn-cart-holder .mpc-sc-flavours dd, .mfn-cart-holder .mpc-sc-flavours dd p { width: auto !important; max-width: none !important; margin: 0 !important; overflow-wrap: break-word; }
