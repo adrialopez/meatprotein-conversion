@@ -379,6 +379,10 @@ add_action(
 			echo '<div class="notice notice-success is-dismissible"><p>Etiqueta guardada y ficha regenerada.</p></div>';
 			return;
 		}
+		if ( 1 === count( $msgs ) && ( 0 === strpos( (string) $msgs[0], 'Pack guardado' ) || 0 === strpos( (string) $msgs[0], 'Sabores del pack' ) ) ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $msgs[0] ) . '</p></div>';
+			return;
+		}
 		echo '<div class="notice notice-warning"><p><strong>Revisa la etiqueta:</strong></p><ul style="list-style:disc;margin-left:20px">';
 		foreach ( $msgs as $m ) {
 			echo '<li>' . esc_html( $m ) . '</li>';
@@ -609,6 +613,20 @@ add_action(
 			update_post_meta( $post_id, '_mpc_' . $k, implode( ',', $sel ) );
 		}
 		delete_transient( 'mpc_pack_ids' );
+		$names = function ( $csv ) {
+			$o = array();
+			foreach ( array_filter( array_map( 'intval', explode( ',', (string) $csv ) ) ) as $i ) {
+				$o[] = mpc_nice_name( get_the_title( $i ) );
+			}
+			return $o ? implode( ', ', $o ) : 'automático';
+		};
+		set_transient(
+			'mpc_notice_' . get_current_user_id(),
+			array(
+				'Pack guardado. Regalo: ' . $names( implode( ',', $ids ) ) . '. Salsas: ' . $names( get_post_meta( $post_id, '_mpc_step_salsa', true ) ) . '. Pan: ' . $names( get_post_meta( $post_id, '_mpc_step_pan', true ) ) . '. Queso: ' . $names( get_post_meta( $post_id, '_mpc_step_queso', true ) ) . '.',
+			),
+			120
+		);
 	},
 	25
 );

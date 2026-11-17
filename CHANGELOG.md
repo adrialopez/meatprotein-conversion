@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.24.3
+- Al guardar el pack aparece un aviso verde con el regalo, las salsas, el pan y el queso que han quedado guardados («automático» si están vacíos).
+
 ## 0.24.2
 - «frente al precio por separado» solo en el pack; en el resto de productos con oferta: «Oferta: ahorras X (N %)».
 
