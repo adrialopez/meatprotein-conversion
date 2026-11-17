@@ -11,3 +11,6 @@ propuesta/
 plugin/meatprotein-conversion/vendor/
 plugin/meatprotein-conversion/.phpcs.json
 docs/
+
+# Imágenes originales del cliente (muy pesadas, 378 MB)
+Images/
