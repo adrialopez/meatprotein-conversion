@@ -315,7 +315,7 @@ add_filter(
 				);
 			}
 			$origin = trim( (string) mpc_opt( 'origin' ) );
-			if ( $origin ) {
+			if ( $origin && ( $is_pack || mpc_is_single_burger( $product ) ) ) {
 				$blocks[] = array(
 					'title' => 'Quién lo fabrica',
 					'body'  => wpautop( $origin ),
@@ -410,7 +410,8 @@ add_filter(
 				$classes[] = 'mpc-pack-page';
 			} elseif ( $p && mpc_is_single_burger( $p ) ) {
 				$classes[] = 'mpc-single-page';
-			} elseif ( $p && mpc_is_basic( $p ) ) {
+			} elseif ( $p ) {
+				// Resto de productos (simples o con variaciones): misma cabecera que los demás.
 				$classes[] = 'mpc-basic-page';
 			}
 		}

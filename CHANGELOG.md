@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.27.3
+- «Quién lo fabrica» solo en hamburguesas y pack. Productos con variaciones (p. ej. Suplementación) usan la misma cabecera de ficha que el resto. Imagen de Suplementación en el menú lateral.
+
 ## 0.27.2
 - Carrito de página: los sabores del pack salen en lista a todo el ancho (con ×N destacado) en una caja bajo el producto; precio tachado y final alineados. Tema hijo 1.0.48.
 
