@@ -1,5 +1,11 @@
 # Cambios
 
+## 0.27.9 + tema 1.0.59
+- El ahorro del pack (tachado, «Ahorras X» y porcentaje en ficha, portada, página de packs e imagen para compartir) se calcula sobre el precio normal de las 10 bandejas más el valor del regalo. El precio guardado del producto no cambia.
+
+## Tema 1.0.58
+- Pie de página rediseñado: fondo oscuro (el logo blanco ya se lee), títulos de columna Contáctanos / Tienda / Ayuda, enlaces en minúscula y legibles, barra inferior con legal y medios de pago en chips blancos.
+
 ## 0.27.8
 - Spinner también en la compra por AJAX de hamburguesas y pack (dura lo que tarda la respuesta) y al pasar al pack desde la ventana de oferta.
 

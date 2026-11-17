@@ -423,3 +423,67 @@ add_filter(
 	20,
 	2
 );
+
+/**
+ * Precio de referencia del pack: el precio normal de las 10 bandejas más lo que vale el regalo.
+ * Solo afecta a lo que se muestra (tachado, «ahorras», porcentaje); el precio guardado del producto no cambia.
+ *
+ * @param float $reg Precio normal del pack en la tienda.
+ * @return float
+ */
+function mpc_pack_reference_price( $reg ) {
+	$gids = function_exists( 'mpc_gift_ids' ) ? mpc_gift_ids() : array();
+	$gift = $gids ? wc_get_product( (int) $gids[0] ) : null;
+	return (float) $reg + ( $gift ? (float) wc_get_price_to_display( $gift, array( 'price' => (float) $gift->get_regular_price() ) ) : 0.0 );
+}
+
+add_filter(
+	'woocommerce_available_variation',
+	function ( $data, $product ) {
+		if ( ! function_exists( 'mpc_is_pack' ) || ! mpc_is_pack( $product ) ) {
+			return $data;
+		}
+		$sale = (float) $data['display_price'];
+		$ref  = mpc_pack_reference_price( (float) $data['display_regular_price'] );
+		if ( $ref > $sale && $sale > 0 ) {
+			$data['display_regular_price'] = $ref;
+			$data['price_html']            = '<span class="price">' . wc_format_sale_price( wc_price( $ref ), wc_price( $sale ) ) . '</span>';
+		}
+		return $data;
+	},
+	20,
+	2
+);
+
+add_filter(
+	'woocommerce_variable_sale_price_html',
+	function ( $html, $product ) {
+		if ( ! function_exists( 'mpc_is_pack' ) || ! mpc_is_pack( $product ) ) {
+			return $html;
+		}
+		$sale = (float) $product->get_variation_price( 'min', true );
+		$ref  = mpc_pack_reference_price( (float) $product->get_variation_regular_price( 'min', true ) );
+		return $ref > $sale && $sale > 0 ? wc_format_sale_price( wc_price( $ref ), wc_price( $sale ) ) . $product->get_price_suffix() : $html;
+	},
+	20,
+	2
+);
+
+/* El tachado lo pinta Advanced Dynamic Pricing con el precio normal del pack: se sustituye por el de referencia (bandejas + regalo). */
+add_filter(
+	'woocommerce_get_price_html',
+	function ( $html, $product ) {
+		if ( ! $product instanceof WC_Product_Variable || ! function_exists( 'mpc_is_pack' ) || ! mpc_is_pack( $product ) ) {
+			return $html;
+		}
+		$vars = $product->get_available_variations();
+		if ( ! $vars ) {
+			return $html;
+		}
+		$sale = (float) $vars[0]['display_price'];
+		$ref  = (float) $vars[0]['display_regular_price'];
+		return $ref > $sale && $sale > 0 ? wc_format_sale_price( wc_price( $ref ), wc_price( $sale ) ) . $product->get_price_suffix() : $html;
+	},
+	999,
+	2
+);

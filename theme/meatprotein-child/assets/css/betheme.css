@@ -737,3 +737,33 @@ table.mp-nutri tr:last-child th, table.mp-nutri tr:last-child td { border-bottom
 /* Portada: aire sobre «Nuestras burgers» y botones de los listados alineados (títulos de dos líneas reservadas) */
 body.home h2.title { margin-top: 3rem !important; }
 li.product .mfn-woo-product-title { min-height: 2.6em; }
+
+/* ---------- Pie de página: oscuro, ordenado y con jerarquía ---------- */
+.mfn-footer-tmpl .mcb-section-wjwyeh0i { background: #0e1a20 !important; background-image: none !important; padding: 3.2rem 0 1.6rem; }
+.mfn-footer-tmpl .mcb-section-wjwyeh0i .mcb-background-overlay, .mfn-footer-tmpl .mcb-section-wjwyeh0i .mcb-wrap-background-overlay { display: none !important; }
+.mfn-footer-tmpl .column_footer_logo { text-align: left; margin-bottom: 1.6rem; }
+.mfn-footer-tmpl .column_footer_logo img { width: 150px !important; height: auto !important; }
+.mfn-footer-tmpl, .mfn-footer-tmpl p, .mfn-footer-tmpl .desc { color: rgba(255, 255, 255, .78) !important; font-size: .95rem; line-height: 1.6; }
+.mfn-footer-tmpl h4.title { margin: 0 0 .9rem !important; font: 700 .74rem var(--mpc-sans) !important; letter-spacing: .14em !important; text-transform: uppercase !important; color: var(--mpc-pink) !important; }
+.mfn-footer-tmpl h5.title, .mfn-footer-tmpl h5.title a { margin: 0 !important; font: 500 .95rem/1.6 var(--mpc-sans) !important; letter-spacing: 0 !important; text-transform: none !important; color: rgba(255, 255, 255, .78) !important; }
+.mfn-footer-tmpl .column_plain_text .desc { margin-bottom: .5rem; }
+.mfn-footer-tmpl a { color: rgba(255, 255, 255, .78) !important; text-decoration: none; transition: color .15s; }
+.mfn-footer-tmpl a:hover, .mfn-footer-tmpl a:focus-visible { color: #fff !important; }
+.mfn-footer-tmpl .mfn-footer-menu { margin: 0; padding: 0; list-style: none; }
+.mfn-footer-tmpl .mfn-footer-menu li { margin: 0 0 .45rem; padding: 0; }
+.mfn-footer-tmpl .mfn-footer-menu a { font: 500 .93rem/1.5 var(--mpc-sans) !important; text-transform: none !important; letter-spacing: 0 !important; padding: 0; }
+.mfn-footer-tmpl .mcb-wrap-opybofve9 .mcb-wrap-inner::before, .mfn-footer-tmpl .mcb-wrap-i2h2lw98 .mcb-wrap-inner::before { display: block; margin-bottom: .9rem; font: 700 .74rem var(--mpc-sans); letter-spacing: .14em; text-transform: uppercase; color: var(--mpc-pink); }
+.mfn-footer-tmpl .mcb-wrap-opybofve9 .mcb-wrap-inner::before { content: "Tienda"; }
+.mfn-footer-tmpl .mcb-wrap-i2h2lw98 .mcb-wrap-inner::before { content: "Ayuda"; }
+.mfn-footer-tmpl .mcb-wrap-tvx3bkk28, .mfn-footer-tmpl .mcb-wrap-214jma069 { margin-top: 1.8rem; padding-top: 1.2rem; border-top: 1px solid rgba(255, 255, 255, .12); }
+.mfn-footer-tmpl .mcb-wrap-tvx3bkk28 .desc, .mfn-footer-tmpl .mcb-wrap-tvx3bkk28 .desc a { font-size: .8rem !important; color: rgba(255, 255, 255, .55) !important; }
+.mfn-footer-tmpl .payment-methods-list { display: flex; gap: .45rem; justify-content: flex-end; margin: 0; padding: 0; list-style: none; }
+.mfn-footer-tmpl .payment-methods-list li { display: grid; place-items: center; width: 46px; height: 30px; margin: 0; padding: 0 6px; border-radius: 7px; background: #fff; }
+.mfn-footer-tmpl .payment-methods-list img { width: 100%; height: 18px; object-fit: contain; }
+@media (max-width: 767px) {
+	.mfn-footer-tmpl .mcb-section-wjwyeh0i { padding: 2.4rem 0 6rem; }
+	.mfn-footer-tmpl .payment-methods-list { justify-content: flex-start; }
+	.mfn-footer-tmpl .mfn-footer-menu a { font-size: .9rem !important; }
+}
+.mfn-footer-tmpl .mfn-footer-menu, .mfn-footer-tmpl .mfn-footer-menu li { margin-left: 0 !important; padding-left: 0 !important; }
+.mfn-footer-tmpl .column_plain_text .desc:empty, .mfn-footer-tmpl .column_plain_text:has(.desc:empty) { display: none; }
