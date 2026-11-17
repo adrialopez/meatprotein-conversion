@@ -655,3 +655,20 @@ ul.products li.product .mfn-li-product-row-title .title, ul.products li.product 
 .alert .alert_icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; }
 .alert .alert_wrapper { flex: 1; min-width: 0; padding: 0 !important; margin: 0 !important; color: inherit; }
 .alert a.close { position: static !important; flex: 0 0 24px; margin-left: auto; align-self: flex-start; opacity: .6; }
+
+/* ===== Avisos de la tienda, versión sobria: colores de la marca y trazo fino, sin barras de color ===== */
+.woocommerce-message, .woocommerce-info, .woocommerce-error, .woocommerce-NoticeGroup .woocommerce-error { border: 1px solid var(--mpc-line, #dfe6ea) !important; border-left-width: 1px !important; border-radius: 12px !important; background: var(--mpc-sky-soft, #eef6fa) !important; color: var(--mpc-ink, #111) !important; padding: .85rem 1rem !important; font-weight: 400 !important; font-size: .94rem !important; }
+.woocommerce-message { background: var(--mpc-sky-soft, #eef6fa) !important; border-color: #cfe3ec !important; }
+.woocommerce-info { background: #f6f9fb !important; border-color: var(--mpc-line, #dfe6ea) !important; }
+.woocommerce-error { background: #fbf1f5 !important; border-color: #ecc9d9 !important; }
+.woocommerce-error a, .woocommerce-message a:not(.button), .woocommerce-info a:not(.button), .woocommerce-error li > a { color: var(--mpc-pink, #c23a7a) !important; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.woocommerce-error li { margin-bottom: .3rem !important; }
+.alert .alert_icon, .alert .alert_icon svg { color: var(--mpc-teal-ink, #00877f); }
+.woocommerce-error .alert_icon, .woocommerce-error.alert .alert_icon svg { color: var(--mpc-pink, #c23a7a); }
+.alert .alert_icon svg { width: 22px; height: 22px; stroke-width: 1.6; }
+.alert a.close { opacity: .45; }
+.woocommerce-cart table.cart td.actions .coupon .coupon-error-notice { color: var(--mpc-pink-dark, #a82e66) !important; }
+.woocommerce-cart .coupon input.input-text.has-error { border-color: var(--mpc-pink, #c23a7a) !important; }
+.woocommerce-error li > a { text-decoration: none !important; border-bottom: 1px solid rgba(194, 58, 122, .35); }
+.woocommerce form .form-row.woocommerce-invalid label, .woocommerce-invalid label, .woocommerce-invalid .required { color: var(--mpc-pink-dark, #a82e66) !important; }
+.woocommerce form .form-row.woocommerce-invalid input.input-text, .woocommerce-invalid input.input-text, .woocommerce-invalid select { border-color: var(--mpc-pink, #c23a7a) !important; box-shadow: none !important; }
