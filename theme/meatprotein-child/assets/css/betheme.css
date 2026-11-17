@@ -565,3 +565,14 @@ body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
 
 /* Listados: un solo botón «Añadir al carrito» por producto (el de la plantilla de Betheme); el duplicado del gancho de WooCommerce y el de la imagen se ocultan. */
 ul.products li.product .mfn-after-shop-loop-item, ul.products li.product .image_links { display: none !important; }
+
+/* Tarjetas de producto (portada, listados y deslizadores): todo alineado a la izquierda, mismo alto de título y precio y botón en la misma línea. */
+li.product .desc, .woocommerce ul.products li.product .desc { text-align: left !important; display: flex; flex-direction: column; align-items: flex-start; }
+li.product .desc .title, li.product .desc .woocommerce-loop-product__title, li.product .desc h2, li.product .desc h4 { text-align: left !important; min-height: 2.6em; margin: 0 0 .25rem; }
+li.product .desc .price { display: flex !important; flex-wrap: wrap; align-items: baseline; justify-content: flex-start !important; gap: 0 .5rem; margin: 0 0 .5rem; text-align: left !important; }
+li.product .desc .price del { order: 0; font-size: .85em; opacity: .65; }
+li.product .desc .price ins { order: 1; text-decoration: none; }
+li.product .desc .mpc-chip { align-self: stretch; }
+li.product .mfn-li-product-row-button { justify-content: flex-start; margin-top: auto; width: 100%; }
+li.product .mfn-li-product-row-button a.button { width: 100% !important; text-align: center; }
+li.product .onsale, li.product .mfn-product-badges-left .onsale { text-align: left; }
