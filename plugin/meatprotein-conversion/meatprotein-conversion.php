@@ -64,7 +64,7 @@ function mpc_bootstrap() {
 		add_action( 'admin_notices', 'mpc_missing_woocommerce_notice' );
 		return;
 	}
-	$modules = array( 'settings', 'helpers', 'names', 'flavours', 'components', 'burger-admin', 'frontend-fixes', 'product', 'cart', 'addons', 'promo', 'packs-page', 'checkout', 'hero', 'layout' );
+	$modules = array( 'settings', 'helpers', 'names', 'flavours', 'components', 'burger-admin', 'frontend-fixes', 'share-images', 'product', 'cart', 'addons', 'promo', 'packs-page', 'checkout', 'hero', 'layout' );
 	foreach ( $modules as $module ) {
 		require_once MPC_DIR . 'includes/' . $module . '.php';
 	}

@@ -1,5 +1,11 @@
 # Cambios
 
+## 0.27.1
+- Imágenes para compartir: los títulos largos reducen la letra antes de cortarse.
+
+## 0.27.0
+- **Imágenes para compartir dinámicas** (1200 × 630 px) del pack, las hamburguesas y las categorías: fondo azul de la marca, nombre, precio (con el tachado si hay oferta), dato de proteína o regalo del pack y la foto de la ficha. Se regeneran solas cuando cambia el título, el precio, la proteína, el regalo o la foto, y Rank Math las usa en Open Graph y X. Fuentes Dela Gothic One e Instrument Sans (licencia OFL) en `assets/fonts/`.
+
 ## 0.26.0
 - **Fichas de producto sin «/producto/»** (`/mango-protein-chicken/`): Rank Math quita la base y el plugin redirige con 301 `/producto/<slug>/` a `/<slug>/`. Enlaces internos y llms.txt actualizados.
 
