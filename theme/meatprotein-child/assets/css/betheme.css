@@ -550,3 +550,9 @@ body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
 @media (max-width: 767px) {
 	.mfn-woocommerce-tabs.mfn-woocommerce-tabs-nav-top { padding: 1rem 1rem 1.2rem !important; }
 }
+
+/* WhatsApp flotante en móvil: siempre por encima de la barra inferior y del botón fijo «Elige / Añadir». */
+@media (max-width: 767px) {
+	.joinchat { bottom: 92px !important; }
+	body:has(.mpc-cta) .joinchat, html:has(.mpc-cta) .joinchat { bottom: 112px !important; }
+}
