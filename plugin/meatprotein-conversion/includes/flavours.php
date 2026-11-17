@@ -29,6 +29,11 @@ function mpc_flavour_products() {
 			'pollo de corral'               => 2497,
 			'miel y tomate'                 => 43882,
 			'miel con tomate'               => 43882,
+			'miel y mostaza'                => 43882,
+			'pollo con miel y mostaza'      => 43882,
+			'mango protein chicken'         => 45578,
+			'pollo con pepinillos y queso cheddar' => 42057,
+			'pollo con rulo de cabra'       => 2459,
 			'pizza'                         => 2455,
 			'pechuga con puerro y calabaza' => 34859,
 			'pollo'                         => 2462,
@@ -165,7 +170,7 @@ function mpc_nutrition_table_html() {
 	$h = '<div class="mpc-table-wrap"><table class="mpc-table"><thead><tr><th>Hamburguesa</th><th>Kcal</th><th>Proteínas</th><th>Grasas</th><th>Hidratos</th><th>Sal</th></tr></thead><tbody>';
 	foreach ( $rows as $id => $r ) {
 		list( $title, $d ) = $r;
-		$h                .= '<tr><th scope="row">' . esc_html( mpc_table_name( $title ) ) . '</th><td>' . esc_html( $d['kcal'] ) . '</td><td>' . esc_html( $d['prot'] ) . ' g</td><td>' . esc_html( $d['fat'] ) . ' g</td><td>' . esc_html( $d['carb'] ) . ' g</td><td>' . esc_html( $d['salt'] ) . ' g</td></tr>';
+		$h                .= '<tr><th scope="row">' . esc_html( mpc_table_name( $title ) ) . '</th><td>' . ( '' === (string) $d['kcal'] ? '&ndash;' : esc_html( $d['kcal'] ) ) . '</td><td>' . esc_html( $d['prot'] ) . ' g</td><td>' . esc_html( $d['fat'] ) . ' g</td><td>' . esc_html( $d['carb'] ) . ' g</td><td>' . esc_html( $d['salt'] ) . ' g</td></tr>';
 	}
 	return $h . '</tbody></table></div><p class="mpc-table__note">Valores por 100 g. Cada hamburguesa pesa 100 g y cada bandeja trae 4. Las albóndigas vienen en bandeja de 400 g.</p>';
 }

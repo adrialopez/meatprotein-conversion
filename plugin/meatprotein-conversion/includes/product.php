@@ -261,7 +261,7 @@ add_filter(
 			);
 		}
 		/* Bandeja suelta: ingredientes, alérgenos y valores nutricionales de esa hamburguesa, en texto. */
-		$d = mpc_is_single_burger( $product ) ? mpc_flavour_nutrition( $product->get_id() ) : null;
+		$d = ( mpc_is_single_burger( $product ) && false === strpos( (string) $product->get_description(), 'class="mp-nutri"' ) ) ? mpc_flavour_nutrition( $product->get_id() ) : null;
 		if ( $d ) {
 			$ing     = preg_replace( '/\b([A-ZÁÉÍÓÚÑ]{3,})\b/u', '<strong>$1</strong>', esc_html( $d['ing'] ) );
 			$rows    = array(

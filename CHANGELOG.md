@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.20.0
+- **Datos nutricionales a partir de las etiquetas nuevas (nov 2026):** `data/flavours.json` regenerado (26 hamburguesas; ingredientes, alérgenos y tabla); fuera «Pollo y trufa» y «Pollo sabor jamón ibérico» (descatalogadas). Energía sin publicar en Pollo de corral y Pepinillos y cheddar (kcal y kJ no cuadran con los macros): el selector, la tarjeta y la tabla omiten la kcal cuando está vacía.
+- La ficha de la bandeja suelta ya no repite el bloque de ingredientes y valores si la descripción del producto lleva su propia tabla (`class="mp-nutri"`).
+- Mapa de sabores con los nombres nuevos (miel y mostaza, Mango Protein Chicken, pollo con pepinillos y queso cheddar, pollo con rulo de cabra).
+
 ## 0.19.6
 - «Envíos y devoluciones» con el texto redactado por el cliente (estructura en tarjetas, índice y secciones); «Meatprotein» unificado.
 - Corregido el signo de los desplegables abiertos de las FAQs (aparecía «2212»): `wp_update_post` quita las barras invertidas del CSS, ahora se guarda con `wp_slash` y el signo es un carácter directo.

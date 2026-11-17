@@ -20,7 +20,7 @@
 		if (!d || d.querySelector('.mpc-chip')) { return; }
 		var el = document.createElement('p');
 		el.className = 'mpc-chip';
-		el.textContent = nut[m[1]].p + ' g de proteína · ' + nut[m[1]].k + ' kcal';
+		el.textContent = nut[m[1]].p + ' g de proteína' + (nut[m[1]].k ? ' · ' + nut[m[1]].k + ' kcal' : '');
 		var price = d.querySelector('.price');
 		if (price && price.parentNode) { price.parentNode.insertBefore(el, price.nextSibling); } else { d.appendChild(el); }
 	});
