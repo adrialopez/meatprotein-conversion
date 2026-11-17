@@ -767,3 +767,26 @@ li.product .mfn-woo-product-title { min-height: 2.6em; }
 }
 .mfn-footer-tmpl .mfn-footer-menu, .mfn-footer-tmpl .mfn-footer-menu li { margin-left: 0 !important; padding-left: 0 !important; }
 .mfn-footer-tmpl .column_plain_text .desc:empty, .mfn-footer-tmpl .column_plain_text:has(.desc:empty) { display: none; }
+
+/* Pie claro (sustituye al oscuro): azul de marca, logo en color */
+.mfn-footer-tmpl .mcb-section-wjwyeh0i { background: var(--mpc-sky) !important; padding: 3rem 0 1.6rem; }
+.mfn-footer-tmpl .column_footer_logo img { content: url("https://meatprotein.eu/wp-content/uploads/2024/05/meat-protein.svg"); width: 140px !important; }
+.mfn-footer-tmpl, .mfn-footer-tmpl p, .mfn-footer-tmpl .desc { color: #26343c !important; }
+.mfn-footer-tmpl h4.title, .mfn-footer-tmpl .mcb-wrap-opybofve9 .mcb-wrap-inner::before, .mfn-footer-tmpl .mcb-wrap-i2h2lw98 .mcb-wrap-inner::before { color: #a82e66 !important; }
+.mfn-footer-tmpl h5.title, .mfn-footer-tmpl h5.title a, .mfn-footer-tmpl a { color: #1b2a32 !important; }
+.mfn-footer-tmpl a:hover, .mfn-footer-tmpl a:focus-visible { color: var(--mpc-pink) !important; }
+.mfn-footer-tmpl .mcb-wrap-tvx3bkk28, .mfn-footer-tmpl .mcb-wrap-214jma069 { border-top-color: rgba(11, 11, 11, .14); }
+.mfn-footer-tmpl .mcb-wrap-tvx3bkk28 .desc, .mfn-footer-tmpl .mcb-wrap-tvx3bkk28 .desc a { color: #4b5a63 !important; }
+.mfn-footer-tmpl .payment-methods-list li { box-shadow: 0 1px 2px rgba(11, 11, 11, .08); }
+.mfn-footer-tmpl .column_footer_menu .mcb-column-inner { margin-left: 0 !important; }
+
+/* Pie: todo alineado a la izquierda (Betheme centra o alinea a la derecha según el ancho), cabeceras con más carácter, sin hueco blanco encima */
+.mfn-footer-tmpl, .mfn-footer-tmpl .column, .mfn-footer-tmpl .column_footer_menu, .mfn-footer-tmpl .mfn-footer-menu, .mfn-footer-tmpl .mfn-footer-menu li, .mfn-footer-tmpl .mfn-footer-menu a, .mfn-footer-tmpl .mcb-column-inner { text-align: left !important; justify-content: flex-start !important; }
+.mfn-footer-tmpl .mfn-footer-menu { display: block; }
+.mfn-footer-tmpl h4.title, .mfn-footer-tmpl .mcb-wrap-opybofve9 .mcb-wrap-inner::before, .mfn-footer-tmpl .mcb-wrap-i2h2lw98 .mcb-wrap-inner::before { position: relative; display: block; margin: 0 0 1.3rem !important; padding-bottom: .7rem; font: 400 1rem/1.2 var(--mpc-display, "Dela Gothic One", sans-serif) !important; letter-spacing: .06em !important; text-transform: uppercase !important; color: #0b0b0b !important; }
+.mfn-footer-tmpl h4.title::after, .mfn-footer-tmpl .mcb-wrap-opybofve9 .mcb-wrap-inner::before, .mfn-footer-tmpl .mcb-wrap-i2h2lw98 .mcb-wrap-inner::before { background-image: linear-gradient(var(--mpc-pink), var(--mpc-pink)); background-repeat: no-repeat; background-size: 34px 3px; background-position: left bottom; }
+.mfn-footer-tmpl h4.title::after { content: ""; position: absolute; left: 0; bottom: 0; width: 34px; height: 3px; background: var(--mpc-pink); }
+.mfn-footer-tmpl .mcb-section-wjwyeh0i { margin-top: 0; }
+#Content:has(+ .mfn-footer-tmpl), #Content { padding-bottom: 0 !important; margin-bottom: 0 !important; }
+body.single-product #Content .mcb-section:last-child, body.single-product .sections_group > .entry-content > .mfn-builder-content > .mcb-section:last-child { padding-bottom: 1.5rem !important; margin-bottom: 0 !important; }
+.mfn-footer-tmpl .column_footer_logo .logo-wrapper { display: block; margin: 0 !important; text-align: left; }

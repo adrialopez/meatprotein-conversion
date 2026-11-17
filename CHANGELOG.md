@@ -1,5 +1,15 @@
 # Cambios
 
+## 0.27.12 + tema 1.0.63
+- Carrito lateral, carrito y pago: el tachado del pack usa el precio de referencia (bandejas + regalo), también por encima de Advanced Dynamic Pricing.
+- Pie: columnas alineadas a la izquierda en cualquier ancho, cabeceras con más peso y subrayado rosa, menos hueco blanco encima.
+
+## Tema 1.0.60
+- Pie de página claro (azul de marca) con logo en color; se mantiene la nueva estructura.
+
+## 0.27.11
+- Carrito lateral, carrito y pago usan el mismo tachado de referencia del pack (bandejas + regalo) que la ficha.
+
 ## 0.27.9 + tema 1.0.59
 - El ahorro del pack (tachado, «Ahorras X» y porcentaje en ficha, portada, página de packs e imagen para compartir) se calcula sobre el precio normal de las 10 bandejas más el valor del regalo. El precio guardado del producto no cambia.
 

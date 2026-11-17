@@ -487,3 +487,39 @@ add_filter(
 	999,
 	2
 );
+
+/* Carrito lateral, carrito y pago: mismo tachado de referencia que la ficha (bandejas + regalo). */
+function mpc_cart_pack_prices( $item ) {
+	$v = $item['data'] ?? null;
+	if ( ! $v instanceof WC_Product_Variation ) {
+		return null;
+	}
+	$parent = wc_get_product( $v->get_parent_id() );
+	if ( ! $parent || ! function_exists( 'mpc_is_pack' ) || ! mpc_is_pack( $parent ) ) {
+		return null;
+	}
+	$actual = (float) wc_get_price_to_display( $v );
+	$ref    = mpc_pack_reference_price( (float) wc_get_price_to_display( $v, array( 'price' => (float) $v->get_regular_price() ) ) );
+	return $ref > $actual && $actual > 0 ? array( $ref, $actual ) : null;
+}
+
+add_filter(
+	'woocommerce_cart_item_price',
+	function ( $html, $item ) {
+		$p = mpc_cart_pack_prices( $item );
+		return $p ? wc_format_sale_price( wc_price( $p[0] ), wc_price( $p[1] ) ) : $html;
+	},
+	20000,
+	2
+);
+
+add_filter(
+	'woocommerce_cart_item_subtotal',
+	function ( $html, $item ) {
+		$p = mpc_cart_pack_prices( $item );
+		$q = (int) ( $item['quantity'] ?? 1 );
+		return $p ? wc_format_sale_price( wc_price( $p[0] * $q ), wc_price( $p[1] * $q ) ) : $html;
+	},
+	20000,
+	2
+);
