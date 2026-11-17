@@ -523,3 +523,12 @@ body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
 /* Pago: aire entre el aviso de entrega, el cupón y la lista de productos. */
 .woocommerce-checkout .mpc-eta { margin-bottom: 1rem; }
 .woocommerce-checkout .mpc-coupon { margin-top: 1rem; margin-bottom: 1.2rem; }
+
+/* Pago (móvil): los sabores y el regalo ocupan todo el ancho, por debajo del precio. */
+@media (max-width: 767px) {
+	.woocommerce-checkout .woocommerce-checkout-review-order-table tr.cart_item td.product-name { display: contents; }
+	.woocommerce-checkout .woocommerce-checkout-review-order-table tr.cart_item .mpc-rv { grid-column: 1; grid-row: 1; }
+	.woocommerce-checkout .woocommerce-checkout-review-order-table tr.cart_item td.product-total { grid-column: 2; grid-row: 1; }
+	.woocommerce-checkout .woocommerce-checkout-review-order-table tr.cart_item dl.variation { grid-column: 1 / -1; grid-row: 2; width: 100% !important; max-width: none !important; margin: .7rem 0 0; padding: .7rem .8rem; border-radius: 12px; background: #fff; }
+	.woocommerce-checkout .woocommerce-checkout-review-order-table dl.variation dd { overflow-wrap: break-word; }
+}
