@@ -630,3 +630,28 @@ ul.products li.product .mfn-li-product-row-title .title, ul.products li.product 
 
 /* Carrito lateral: «Ver carrito» (lleva a la página del carrito) como botón secundario bajo «Finalizar compra». */
 .mfn-cart-holder .mfn-ch-footer-buttons a:not(.button) { display: block; margin: .5rem 0 0; padding: .7rem 1rem; border: 1.5px solid var(--mpc-ink, #111); border-radius: 14px; background: #fff; color: var(--mpc-ink, #111) !important; font: 700 .95rem/1.2 var(--mpc-sans, sans-serif); text-align: center; text-decoration: none; }
+
+/* ===== Avisos de la tienda (éxito, información, error): una sola caja clara, a todo el ancho y legible ===== */
+.woocommerce-message, .woocommerce-info, .woocommerce-error, .woocommerce-NoticeGroup .woocommerce-error { display: block !important; position: relative; width: auto !important; margin: 0 0 1rem !important; padding: .9rem 1rem .9rem 1.1rem !important; border: 1px solid transparent !important; border-left-width: 4px !important; border-radius: 12px !important; box-shadow: none !important; font: 500 .95rem/1.45 var(--mpc-sans, sans-serif) !important; list-style: none !important; text-align: left; }
+.woocommerce-message::before, .woocommerce-info::before, .woocommerce-error::before { display: none !important; content: none !important; }
+.woocommerce-message { background: #eaf6f0 !important; border-color: #b9dfcb !important; border-left-color: #1f8f5f !important; color: #14573b !important; }
+.woocommerce-info { background: #eef6fa !important; border-color: #cfe2ec !important; border-left-color: #2a7fa6 !important; color: #1d3b4c !important; }
+.woocommerce-error { background: #fdeeee !important; border-color: #f2c4c4 !important; border-left-color: #c0392b !important; color: #8a1f17 !important; }
+.woocommerce-error li, .woocommerce-message li, .woocommerce-info li { margin: 0 0 .35rem !important; padding: 0 !important; list-style: none !important; background: none !important; }
+.woocommerce-error li:last-child { margin-bottom: 0 !important; }
+.woocommerce-error a, .woocommerce-message a:not(.button), .woocommerce-info a:not(.button) { color: inherit !important; font-weight: 700; text-decoration: underline; }
+.woocommerce-error strong, .woocommerce-error li > a { color: inherit !important; }
+.woocommerce-message .button, .woocommerce-info .button { float: none !important; display: inline-block; margin: .5rem 0 0 !important; padding: .55rem 1rem !important; min-height: 0 !important; font-size: .9rem !important; }
+.woocommerce-notices-wrapper:empty { display: none; }
+/* Cupón del carrito: el mensaje de error va en su propia línea y no aplasta el campo */
+.woocommerce-cart .coupon { flex-wrap: wrap !important; }
+.woocommerce-cart .coupon .coupon-error-notice, .woocommerce-cart .coupon .woocommerce-error { flex: 0 0 100%; order: 3; margin: .1rem 0 0 !important; padding: 0 !important; border: 0 !important; background: none !important; color: #b03a2e !important; font-size: .85rem !important; }
+.woocommerce-cart table.cart td.actions .coupon, .woocommerce-cart .coupon { flex-wrap: wrap !important; }
+.woocommerce-cart table.cart td.actions .coupon .coupon-error-notice { flex: 0 0 100% !important; order: 3; margin: .2rem 0 0 !important; padding: 0 !important; border: 0 !important; background: none !important; color: #b03a2e !important; font-size: .85rem !important; text-align: left; }
+.woocommerce-cart .coupon input.input-text.has-error { border-color: #c0392b !important; }
+/* Avisos con icono (Betheme): icono a la izquierda en la misma línea, texto a la derecha y la X arriba */
+.alert { display: flex !important; align-items: flex-start; gap: .7rem; }
+.alert .alert_icon { flex: 0 0 24px; width: 24px; height: 24px; margin: 0 !important; position: static !important; }
+.alert .alert_icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; }
+.alert .alert_wrapper { flex: 1; min-width: 0; padding: 0 !important; margin: 0 !important; color: inherit; }
+.alert a.close { position: static !important; flex: 0 0 24px; margin-left: auto; align-self: flex-start; opacity: .6; }
