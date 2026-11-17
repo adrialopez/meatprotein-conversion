@@ -194,14 +194,17 @@ add_filter(
 		}
 		arsort( $flavours );
 		$parts = array();
+		$plain = array();
 		foreach ( $flavours as $name => $n ) {
-			$parts[] = $n > 1 ? $name . ' ×' . $n : $name;
+			$plain[] = $n > 1 ? $name . ' ×' . $n : $name;
+			$parts[] = '<span class="mpc-fl">' . esc_html( $name ) . ( $n > 1 ? ' <b>×' . (int) $n . '</b>' : '' ) . '</span>';
 		}
 		array_unshift(
 			$rest,
 			array(
-				'key'   => 'Tus sabores',
-				'value' => implode( ', ', $parts ),
+				'key'     => 'Tus sabores',
+				'value'   => implode( ', ', $plain ),
+				'display' => implode( '', $parts ),
 			)
 		);
 		return $rest;

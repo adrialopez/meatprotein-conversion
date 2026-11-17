@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.27.2
+- Carrito de página: los sabores del pack salen en lista a todo el ancho (con ×N destacado) en una caja bajo el producto; precio tachado y final alineados. Tema hijo 1.0.48.
+
 ## 0.27.1
 - Imágenes para compartir: los títulos largos reducen la letra antes de cortarse.
 
