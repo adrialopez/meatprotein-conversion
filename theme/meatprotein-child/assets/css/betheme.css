@@ -693,3 +693,7 @@ ul.products li.product .mfn-li-product-row-title .title, ul.products li.product 
 .woocommerce-cart table.cart .mpc-fl { padding: .12rem 0; border-top: 0; line-height: 1.3; }
 .woocommerce-cart table.cart .mpc-fl::before { content: ""; display: inline-block; width: 5px; height: 5px; margin: 0 .55rem .12rem 0; border-radius: 50%; background: var(--mpc-pink); }
 .woocommerce-cart table.cart dd p:has(.mpc-fl) { line-height: 1.3 !important; }
+@media (max-width: 767px) {
+	.woocommerce-cart table.cart tr.cart_item td.product-remove { justify-self: end; width: 32px !important; }
+	.woocommerce-cart table.cart tr.cart_item td.product-name { padding-right: 0 !important; }
+}
