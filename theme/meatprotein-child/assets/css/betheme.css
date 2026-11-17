@@ -556,3 +556,9 @@ body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
 	.joinchat { bottom: 92px !important; }
 	body:has(.mpc-cta) .joinchat, html:has(.mpc-cta) .joinchat { bottom: 112px !important; }
 }
+
+/* Móvil: el hueco que se reserva bajo el pie (barra inferior / botón fijo) toma el color del pie, sin franja blanca. */
+@media (max-width: 767px) {
+	.mfn-footer-tmpl { background: var(--mpc-sky, #cde6f2); }
+	html:has(.mpc-cta) { background: var(--mpc-sky, #cde6f2); }
+}
