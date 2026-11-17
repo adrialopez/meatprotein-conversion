@@ -156,23 +156,41 @@ add_filter(
  *  El pedido conserva cada bandeja por separado. */
 add_filter(
 	'woocommerce_get_item_data',
-	function ( $data ) {
+	function ( $data, $item = array() ) {
 		$flavours = array();
 		$rest     = array();
 		foreach ( $data as $row ) {
 			if ( isset( $row['key'] ) && preg_match( '/^bandeja\s*\d+$/i', trim( wp_strip_all_tags( $row['key'] ) ) ) ) {
 				$v = trim( wp_strip_all_tags( (string) ( $row['display'] ?? $row['value'] ) ) );
 				if ( '' !== $v ) {
-					$v              = mb_strtolower( html_entity_decode( $v ), 'UTF-8' );
+					$v              = mb_strtolower( str_replace( '&', ' y ', html_entity_decode( $v ) ), 'UTF-8' );
+					$v              = trim( preg_replace( '/\s+/', ' ', $v ) );
 					$v              = mb_strtoupper( mb_substr( $v, 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $v, 1, null, 'UTF-8' );
 					$flavours[ $v ] = ( $flavours[ $v ] ?? 0 ) + 1;
 				}
 			} else {
+				// Sin emojis en ningún dato, y el regalo con su nombre real en vez del nombre del atributo.
+				$val = trim( preg_replace( '/[\x{1F000}-\x{1FFFF}\x{2600}-\x{27BF}\x{FE0F}]/u', '', html_entity_decode( wp_strip_all_tags( (string) ( $row['display'] ?? $row['value'] ) ) ) ) );
+				if ( preg_match( '/^regalo$/iu', $val ) ) {
+					$gid  = isset( $item['mpc_gift'] ) ? (int) $item['mpc_gift'] : 0;
+					$gids = function_exists( 'mpc_gift_ids' ) ? mpc_gift_ids() : array();
+					$gid  = $gid ? $gid : ( $gids ? (int) $gids[0] : 0 );
+					$name = $gid ? mpc_nice_name( get_the_title( $gid ) ) : mb_convert_case( mb_strtolower( wp_strip_all_tags( (string) $row['key'] ) ), MB_CASE_TITLE, 'UTF-8' );
+					$row  = array(
+						'key'   => 'Regalo',
+						'value' => '1 bandeja de ' . $name,
+					);
+				} elseif ( isset( $row['value'] ) && $val !== trim( wp_strip_all_tags( (string) $row['value'] ) ) ) {
+					$row['value']   = $val;
+					$row['display'] = esc_html( $val );
+				}
 				$rest[] = $row;
 			}
 		}
 		if ( count( $flavours ) < 2 ) {
-			return $data;
+			return array_merge( $rest, array_filter( $data, function ( $r ) {
+				return isset( $r['key'] ) && preg_match( '/^bandeja\s*\d+$/i', trim( wp_strip_all_tags( $r['key'] ) ) );
+			} ) );
 		}
 		arsort( $flavours );
 		$parts = array();
@@ -189,7 +207,7 @@ add_filter(
 		return $rest;
 	},
 	20,
-	1
+	2
 );
 
 /** Los packs se llaman en carrito y checkout con un nombre limpio (sin emojis, sin «PROMOCIÓN» ni erratas). */
