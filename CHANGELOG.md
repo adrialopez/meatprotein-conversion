@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.21.3
+- Portada: la rejilla de categorías solo muestra las principales (ya no «Hamburguesas de pollo»).
+- Parte pública: se evita que YITH Order Tracking cargue el selector de medios de WordPress para visitantes (quitaba velocidad y daba un error de JavaScript en «Mi cuenta»).
+
 ## 0.21.1
 - El sello y la frase «alto contenido en proteínas» solo se generan si la proteína aporta al menos el 20 % de la energía (regla del reglamento europeo); «bajo en grasa» solo con 3 g o menos de grasa por 100 g.
 
