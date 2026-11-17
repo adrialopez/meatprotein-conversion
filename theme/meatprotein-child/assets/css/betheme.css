@@ -514,3 +514,8 @@ body.single-product .woocommerce-product-gallery .woocommerce-product-gallery__i
 	.mfn-looped-items-slider-wrapper .mp-native-scroll .swiper-slide-duplicate { display: none !important; }
 	.mfn-looped-items-slider-wrapper .swiper-pagination, .mfn-looped-items-slider-wrapper .mfn-swiper-arrow { display: none !important; }
 }
+
+/* Pago: sin barra inferior ni botón de WhatsApp flotante (menos puntos de fuga); la salida es «Volver al carrito» y el pie queda visible. */
+body.woocommerce-checkout .mfn-footer-stickymenu, body.woocommerce-checkout .joinchat { display: none !important; }
+body.woocommerce-checkout { padding-bottom: 0 !important; }
+body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
