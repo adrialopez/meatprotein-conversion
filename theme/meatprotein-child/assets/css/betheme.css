@@ -429,3 +429,9 @@ body.single-product .woocommerce-product-gallery .woocommerce-product-gallery__i
 /* Portada: aire entre el texto del hero y la caja «Tu pack». */
 .mpc-hero__lead { margin-bottom: 0; }
 .mpc-hero .mpc-hero__builder { margin-top: 1.7rem; }
+
+/* Textos pequeños legibles y enlaces del pie fáciles de tocar */
+.mpc-card .mpc-addon__tag, .mpc-card__ribbon, .mpc-pack-card__pct { font-size: .75rem; }
+@media (max-width: 767px) {
+	.mfn-footer-tmpl .mcb-column a:not(.button):not(.mfn-btn) { display: inline-block; padding: .4rem 0; min-height: 32px; }
+}
