@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.22.1
+- Ficha del pack: la píldora del regalo dice «Incluye 1 bandeja de X de regalo y envío gratis». El cuadro «Etiqueta y pack» ya no aparece en el pack (solo «Regalo del pack»); queda para las hamburguesas.
+
 ## 0.22.0
 - **El regalo se elige en la ficha del pack** (cuadro «Meatprotein: regalo del pack», buscador de productos; con varios, el cliente elige). Portada, ficha, selector, carrito, pedidos y stock salen de ese producto. El título del pack ya no necesita nombrar el regalo y puede ser solo «10 bandejas de hamburguesas Meatprotein». El ajuste de Conversión queda como respaldo.
 

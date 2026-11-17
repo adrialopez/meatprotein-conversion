@@ -57,7 +57,7 @@
 		if (gift) {
 			var pill = document.createElement('p'); pill.className = 'mpc-giftpill';
 			pill.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 7v13M12 7c-2-4-6-4-6-1.5S10 7 12 7zM12 7c2-4 6-4 6-1.5S14 7 12 7z"/></svg>';
-			var sp = document.createElement('span'); sp.textContent = 'Incluye ' + gift;
+			var sp = document.createElement('span'); sp.textContent = 'Incluye ' + gift + ' y envío gratis';
 			pill.appendChild(sp);
 			h1.parentNode.insertBefore(pill, h1.nextSibling);
 		}

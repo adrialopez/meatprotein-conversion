@@ -264,6 +264,11 @@ function mpc_apply_label( $post_id, array $d ) {
 add_action(
 	'add_meta_boxes_product',
 	function () {
+		global $post;
+		$pr = $post ? wc_get_product( $post->ID ) : null;
+		if ( $pr && mpc_is_pack( $pr ) ) {
+			return; // El pack no tiene etiqueta: su cuadro es «Regalo del pack».
+		}
 		add_meta_box( 'mpc_burger', 'Meatprotein: etiqueta y pack', 'mpc_burger_box', 'product', 'normal', 'high' );
 	}
 );
@@ -312,6 +317,10 @@ function mpc_burger_box( $post ) {
  * @param int $post_id Producto.
  */
 function mpc_save_burger_box( $post_id ) {
+	$pr = wc_get_product( $post_id );
+	if ( $pr && mpc_is_pack( $pr ) ) {
+		return;
+	}
 	if ( ! isset( $_POST['mpc_burger_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mpc_burger_nonce'] ) ), 'mpc_burger_box' ) ) {
 		return;
 	}
