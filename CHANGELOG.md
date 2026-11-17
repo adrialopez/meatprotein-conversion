@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.20.1
+- **Pack:** la opción «Ternera a la parrilla» no tenía correspondencia con su producto (no se descontaba su stock ni salía su información); añadida al mapa. Los sabores se agrupan ahora por la subcategoría de su producto (Pollo, Ternera, Pavo, Potro, Albóndigas), no por palabras del nombre (antes «Bacon» y «Cheese bacon» caían en Ternera y varios sabores en «Otros sabores»).
+- Selector: nuevo grupo «Albóndigas» (sin él, las albóndigas no aparecían).
+- Hero de la portada: «el envío llega refrigerado antes de las 14:00» en vez de «24-48 h».
+
 ## 0.20.0
 - **Datos nutricionales a partir de las etiquetas nuevas (nov 2026):** `data/flavours.json` regenerado (26 hamburguesas; ingredientes, alérgenos y tabla); fuera «Pollo y trufa» y «Pollo sabor jamón ibérico» (descatalogadas). Energía sin publicar en Pollo de corral y Pepinillos y cheddar (kcal y kJ no cuadran con los macros): el selector, la tarjeta y la tabla omiten la kcal cuando está vacía.
 - La ficha de la bandeja suelta ya no repite el bloque de ingredientes y valores si la descripción del producto lleva su propia tabla (`class="mp-nutri"`).

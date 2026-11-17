@@ -30,6 +30,7 @@ function mpc_flavour_products() {
 			'miel y tomate'                 => 43882,
 			'miel con tomate'               => 43882,
 			'miel y mostaza'                => 43882,
+			'ternera a la parrilla'         => 2460,
 			'pollo con miel y mostaza'      => 43882,
 			'mango protein chicken'         => 45578,
 			'pollo con pepinillos y queso cheddar' => 42057,
@@ -60,6 +61,30 @@ function mpc_flavour_products() {
 	);
 }
 
+/**
+ * Grupo de un sabor según la subcategoría de su producto (Pollo, Ternera, Pavo, Potro, Albóndigas).
+ * Así un sabor nuevo cae en su grupo con solo asignarle la subcategoría, sin tocar código.
+ *
+ * @param int $product_id ID de producto.
+ * @return string Etiqueta del grupo o cadena vacía.
+ */
+function mpc_flavour_group( $product_id ) {
+	$labels = array(
+		'hamburguesas-de-pollo'   => 'Pollo',
+		'hamburguesas-de-ternera' => 'Ternera',
+		'hamburguesas-de-pavo'    => 'Pavo',
+		'hamburguesas-de-potro'   => 'Potro',
+		'albondigas-proteicas'    => 'Albóndigas',
+	);
+	$slugs  = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'slugs' ) );
+	foreach ( (array) $slugs as $slug ) {
+		if ( isset( $labels[ $slug ] ) ) {
+			return $labels[ $slug ];
+		}
+	}
+	return '';
+}
+
 /** Datos para el JS: título, imagen de información y enlace de cada sabor. */
 function mpc_flavours_data() {
 	$out = array();
@@ -78,6 +103,10 @@ function mpc_flavours_data() {
 		$avail            = mpc_available_trays( $id );
 		$out[ $key ]['s'] = ( null === $avail || $avail > 0 ) ? 1 : 0;
 		$out[ $key ]['m'] = null === $avail ? 99 : (int) $avail;
+		$grp              = mpc_flavour_group( $id );
+		if ( $grp ) {
+			$out[ $key ]['g'] = $grp;
+		}
 		$nut              = mpc_flavour_nutrition( $id );
 		if ( $nut ) {
 			$out[ $key ]['d'] = $nut;

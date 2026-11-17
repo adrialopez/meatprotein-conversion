@@ -23,13 +23,14 @@
 		var k = String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/&amp;|&/g, ' y ').replace(/[^a-z0-9]+/g, ' ').trim();
 		return ALIAS[k] || k;
 	}
-	var FIX = { 'chees bacon': 'Cheese bacon', 'cheese bacon': 'Cheese bacon', 'mexican': 'Mexican', 'espinacas y queso': 'Espinacas y queso', 'pollo trufa': 'Pollo trufa', 'ternera queso y trufa': 'Ternera, queso y trufa', 'ternera queso': 'Ternera y queso', 'miel y tomate': 'Miel y tomate', 'miel con tomate': 'Miel y tomate', 'pechuga con puerro y calabaza': 'Pechuga, puerro y calabaza', 'kebab': 'Kebab', 'satay': 'Satay', 'chicken mango': 'Pollo y mango', 'pavo cebolla': 'Pavo y cebolla', 'pavo con cebolla caramelizada': 'Pavo y cebolla caramelizada', 'ternera cebolla caramelizada': 'Ternera y cebolla caramelizada', 'ternera cebolla': 'Ternera y cebolla' };
+	var FIX = { 'chees bacon': 'Cheese bacon', 'cheese bacon': 'Cheese bacon', 'mexican': 'Mexican', 'espinacas y queso': 'Espinacas y queso', 'pollo trufa': 'Pollo trufa', 'ternera queso y trufa': 'Ternera, queso y trufa', 'ternera queso': 'Ternera y queso', 'miel y tomate': 'Miel y tomate', 'miel con tomate': 'Miel y tomate', 'pechuga con puerro y calabaza': 'Pechuga, puerro y calabaza', 'kebab': 'Kebab', 'satay': 'Satay', 'chicken mango': 'Pollo y mango', 'mango protein chicken': 'Mango Protein Chicken', 'miel y mostaza': 'Miel y mostaza', 'ternera a la parrilla': 'Ternera a la parrilla', 'pavo cebolla': 'Pavo y cebolla', 'pavo con cebolla caramelizada': 'Pavo y cebolla caramelizada', 'ternera cebolla caramelizada': 'Ternera y cebolla caramelizada', 'ternera cebolla': 'Ternera y cebolla' };
 	function pretty(raw, key) {
 		if (FIX[key]) { return FIX[key]; }
 		var t = String(raw).replace(/&amp;/g, '&').replace(/\s*&\s*/g, ' y ').trim().toLowerCase();
 		return t.charAt(0).toUpperCase() + t.slice(1);
 	}
 	function group(key) {
+		if (INFO[key] && INFO[key].g) { return ['Pollo', 'Ternera', 'Pavo', 'Potro', 'Albóndigas'].indexOf(INFO[key].g) > -1 ? INFO[key].g : 'Otros sabores'; }
 		if (/pollo|chicken|kebab|satay|rulo de cabra/.test(key)) { return 'Pollo'; }
 		if (/ternera|parrilla|cheese bacon|bacon/.test(key)) { return 'Ternera'; }
 		if (/potro/.test(key)) { return 'Potro'; }
@@ -80,7 +81,7 @@
 	}
 
 	/* ---- Interfaz ---- */
-	var groups = ['Pollo', 'Ternera', 'Potro', 'Pavo', 'Otros sabores'];
+	var groups = ['Pollo', 'Ternera', 'Pavo', 'Potro', 'Albóndigas', 'Otros sabores'];
 	var html = '<div class="mpc-pack__head"><h3>Elige tus sabores</h3><p class="mpc-pack__count" aria-live="polite"></p></div>' +
 		'<div class="mpc-pack__bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + S + '"><i></i></div>' +
 		'<div class="mpc-pack__tools"><button type="button" class="mpc-link" data-act="random">Sorpréndeme con los que faltan</button><button type="button" class="mpc-link" data-act="clear">Vaciar</button></div>';

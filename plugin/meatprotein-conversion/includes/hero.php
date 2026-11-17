@@ -57,7 +57,7 @@ function mpc_hero_html() {
 			<div class="mpc-hero__copy">
 				<p class="mpc-hero__eyebrow">Hamburguesas fit<?php echo $prot ? ' · hasta ' . (int) $prot . ' g de proteína' : ''; ?></p>
 				<h1 id="mpc-hero-t">Monta tu pack de <span>10 sabores</span></h1>
-				<p class="mpc-hero__lead">Toca tus favoritos. <?php echo $gift ? 'Incluye ' . esc_html( false === stripos( $gift, 'regalo' ) ? $gift . ' de regalo' : $gift ) . ' y el' : 'El'; ?> envío sale refrigerado en 24-48 h.</p>
+				<p class="mpc-hero__lead">Toca tus favoritos. <?php echo $gift ? 'Incluye ' . esc_html( false === stripos( $gift, 'regalo' ) ? $gift . ' de regalo' : $gift ) . ' y el' : 'El'; ?> envío llega refrigerado antes de las 14:00.</p>
 
 				<div class="mpc-hero__builder" data-mpc-hero data-url="<?php echo esc_url( $pack->get_permalink() ); ?>" data-size="10" data-price="<?php echo esc_attr( $price ); ?>">
 					<div class="mpc-hero__bhead"><b>Tu pack</b><span data-mpc-hcount aria-live="polite">0 de 10</span><button type="button" class="mpc-hero__clear" data-mpc-hclear hidden>Vaciar</button></div>
