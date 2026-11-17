@@ -178,7 +178,15 @@ function mpc_is_single_burger( $product ) {
  * @return mixed Resultado.
  */
 function mpc_step_products( $setting, $cats, $include_pattern, $exclude_pattern, $limit, $skip_id = 0 ) {
-	$cfg = trim( (string) mpc_opt( $setting ) );
+	// Lo elegido en la ficha del pack (cuadro «Regalo y extras del pack») manda sobre el ajuste de Conversión y sobre el modo automático.
+	$cfg   = '';
+	$packs = function_exists( 'mpc_get_packs' ) ? mpc_get_packs() : array();
+	if ( $packs ) {
+		$cfg = trim( (string) get_post_meta( $packs[0]->get_id(), '_mpc_' . $setting, true ) );
+	}
+	if ( '' === $cfg ) {
+		$cfg = trim( (string) mpc_opt( $setting ) );
+	}
 	if ( '' !== $cfg ) {
 		$ids = array_values( array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', $cfg ) ) ) );
 	} else {

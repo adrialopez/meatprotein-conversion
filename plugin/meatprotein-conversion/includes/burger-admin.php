@@ -539,7 +539,7 @@ add_action(
 	function ( $post ) {
 		$p = wc_get_product( $post->ID );
 		if ( $p && mpc_is_pack( $p ) ) {
-			add_meta_box( 'mpc_gift', 'Meatprotein: regalo del pack', 'mpc_gift_box', 'product', 'side', 'high' );
+			add_meta_box( 'mpc_gift', 'Meatprotein: regalo y extras del pack', 'mpc_gift_box', 'product', 'normal', 'high' );
 		}
 	}
 );
@@ -565,6 +565,23 @@ function mpc_gift_box( $post ) {
 		}
 	}
 	echo '</select>';
+	echo '<hr><p><strong>Extras que se ofrecen al comprar el pack</strong><br><span class="description">Elige qué productos salen en cada pregunta, en el orden que los selecciones. Si dejas uno vacío, se eligen solos los más vendidos de su categoría.</span></p>';
+	foreach ( array(
+		'step_salsa' => '¿Quieres salsa?',
+		'step_pan'   => '¿Añades pan?',
+		'step_queso' => '¿Y queso?',
+	) as $key => $label ) {
+		$cur = array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', trim( (string) get_post_meta( $post->ID, '_mpc_' . $key, true ) ) ) ) );
+		echo '<p style="margin:10px 0 2px"><label><strong>' . esc_html( $label ) . '</strong></label></p>';
+		echo '<select class="wc-product-search" multiple="multiple" style="width:100%" name="mpc_' . esc_attr( $key ) . '[]" data-placeholder="Automático: los más vendidos…" data-action="woocommerce_json_search_products" data-exclude_type="variable">';
+		foreach ( $cur as $id ) {
+			$pr = wc_get_product( $id );
+			if ( $pr ) {
+				echo '<option value="' . esc_attr( $id ) . '" selected="selected">' . esc_html( wp_strip_all_tags( $pr->get_formatted_name() ) ) . '</option>';
+			}
+		}
+		echo '</select>';
+	}
 	echo '<p class="description" style="margin-top:8px">Qué se muestra: «Incluye 1 bandeja de <em>nombre del producto</em> de regalo» en la portada y la ficha, y «Regalo: <em>nombre</em>» en carrito, pedidos y correos. El título del pack ya no hace falta que lo nombre.</p>';
 }
 
@@ -579,6 +596,10 @@ add_action(
 		}
 		$ids = isset( $_POST['mpc_gift_ids'] ) ? array_filter( array_map( 'absint', (array) wp_unslash( $_POST['mpc_gift_ids'] ) ) ) : array();
 		update_post_meta( $post_id, '_mpc_gift_ids', implode( ',', $ids ) );
+		foreach ( array( 'step_salsa', 'step_pan', 'step_queso' ) as $k ) {
+			$sel = isset( $_POST[ 'mpc_' . $k ] ) ? array_filter( array_map( 'absint', (array) wp_unslash( $_POST[ 'mpc_' . $k ] ) ) ) : array();
+			update_post_meta( $post_id, '_mpc_' . $k, implode( ',', $sel ) );
+		}
 		delete_transient( 'mpc_pack_ids' );
 	},
 	25

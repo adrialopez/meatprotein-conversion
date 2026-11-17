@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.23.0
+- **Extras del pack elegibles en la ficha del pack:** el cuadro «Regalo y extras del pack» permite escoger qué salsas, panes y quesos se ofrecen al comprar (buscador de productos, en el orden elegido). Vacío = automático (los más vendidos). Lo elegido manda sobre los ajustes de Conversión.
+
 ## 0.22.3
 - Ficha del pack: el regalo de «Qué recibes» se escribe con el nombre real del producto («1 bandeja de Mango Protein Chicken de regalo»), sin pasarlo a minúsculas.
 
