@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.21.5
+- Pedidos, correos y administración: el regalo del pack se muestra como «Regalo: 1 bandeja de Mango Protein Chicken» en lugar de «CHICKEN, MANGO: REGALO 🎁» (también en pedidos ya hechos).
+
 ## 0.21.4
 - Portada: las burgers del «Tu pack» dejan aire respecto a la caja (padding y `scroll-padding`), se difuminan por la derecha y llevan una flecha que avisa de que se deslizan (desaparece al desplazar). Tema 1.0.21: nombre de categoría de la portada que no se corta y botones «Añadir al carrito» más pequeños.
 

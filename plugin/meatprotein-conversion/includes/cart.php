@@ -252,3 +252,48 @@ add_action(
 	},
 	20
 );
+
+/**
+ * Pedidos, correos y administración: el atributo del regalo del pack se guarda con el nombre del atributo y un emoji
+ * («CHICKEN, MANGO: REGALO 🎁»). Se muestra como «Regalo: 1 bandeja de Mango Protein Chicken».
+ */
+add_filter(
+	'woocommerce_order_item_display_meta_key',
+	function ( $key, $meta ) {
+		return mpc_is_gift_meta( $meta ) ? 'Regalo' : $key;
+	},
+	10,
+	2
+);
+add_filter(
+	'woocommerce_order_item_display_meta_value',
+	function ( $value, $meta, $item ) {
+		if ( ! mpc_is_gift_meta( $meta ) ) {
+			return $value;
+		}
+		$ids  = function_exists( 'mpc_gift_ids' ) ? mpc_gift_ids() : array();
+		$name = $ids ? mpc_nice_name( get_the_title( $ids[0] ) ) : '';
+		if ( ! $name ) {
+			return $value;
+		}
+		return esc_html( '1 bandeja de ' . $name );
+	},
+	10,
+	3
+);
+
+/**
+ * ¿Es el dato del regalo de un pack? Su valor es «REGALO» (con o sin emoji) y su clave no es una «Bandeja N».
+ *
+ * @param object $meta Meta del producto de pedido.
+ * @return bool
+ */
+function mpc_is_gift_meta( $meta ) {
+	$key = isset( $meta->key ) ? (string) $meta->key : '';
+	$val = isset( $meta->value ) && is_scalar( $meta->value ) ? (string) $meta->value : '';
+	if ( '' === $key || 0 === strpos( $key, '_' ) || preg_match( '/^bandeja[\s-]*\d+$/i', $key ) ) {
+		return false;
+	}
+	$val = trim( preg_replace( '/[\x{1F000}-\x{1FFFF}\x{2600}-\x{27BF}\x{FE0F}]/u', '', $val ) );
+	return 0 === strcasecmp( $val, 'regalo' );
+}
