@@ -160,7 +160,6 @@ li.product .mfn-li-product-row-button a.button { display: block !important; widt
 .mfn-cart-holder .mfn-chft-row { padding: .15rem 0; font-size: .95rem; }
 .mfn-cart-holder .mfn-chft-total { font-size: 1.1rem; }
 .mfn-cart-holder .mfn-chft-apply-coupon-switcher { font-size: .88rem; color: var(--mpc-soft); }
-.mfn-cart-holder .mfn-ch-footer-buttons a:not(.button) { display: none; }
 .mfn-cart-holder .mpc-hide, .mfn-cart-holder .mfn-chft-total .includes_tax { display: none !important; }
 .mfn-cart-holder .mpc-sc-trust { display: flex; flex-wrap: wrap; justify-content: center; gap: .15rem .9rem; margin-top: .5rem; padding-top: .6rem; }
 .mfn-cart-holder .mpc-sc-trust li { padding-left: 1.05rem; font-size: .76rem; }
@@ -636,3 +635,6 @@ ul.products li.product .mfn-li-product-row-title .title, ul.products li.product 
 .mpc-cta__btn { padding: 0 .6rem !important; font-size: .95rem !important; white-space: nowrap; }
 .mpc-cta__cart svg { transform: translate(-3px, 3px); }
 .mpc-cta__badge { top: 4px !important; right: 4px !important; }
+
+/* Carrito lateral: «Ver carrito» (lleva a la página del carrito) como botón secundario bajo «Finalizar compra». */
+.mfn-cart-holder .mfn-ch-footer-buttons a:not(.button) { display: block; margin: .5rem 0 0; padding: .7rem 1rem; border: 1.5px solid var(--mpc-ink, #111); border-radius: 14px; background: #fff; color: var(--mpc-ink, #111) !important; font: 700 .95rem/1.2 var(--mpc-sans, sans-serif); text-align: center; text-decoration: none; }
