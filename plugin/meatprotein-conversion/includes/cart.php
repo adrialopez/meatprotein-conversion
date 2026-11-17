@@ -178,7 +178,7 @@ add_filter(
 					$name = $gid ? mpc_nice_name( get_the_title( $gid ) ) : mb_convert_case( mb_strtolower( wp_strip_all_tags( (string) $row['key'] ) ), MB_CASE_TITLE, 'UTF-8' );
 					$row  = array(
 						'key'   => 'Regalo',
-						'value' => '1 bandeja de ' . $name,
+						'value' => $name,
 					);
 				} elseif ( isset( $row['value'] ) && $val !== trim( wp_strip_all_tags( (string) $row['value'] ) ) ) {
 					$row['value']   = $val;
@@ -255,7 +255,7 @@ add_action(
 
 /**
  * Pedidos, correos y administración: el atributo del regalo del pack se guarda con el nombre del atributo y un emoji
- * («CHICKEN, MANGO: REGALO 🎁»). Se muestra como «Regalo: 1 bandeja de Mango Protein Chicken».
+ * («CHICKEN, MANGO: REGALO 🎁»). Se muestra como «Regalo: Mango Protein Chicken» (el nombre del producto regalo).
  */
 add_filter(
 	'woocommerce_order_item_display_meta_key',
@@ -276,7 +276,7 @@ add_filter(
 		if ( ! $name ) {
 			return $value;
 		}
-		return esc_html( '1 bandeja de ' . $name );
+		return esc_html( $name );
 	},
 	10,
 	3

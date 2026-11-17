@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.21.6
+- El regalo del pack se muestra solo con el nombre del producto regalo («Regalo: Mango Protein Chicken»), tomado del ID de WooCommerce > Conversión, en carrito, pago, pedidos y correos.
+
 ## 0.21.5
 - Pedidos, correos y administración: el regalo del pack se muestra como «Regalo: 1 bandeja de Mango Protein Chicken» en lugar de «CHICKEN, MANGO: REGALO 🎁» (también en pedidos ya hechos).
 
