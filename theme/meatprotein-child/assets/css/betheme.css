@@ -532,3 +532,13 @@ body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
 	.woocommerce-checkout .woocommerce-checkout-review-order-table tr.cart_item dl.variation { grid-column: 1 / -1; grid-row: 2; width: 100% !important; max-width: none !important; margin: .7rem 0 0; padding: .7rem .8rem; border-radius: 12px; background: #fff; }
 	.woocommerce-checkout .woocommerce-checkout-review-order-table dl.variation dd { overflow-wrap: break-word; }
 }
+
+/* ---------- Pestañas de la ficha: texto con subrayado (sin píldoras) ---------- */
+.mfn-woocommerce-tabs-nav { display: flex !important; justify-content: flex-start !important; gap: 1.8rem !important; padding: 0 !important; margin: 0 0 1.4rem !important; border: 0 !important; border-bottom: 1px solid var(--mpc-line, #dfe6ea) !important; border-radius: 0 !important; background: none !important; overflow-x: auto; }
+.mfn-woocommerce-tabs-nav li { flex: 0 0 auto; }
+.mfn-woocommerce-tabs-nav li a { padding: .85rem .1rem !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; font-size: 1rem !important; text-align: left; color: var(--mpc-soft, #5b6670) !important; }
+.mfn-woocommerce-tabs-nav li a:hover { color: var(--mpc-ink, #111) !important; }
+.mfn-woocommerce-tabs-nav li.active a, .mfn-woocommerce-tabs-nav.has-ind li.active a { color: var(--mpc-ink, #111) !important; background: none !important; box-shadow: none !important; }
+.mfn-woocommerce-tabs-nav .mpc-tabind { top: auto !important; bottom: -1px !important; height: 3px; border-radius: 0 !important; background: var(--mpc-pink, #c23a7a) !important; }
+.mfn-woocommerce-tabs-nav:not(.has-ind) li.active a { box-shadow: inset 0 -3px 0 var(--mpc-pink, #c23a7a) !important; }
+@media (max-width: 767px) { .mfn-woocommerce-tabs-nav { gap: 1.4rem !important; } }
