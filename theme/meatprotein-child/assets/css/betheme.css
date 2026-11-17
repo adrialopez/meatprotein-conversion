@@ -435,3 +435,6 @@ body.single-product .woocommerce-product-gallery .woocommerce-product-gallery__i
 @media (max-width: 767px) {
 	.mfn-footer-tmpl .mcb-column a:not(.button):not(.mfn-btn) { display: inline-block; padding: .4rem 0; min-height: 32px; }
 }
+/* Pago: la lista de garantías sin viñetas. */
+.mpc-secure, .mpc-secure li { list-style: none; }
+.mpc-secure { padding-left: 0; }
