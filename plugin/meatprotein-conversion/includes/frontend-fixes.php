@@ -85,3 +85,49 @@ add_filter(
 	},
 	20
 );
+
+/**
+ * URLs de categoría sin «categoria-producto» ni la categoría padre: /pan/, /saladas/, /hamburguesas-de-pollo/…
+ * Las direcciones antiguas (con la base, con el padre o con un slug renombrado) redirigen con 301 a la nueva.
+ * Se ejecuta antes que la redirección propia de Rank Math, que con categorías anidadas apunta a una dirección que no existe.
+ */
+add_action(
+	'parse_request',
+	function ( $wp ) {
+		if ( is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+			return;
+		}
+		$path = trim( (string) wp_parse_url( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '', PHP_URL_PATH ), '/' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( '' === $path ) {
+			return;
+		}
+		$renamed = array(
+			'suplantacion'  => 'suplementacion',
+			'snacks-dulces' => 'snacks-y-bebidas',
+		);
+		$parts = explode( '/', $path );
+		$base  = 'categoria-producto' === $parts[0];
+		if ( $base ) {
+			array_shift( $parts );
+		} elseif ( ! isset( $renamed[ $parts[0] ] ) ) {
+			return;
+		}
+		$slug = '';
+		$rest = array();
+		foreach ( $parts as $i => $seg ) {
+			$cand = isset( $renamed[ $seg ] ) ? $renamed[ $seg ] : $seg;
+			if ( term_exists( $cand, 'product_cat' ) ) {
+				$slug = $cand;
+				$rest = array_slice( $parts, $i + 1 );
+			}
+		}
+		if ( '' === $slug ) {
+			return;
+		}
+		$target = home_url( '/' . $slug . '/' . ( $rest ? implode( '/', $rest ) . '/' : '' ) );
+		$q      = isset( $_SERVER['QUERY_STRING'] ) && '' !== $_SERVER['QUERY_STRING'] ? '?' . wp_unslash( $_SERVER['QUERY_STRING'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		wp_safe_redirect( $target . $q, 301 );
+		exit;
+	},
+	1
+);

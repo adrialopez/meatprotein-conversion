@@ -416,7 +416,7 @@ function mpc_write_llms() {
 		}
 	}
 	$L .= "\n## Otras categorías\n\n";
-	foreach ( array( 'pizza-fitness', 'pan', 'salsas-y-cremas', 'snacks-y-bebidas', 'pasta-konjac', 'suplantacion', 'queso' ) as $s ) {
+	foreach ( array( 'pizza-fitness', 'pan', 'salsas-y-cremas', 'snacks-y-bebidas', 'pasta-konjac', 'suplementacion', 'queso' ) as $s ) {
 		$t = get_term_by( 'slug', $s, 'product_cat' );
 		if ( $t ) {
 			$L .= '- [' . $t->name . '](' . get_term_link( $t ) . ")\n";

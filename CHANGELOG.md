@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.25.0
+- **URLs de categoría cortas:** sin «categoria-producto» ni la categoría padre (`/pan/`, `/saladas/`, `/hamburguesas-de-pollo/`; Rank Math: quitar base y slugs de padres). «Suplantacion» pasa a `/suplementacion/`. Las direcciones antiguas redirigen con 301 a la nueva (también las de categorías anidadas y los slugs renombrados).
+
 ## 0.24.4
 - Categoría «Snacks y bebidas» con URL nueva (`/categoria-producto/snacks-y-bebidas/`, la antigua redirige con 301); los snacks sugeridos del carrito y llms.txt usan el slug nuevo.
 
