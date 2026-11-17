@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.23.1
+- Cuadro de extras del pack: con el modo automático se muestra qué productos salen ahora.
+
 ## 0.23.0
 - **Extras del pack elegibles en la ficha del pack:** el cuadro «Regalo y extras del pack» permite escoger qué salsas, panes y quesos se ofrecen al comprar (buscador de productos, en el orden elegido). Vacío = automático (los más vendidos). Lo elegido manda sobre los ajustes de Conversión.
 

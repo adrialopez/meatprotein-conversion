@@ -581,6 +581,14 @@ function mpc_gift_box( $post ) {
 			}
 		}
 		echo '</select>';
+		if ( ! $cur ) {
+			$steps = mpc_bundle_steps( wc_get_product( $post->ID ) );
+			$k2    = str_replace( 'step_', '', $key );
+			$names = ! empty( $steps[ $k2 ]['items'] ) ? array_map( function ( $pr ) {
+				return mpc_nice_name( $pr->get_name() );
+			}, $steps[ $k2 ]['items'] ) : array();
+			echo '<p class="description" style="margin:2px 0 0">Ahora salen (automático): ' . esc_html( $names ? implode( ', ', $names ) : 'ninguno' ) . '.</p>';
+		}
 	}
 	echo '<p class="description" style="margin-top:8px">Qué se muestra: «Incluye 1 bandeja de <em>nombre del producto</em> de regalo» en la portada y la ficha, y «Regalo: <em>nombre</em>» en carrito, pedidos y correos. El título del pack ya no hace falta que lo nombre.</p>';
 }
