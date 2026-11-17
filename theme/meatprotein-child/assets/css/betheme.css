@@ -625,3 +625,14 @@ ul.products li.product .mfn-li-product-row-button { display: flex; justify-conte
 ul.products li.product .mfn-li-product-row-button a.button { width: 100% !important; text-align: center; }
 ul.products li.product .image_wrapper a img, ul.products li.product .image_frame img.wp-post-image { padding: 3% !important; }
 ul.products li.product .mfn-li-product-row-title .title, ul.products li.product .mfn-li-product-row-title a { display: -webkit-box !important; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; line-height: 1.25 !important; min-height: 2.5em !important; max-height: 2.5em; margin-bottom: .35rem; }
+
+/* Barra fija de compra (móvil): bolsa del carrito, cantidad y botón caben en una línea y el contador de la bolsa no se corta. */
+.mpc-cta { gap: .5rem; padding-left: .7rem; padding-right: .7rem; }
+.mpc-cta__cart { flex: 0 0 48px !important; width: 48px !important; height: auto !important; min-height: 54px; align-self: stretch !important; overflow: visible !important; }
+.mpc-cta__cart svg { width: 22px; height: 22px; }
+.mpc-cta__badge { top: 5px !important; right: 5px !important; min-width: 17px !important; height: 17px !important; padding: 0 4px !important; font-size: .66rem !important; }
+.mpc-cta__qty button { width: 36px !important; }
+.mpc-cta__qty output { min-width: 1.3rem !important; }
+.mpc-cta__btn { padding: 0 .6rem !important; font-size: .95rem !important; white-space: nowrap; }
+.mpc-cta__cart svg { transform: translate(-3px, 3px); }
+.mpc-cta__badge { top: 4px !important; right: 4px !important; }
