@@ -139,7 +139,7 @@
 			t.textContent = 'Hazlo pack: 10 bandejas por ' + fmt(sg.price);
 			p.textContent = 'Envío refrigerado gratis y eliges los sabores. Empezamos por esta hamburguesa.';
 			cNo.textContent = 'No, solo esta'; cYes.textContent = 'Sí, quiero el pack';
-			cYes.addEventListener('click', function () { markAsked(); window.location.href = sg.url + (sg.key ? (sg.url.indexOf('?') > -1 ? '&' : '?') + 'mpc_pre=' + encodeURIComponent(sg.key) : ''); });
+			cYes.addEventListener('click', function () { markAsked(); if (window.mpcBusy) { window.mpcBusy(); } window.location.href = sg.url + (sg.key ? (sg.url.indexOf('?') > -1 ? '&' : '?') + 'mpc_pre=' + encodeURIComponent(sg.key) : ''); });
 		}
 		cNo.addEventListener('click', function () { markAsked(); d.close(); submitReal(); });
 		cYes.setAttribute('autofocus', '');

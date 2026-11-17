@@ -161,6 +161,7 @@ add_action(
 		clearTimeout(timer);
 		timer = setTimeout(stop, 25000);
 	}
+	window.mpcBusy = start;
 	document.addEventListener('submit', function (e) {
 		var f = e.target;
 		if (!f || !f.classList || !f.classList.contains('cart')) { return; }
@@ -175,6 +176,17 @@ add_action(
 		if (a && !a.classList.contains('ajax_add_to_cart') && !e.defaultPrevented) { start(a); }
 	});
 	window.addEventListener('pageshow', function (e) { if (e.persisted) { stop(); } });
+	/* En fichas de hamburguesa y pack la compra va por AJAX (admin-ajax: woocommerce_add_to_cart): el indicador dura lo que tarda la respuesta. */
+	var xs = XMLHttpRequest.prototype.send;
+	XMLHttpRequest.prototype.send = function (body) {
+		var x = this, act = '';
+		try { act = (body instanceof FormData ? body.get('action') : (typeof body === 'string' ? body : '')) || ''; } catch (err) { act = ''; }
+		if (/add_to_cart/.test(String(act))) {
+			start(document.querySelector('.single_add_to_cart_button'));
+			x.addEventListener('loadend', function () { setTimeout(stop, 500); });
+		}
+		return xs.apply(this, arguments);
+	};
 })();
 JS
 		. "\n</script>\n";

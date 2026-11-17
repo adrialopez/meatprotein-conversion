@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.27.8
+- Spinner también en la compra por AJAX de hamburguesas y pack (dura lo que tarda la respuesta) y al pasar al pack desde la ventana de oferta.
+
 ## Tema 1.0.57
 - Portada: más aire sobre «Nuestras burgers»; listados con los botones de añadir alineados (título reserva dos líneas).
 
