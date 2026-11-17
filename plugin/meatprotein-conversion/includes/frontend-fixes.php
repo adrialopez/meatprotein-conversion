@@ -46,3 +46,23 @@ add_action(
 	},
 	100
 );
+
+/**
+ * Listados de productos: los agotados van al final (en categorías, etiquetas, tienda y búsqueda), sin cambiar el resto del orden.
+ */
+add_filter(
+	'posts_clauses',
+	function ( $clauses, $query ) {
+		global $wpdb;
+		if ( is_admin() || ! $query->is_main_query() || 'product' !== $query->get( 'post_type' ) && ! ( $query->is_post_type_archive( 'product' ) || $query->is_tax( array( 'product_cat', 'product_tag' ) ) ) ) {
+			return $clauses;
+		}
+		if ( false === strpos( $clauses['join'], 'mpc_ml' ) ) {
+			$clauses['join'] .= " LEFT JOIN {$wpdb->prefix}wc_product_meta_lookup AS mpc_ml ON mpc_ml.product_id = {$wpdb->posts}.ID";
+		}
+		$clauses['orderby'] = "(CASE WHEN mpc_ml.stock_status = 'outofstock' THEN 1 ELSE 0 END) ASC" . ( $clauses['orderby'] ? ', ' . $clauses['orderby'] : '' );
+		return $clauses;
+	},
+	20,
+	2
+);

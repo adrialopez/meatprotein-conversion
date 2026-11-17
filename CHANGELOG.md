@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.24.0
+- Listados: los productos agotados van al final de cada categoría, etiqueta, tienda y búsqueda.
+- Nombres de todo el catálogo sin mayúsculas gritadas ni «NEW» (antes solo hamburguesas y pack): «Grandmas BBQ Louisiana» en lugar de «GRANDMAS BBQ LOUISIANA».
+
 ## 0.23.1
 - Cuadro de extras del pack: con el modo automático se muestra qué productos salen ahora.
 

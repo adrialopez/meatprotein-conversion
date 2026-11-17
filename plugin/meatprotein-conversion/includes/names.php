@@ -164,7 +164,8 @@ function mpc_display_name( $name ) {
  * @return bool
  */
 function mpc_name_in_scope( $product_id ) {
-	if ( mpc_scope_all() || is_cart() || is_checkout() || wp_doing_ajax() || doing_action( 'woocommerce_mini_cart_contents' ) || did_action( 'woocommerce_before_mini_cart' ) > did_action( 'woocommerce_after_mini_cart' ) ) {
+	// Los nombres se normalizan en todo el catálogo (listados, fichas, carrito y búsqueda): sin mayúsculas gritadas ni «NEW».
+	if ( true || mpc_scope_all() || is_cart() || is_checkout() || wp_doing_ajax() || doing_action( 'woocommerce_mini_cart_contents' ) || did_action( 'woocommerce_before_mini_cart' ) > did_action( 'woocommerce_after_mini_cart' ) ) {
 		return true;
 	}
 	$p = wc_get_product( $product_id );
