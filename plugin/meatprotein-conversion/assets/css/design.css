@@ -377,3 +377,5 @@ a.mpc-upsell__add.is-busy { opacity: .6; pointer-events: none; }
 @keyframes mpc-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
 @media (prefers-reduced-motion: reduce) { .mpc-hero__hint { animation: none; } }
 @media (min-width: 900px) { .mpc-hero__hint { display: none; } .mpc-hero__rail .mpc-hero__tiles { -webkit-mask-image: none; mask-image: none; } }
+
+.mpc-giftpill + .mpc-giftpill { margin-top: .5rem; }

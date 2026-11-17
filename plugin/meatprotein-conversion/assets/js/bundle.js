@@ -57,9 +57,14 @@
 		if (gift) {
 			var pill = document.createElement('p'); pill.className = 'mpc-giftpill';
 			pill.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 7v13M12 7c-2-4-6-4-6-1.5S10 7 12 7zM12 7c2-4 6-4 6-1.5S14 7 12 7z"/></svg>';
-			var sp = document.createElement('span'); sp.textContent = 'Incluye ' + gift + ' y envío gratis';
+			var sp = document.createElement('span'); sp.textContent = 'Incluye ' + gift;
 			pill.appendChild(sp);
 			h1.parentNode.insertBefore(pill, h1.nextSibling);
+			var ship = document.createElement('p'); ship.className = 'mpc-giftpill mpc-giftpill--ship';
+			ship.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg>';
+			var ss = document.createElement('span'); ss.textContent = 'Envío gratis';
+			ship.appendChild(ss);
+			pill.parentNode.insertBefore(ship, pill.nextSibling);
 		}
 	})();
 	/* Etiqueta junto al selector de cantidad (solo pack; en bandejas sueltas la cantidad va en la barra fija). */

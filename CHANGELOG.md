@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.22.2
+- Ficha del pack: «Envío gratis» como etiqueta propia bajo la del regalo (en vez de dentro de la misma frase).
+
 ## 0.22.1
 - Ficha del pack: la píldora del regalo dice «Incluye 1 bandeja de X de regalo y envío gratis». El cuadro «Etiqueta y pack» ya no aparece en el pack (solo «Regalo del pack»); queda para las hamburguesas.
 
