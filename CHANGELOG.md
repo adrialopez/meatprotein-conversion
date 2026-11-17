@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.22.3
+- Ficha del pack: el regalo de «Qué recibes» se escribe con el nombre real del producto («1 bandeja de Mango Protein Chicken de regalo»), sin pasarlo a minúsculas.
+
 ## 0.22.2
 - Ficha del pack: «Envío gratis» como etiqueta propia bajo la del regalo (en vez de dentro de la misma frase).
 

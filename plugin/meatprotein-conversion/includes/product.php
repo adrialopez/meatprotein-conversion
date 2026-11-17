@@ -234,7 +234,7 @@ add_filter(
 			$content = '';
 		}
 		if ( $is_pack ) {
-			$gift_one = $extras ? mb_strtolower( preg_replace( '/\s+de regalo$/iu', '', $extras[0] ), 'UTF-8' ) : '';
+			$gift_one = $extras ? preg_replace( '/\s+de regalo$/iu', '', $extras[0] ) : '';
 			if ( mpc_gift_multi() ) {
 				$gift_one = 'bandeja a tu elección';
 			}
@@ -247,7 +247,7 @@ add_filter(
 				$tiles[] = array( 'lab', (int) $prot . ' g', 'de proteína como máximo en cada hamburguesa' );
 			}
 			if ( $gift_one ) {
-				$tiles[] = array( 'ship', '+1', $gift_one . ', de regalo' );
+				$tiles[] = array( 'ship', '+1', $gift_one . ' de regalo' );
 			}
 			$grid = '<ul class="mpc-incl">';
 			foreach ( $tiles as $t ) {
