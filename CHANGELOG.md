@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.27.4
+- «Información nutricional y alérgenos» solo en hamburguesas. En el resto de productos hay un cuadro opcional en la ficha (admin) que, si se rellena, muestra el desplegable; vacío no muestra nada.
+
 ## Tema 1.0.53
 - Carrusel de categorías en escritorio: margen arriba y abajo para que la tarjeta elevada con sombra no se corte.
 

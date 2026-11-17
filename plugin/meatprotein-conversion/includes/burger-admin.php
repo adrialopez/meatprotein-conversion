@@ -630,3 +630,44 @@ add_action(
 	},
 	25
 );
+
+
+/* ------------------------------------------------------------------ Información nutricional de otros productos */
+
+add_action(
+	'add_meta_boxes_product',
+	function ( $post ) {
+		$p = wc_get_product( $post->ID );
+		if ( $p && ! mpc_is_pack( $p ) && ! mpc_is_single_burger( $p ) ) {
+			add_meta_box( 'mpc_nutri_extra', 'Meatprotein: información nutricional y alérgenos', 'mpc_nutri_extra_box', 'product', 'normal', 'default' );
+		}
+	}
+);
+
+/** Caja libre: si se rellena, la ficha muestra el desplegable «Información nutricional y alérgenos»; si está vacía, no aparece nada. */
+function mpc_nutri_extra_box( $post ) {
+	wp_nonce_field( 'mpc_nutri_extra', 'mpc_nutri_extra_nonce' );
+	echo '<p style="margin-top:0;color:#50575e">Opcional. Escribe aquí los valores por 100 g, los ingredientes y los alérgenos. Si lo dejas vacío, la ficha no muestra este bloque.</p>';
+	wp_editor(
+		(string) get_post_meta( $post->ID, '_mpc_nutri_extra', true ),
+		'mpc_nutri_extra',
+		array(
+			'textarea_rows' => 8,
+			'media_buttons' => false,
+			'teeny'         => true,
+		)
+	);
+}
+
+add_action(
+	'save_post_product',
+	function ( $post_id ) {
+		if ( ! isset( $_POST['mpc_nutri_extra_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mpc_nutri_extra_nonce'] ) ), 'mpc_nutri_extra' ) ) {
+			return;
+		}
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+		update_post_meta( $post_id, '_mpc_nutri_extra', wp_kses_post( wp_unslash( $_POST['mpc_nutri_extra'] ?? '' ) ) );
+	}
+);

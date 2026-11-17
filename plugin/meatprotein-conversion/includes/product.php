@@ -305,20 +305,23 @@ add_filter(
 				'body'  => '<p>Controlamos las materias primas en la recepción, el proceso de producción y el peso y aspecto de cada pedido antes de enviarlo. Los alérgenos están identificados y documentados en cada receta.</p>' . ( $cert ? wpautop( $cert ) : '' ) . ( $q ? '<p><a href="' . esc_url( $q ) . '">Ver los controles de calidad</a></p>' : '' ),
 				'open'  => false,
 			);
-			$nut_html = mpc_nutrition_table_html();
-			$nut      = trim( (string) mpc_opt( 'nutrition' ) );
-			if ( ! mpc_is_single_burger( $product ) && ! $is_pack && ! mpc_is_basic( $product ) && ( $nut_html || $nut ) ) {
-				$blocks[] = array(
-					'title' => 'Información nutricional y alérgenos',
-					'body'  => '<p>Pulsa «Info» junto a cada sabor en el selector para ver sus ingredientes y alérgenos.</p>' . $nut_html . ( $nut ? wpautop( $nut ) : '' ),
-					'open'  => false,
-				);
-			}
 			$origin = trim( (string) mpc_opt( 'origin' ) );
 			if ( $origin && ( $is_pack || mpc_is_single_burger( $product ) ) ) {
 				$blocks[] = array(
 					'title' => 'Quién lo fabrica',
 					'body'  => wpautop( $origin ),
+					'open'  => false,
+				);
+			}
+		}
+
+		/* Información nutricional y alérgenos: solo hamburguesas (van en su descripción). En el resto de productos, el bloque aparece únicamente si se rellena su cuadro en la ficha. */
+		if ( ! $is_pack && ! mpc_is_single_burger( $product ) ) {
+			$extra = trim( (string) get_post_meta( $product->get_id(), '_mpc_nutri_extra', true ) );
+			if ( '' !== $extra ) {
+				$blocks[] = array(
+					'title' => 'Información nutricional y alérgenos',
+					'body'  => wp_kses_post( wpautop( $extra ) ),
 					'open'  => false,
 				);
 			}
