@@ -127,6 +127,8 @@ function mpc_render_burger( $post, $d ) {
 	$is_alb = has_term( 'albondigas-proteicas', 'product_cat', $post->ID );
 	$pub   = ! empty( $d['energia_publicable'] );
 	$low   = $d['grasas'] <= 3;
+	$en    = $d['proteinas'] * 4 + $d['grasas'] * 9 + $d['hidratos'] * 4;
+	$high  = $en > 0 && ( $d['proteinas'] * 4 / $en ) >= 0.20; // Alto contenido en proteínas: al menos el 20 % de la energía.
 	$ids   = get_option( 'mp_sellos_ids' );
 	$seal  = array(
 		'alto' => is_array( $ids ) && ! empty( $ids['alto'] ) ? wp_get_attachment_url( $ids['alto'] ) : '',
@@ -162,7 +164,14 @@ function mpc_render_burger( $post, $d ) {
 	if ( $pub ) {
 		$claim .= ( $d['kcal'] <= 130 ? ' y solo ' : ' y ' ) . mpc_fmt( $d['kcal'] ) . ' kcal';
 	}
-	$claim .= ': alto contenido en proteínas' . ( $low ? ' y bajo en grasa (' . mpc_fmt( $d['grasas'] ) . ' g)' : '' ) . '.';
+	$parts = array();
+	if ( $high ) {
+		$parts[] = 'alto contenido en proteínas';
+	}
+	if ( $low ) {
+		$parts[] = 'bajo en grasa (' . mpc_fmt( $d['grasas'] ) . ' g)';
+	}
+	$claim .= ( $parts ? ': ' . implode( ' y ', $parts ) : '' ) . '.';
 	if ( ! preg_match( '/achiote|colorante|conservante|sulfito|\bE-?\d{3}\b/iu', $d['ingredientes'] ) ) {
 		$claim .= ' Sin sulfitos, colorantes ni conservantes añadidos.';
 	}
@@ -180,8 +189,8 @@ function mpc_render_burger( $post, $d ) {
 
 	$core    = $pub ? mpc_fmt( $d['proteinas'] ) . ' g de proteína y ' . mpc_fmt( $d['kcal'] ) . ' kcal por 100 g' : mpc_fmt( $d['proteinas'] ) . ' g de proteína por 100 g';
 	$excerpt = ( $is_alb ? "$title: bandeja de 400 g de albóndigas proteicas con $core." : "$title: bandeja de 400 g (4 x 100 g) con $core." ) . ' Entrega refrigerada antes de las 14:00 en Península y Portugal.';
-	if ( $seal['alto'] ) {
-		$excerpt .= "\n" . '<p class="mp-sellos"><img src="' . esc_url( $seal['alto'] ) . '" alt="Alto contenido en proteínas" width="68" height="64" loading="lazy" />'
+	if ( ( $high && $seal['alto'] ) || ( $low && $seal['bajo'] ) ) {
+		$excerpt .= "\n" . '<p class="mp-sellos">' . ( $high && $seal['alto'] ? '<img src="' . esc_url( $seal['alto'] ) . '" alt="Alto contenido en proteínas" width="68" height="64" loading="lazy" />' : '' )
 			. ( $low && $seal['bajo'] ? '<img src="' . esc_url( $seal['bajo'] ) . '" alt="Bajo en grasa" width="92" height="64" loading="lazy" />' : '' ) . '</p>';
 	}
 	$desc = "$title: $core. Bandeja de 400 g (4 x 100 g). Entrega refrigerada antes de las 14:00 en Península y Portugal.";

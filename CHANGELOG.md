@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.21.1
+- El sello y la frase «alto contenido en proteínas» solo se generan si la proteína aporta al menos el 20 % de la energía (regla del reglamento europeo); «bajo en grasa» solo con 3 g o menos de grasa por 100 g.
+
 ## 0.21.0
 - **Edición desde el administrador, sin scripts:** cada ficha de producto tiene el cuadro «Meatprotein: etiqueta y pack» con ingredientes, trazas de gluten, tabla nutricional, «Publicar la energía» y «Nombre en el pack». Al guardar se regenera sola la ficha (descripción, tabla, frase de calidad, sellos «Alto contenido en proteínas» / «Bajo en grasa» según los datos, meta descripción de Google, datos estructurados) y el archivo `llms.txt`. Los alérgenos se calculan de las palabras en MAYÚSCULAS de los ingredientes y se avisa si la etiqueta no cuadra (kcal frente a macros, saturadas > grasas...).
 - **Sabores del pack automáticos:** WooCommerce > Conversión > «Sabores del pack» lista las fichas con «Nombre en el pack» y el botón «Actualizar los desplegables del pack» los copia a «Bandeja 1…10». El grupo del selector (Pollo, Ternera, Pavo, Potro, Albóndigas...) sale de la subcategoría de la ficha, también para tipos de carne nuevos. Ya no hace falta tocar código para añadir un sabor.
