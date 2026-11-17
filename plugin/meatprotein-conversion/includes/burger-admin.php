@@ -157,7 +157,7 @@ function mpc_render_burger( $post, $d ) {
 		array( 'Proteínas', 'proteinas' ),
 		array( 'Sal', 'sal' ),
 	) as $r ) {
-		$rows .= '<tr><th scope="row">' . $r[0] . '</th><td>' . mpc_fmt( $d[ $r[1] ] ) . ' g</td></tr>';
+		$rows .= '<tr' . ( 0 === strpos( $r[0], 'de ' ) ? ' class="sub"' : '' ) . '><th scope="row">' . $r[0] . '</th><td>' . mpc_fmt( $d[ $r[1] ] ) . ' g</td></tr>';
 	}
 
 	$claim = mpc_fmt( $d['proteinas'] ) . ' g de proteína por cada 100 g';
@@ -181,11 +181,11 @@ function mpc_render_burger( $post, $d ) {
 	$html .= '<p class="mp-claims">' . esc_html( $claim ) . "</p>\n";
 	$html .= "<h2>Ingredientes y alérgenos</h2>\n<p><strong>Ingredientes:</strong> " . $ing . "</p>\n";
 	$html .= '<p><strong>Alérgenos:</strong> ' . ( $al ? 'contiene ' . esc_html( mpc_list_es( $al ) ) . '.' : 'no contiene alérgenos de declaración obligatoria.' ) . ( $gl ? ' Puede contener trazas de gluten.' : '' ) . "</p>\n";
-	$html .= "<h2>Información nutricional por 100 g</h2>\n<table class=\"mp-nutri\"><tbody>" . $rows . "</tbody></table>\n";
+	$html .= "<h2>Información nutricional</h2>\n<table class=\"mp-nutri\"><thead><tr><th scope=\"col\">Por 100 g</th><th scope=\"col\"></th></tr></thead><tbody>" . $rows . "</tbody></table>\n";
 	$html .= '<p>Peso neto: ' . ( $is_alb ? '400 g por bandeja.' : '100 g por unidad, 400 g por bandeja (4 unidades).' ) . "</p>\n";
 	$html .= "<h2>Cómo la recibes</h2>\n<ul>\n<li>Producto fresco, enviado con transporte refrigerado (SEUR).</li>\n<li>Entrega antes de las 14:00 en Península y Portugal. Haz tu pedido antes de las 13:00 para el envío según el calendario habitual.</li>\n";
 	$html .= '<li>Envío gratis a la Península con el <a href="' . esc_url( $base . '/pack-10-bandejas-hamburguesas/' ) . "\">pack de 10 bandejas</a>.</li>\n</ul>\n";
-	$html .= '<p>Más detalles en <a href="' . esc_url( $base . '/envios-y-devoluciones/' ) . '">Envíos y devoluciones</a> y en <a href="' . esc_url( $base . '/controles-de-calidad/' ) . '">Controles de calidad</a>.</p>' . "\n" . $imgs;
+	$html .= '<p>Más detalles en <a href="' . esc_url( $base . '/envios-y-devoluciones/' ) . '">Envíos y devoluciones</a> y en <a href="' . esc_url( $base . '/controles-de-calidad/' ) . '">Controles de calidad</a>.</p>' . "\n";
 
 	$core    = $pub ? mpc_fmt( $d['proteinas'] ) . ' g de proteína y ' . mpc_fmt( $d['kcal'] ) . ' kcal por 100 g' : mpc_fmt( $d['proteinas'] ) . ' g de proteína por 100 g';
 	$excerpt = ( $is_alb ? "$title: bandeja de 400 g de albóndigas proteicas con $core." : "$title: bandeja de 400 g (4 x 100 g) con $core." ) . ' Entrega refrigerada antes de las 14:00 en Península y Portugal.';

@@ -722,3 +722,14 @@ html.mpc-busy body::before { content: ""; position: fixed; inset: 0; z-index: 99
 html.mpc-busy body::after { content: ""; position: fixed; top: 50%; left: 50%; z-index: 99999; width: 46px; height: 46px; margin: -23px 0 0 -23px; border: 4px solid rgba(194, 58, 122, .2); border-top-color: var(--mpc-pink, #c23a7a); border-radius: 50%; animation: mpc-spin .8s linear infinite; }
 .single_add_to_cart_button.mpc-loading, a.add_to_cart_button.loading, a.mpc-loading { position: relative; color: transparent !important; pointer-events: none; }
 .single_add_to_cart_button.mpc-loading::after, a.add_to_cart_button.loading::after, a.mpc-loading::after { content: ""; position: absolute; top: 50%; left: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border: 3px solid rgba(255, 255, 255, .4); border-top-color: #fff; border-radius: 50%; animation: mpc-spin .7s linear infinite; font: 0/0 a; }
+
+/* Detalles de la ficha: títulos de sección discretos y tabla nutricional estándar */
+.mfn-woocommerce-tabs .the_content_wrapper h2, .woocommerce-Tabs-panel h2, .mfn-woocommerce-tabs h2 { margin: 1.5rem 0 .55rem !important; font: 700 1.05rem/1.3 var(--mpc-sans) !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--mpc-ink); }
+.mfn-woocommerce-tabs .the_content_wrapper p, .mfn-woocommerce-tabs .the_content_wrapper li { font-size: .95rem; line-height: 1.55; }
+table.mp-nutri { width: 100%; max-width: 440px; margin: .2rem 0 1rem; border-collapse: collapse; border: 0; border-top: 2px solid var(--mpc-ink); border-bottom: 2px solid var(--mpc-ink); background: none; font-size: .92rem; }
+table.mp-nutri thead th { padding: .45rem 0; border: 0; border-bottom: 1px solid var(--mpc-ink); background: none; font: 700 .8rem var(--mpc-sans); letter-spacing: .04em; text-transform: uppercase; text-align: left; color: var(--mpc-ink); }
+table.mp-nutri th, table.mp-nutri td { padding: .4rem 0; border: 0; border-bottom: 1px solid var(--mpc-line); background: none !important; font-size: .92rem; line-height: 1.35; vertical-align: baseline; }
+table.mp-nutri tbody th { width: auto; font-weight: 600; text-align: left; color: var(--mpc-ink); }
+table.mp-nutri td { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.mp-nutri tr.sub th { padding-left: 1.1rem; font-weight: 400; color: var(--mpc-soft); }
+table.mp-nutri tr:last-child th, table.mp-nutri tr:last-child td { border-bottom: 0; }

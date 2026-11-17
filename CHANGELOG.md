@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.27.6 + tema 1.0.56
+- Detalles de las burgers: títulos de sección discretos, tabla nutricional estándar (Por 100 g, filas «de las cuales» sangradas) y sin la imagen de etiqueta al final.
+
 ## 0.27.5 + tema 1.0.55
 - Indicador de carga (spinner y velo suave) al añadir al carrito, y en los botones de añadir de los listados.
 
