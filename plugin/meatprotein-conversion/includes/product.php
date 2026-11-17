@@ -72,7 +72,7 @@ add_action(
 		}
 		if ( $reg > $sale && $sale > 0 ) {
 			printf(
-				'<p class="mpc-save"><strong>Ahorras %s</strong> (%d %%) frente al precio por separado</p>',
+				mpc_is_pack( $product ) ? '<p class="mpc-save"><strong>Ahorras %s</strong> (%d %%) frente al precio por separado</p>' : '<p class="mpc-save"><strong>Oferta: ahorras %s</strong> (%d %%)</p>',
 				wp_kses_post( wc_price( $reg - $sale ) ),
 				(int) round( ( $reg - $sale ) / $reg * 100 )
 			);

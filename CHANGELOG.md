@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.24.2
+- «frente al precio por separado» solo en el pack; en el resto de productos con oferta: «Oferta: ahorras X (N %)».
+
 ## 0.24.1
 - Título de Google (Rank Math) de las fichas con el nombre normalizado.
 
