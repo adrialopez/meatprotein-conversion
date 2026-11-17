@@ -30,7 +30,7 @@
 		return t.charAt(0).toUpperCase() + t.slice(1);
 	}
 	function group(key) {
-		if (INFO[key] && INFO[key].g) { return ['Pollo', 'Ternera', 'Pavo', 'Potro', 'Albóndigas'].indexOf(INFO[key].g) > -1 ? INFO[key].g : 'Otros sabores'; }
+		if (INFO[key] && INFO[key].g) { return INFO[key].g; }
 		if (/pollo|chicken|kebab|satay|rulo de cabra/.test(key)) { return 'Pollo'; }
 		if (/ternera|parrilla|cheese bacon|bacon/.test(key)) { return 'Ternera'; }
 		if (/potro/.test(key)) { return 'Potro'; }
@@ -81,7 +81,12 @@
 	}
 
 	/* ---- Interfaz ---- */
-	var groups = ['Pollo', 'Ternera', 'Pavo', 'Potro', 'Albóndigas', 'Otros sabores'];
+	var PREF = ['Pollo', 'Ternera', 'Pavo', 'Potro', 'Albóndigas proteicas'];
+	var present = {};
+	keys.forEach(function (k) { present[flavours[k].group] = true; });
+	var groups = PREF.filter(function (g) { return present[g]; })
+		.concat(Object.keys(present).filter(function (g) { return PREF.indexOf(g) < 0 && g !== 'Otros sabores'; }).sort())
+		.concat(present['Otros sabores'] ? ['Otros sabores'] : []);
 	var html = '<div class="mpc-pack__head"><h3>Elige tus sabores</h3><p class="mpc-pack__count" aria-live="polite"></p></div>' +
 		'<div class="mpc-pack__bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + S + '"><i></i></div>' +
 		'<div class="mpc-pack__tools"><button type="button" class="mpc-link" data-act="random">Sorpréndeme con los que faltan</button><button type="button" class="mpc-link" data-act="clear">Vaciar</button></div>';

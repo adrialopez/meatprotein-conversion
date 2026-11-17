@@ -17,48 +17,49 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return mixed Resultado.
  */
 function mpc_flavour_products() {
-	return apply_filters(
-		'mpc_flavour_products',
-		array(
-			'chorizo'                       => 2499,
-			'barbacoa'                      => 5098,
-			'potro trufa'                   => 13621,
-			'potro'                         => 2458,
-			'espinacas y queso'             => 2427,
-			'albondigas'                    => 2500,
-			'pollo de corral'               => 2497,
-			'miel y tomate'                 => 43882,
-			'miel con tomate'               => 43882,
-			'miel y mostaza'                => 43882,
-			'ternera a la parrilla'         => 2460,
-			'pollo con miel y mostaza'      => 43882,
-			'mango protein chicken'         => 45578,
-			'pollo con pepinillos y queso cheddar' => 42057,
-			'pollo con rulo de cabra'       => 2459,
-			'pizza'                         => 2455,
-			'pechuga con puerro y calabaza' => 34859,
-			'pollo'                         => 2462,
-			'chees bacon'                   => 2457,
-			'cheese bacon'                  => 2457,
-			'rulo de cabra'                 => 2459,
-			'ternera queso'                 => 2450,
-			'ternera queso y trufa'         => 20065,
-			'ternera y queso trufa'         => 20065,
-			'ternera cebolla caramelizada'  => 36141,
-			'ternera cebolla'               => 36141,
-			'ternera'                       => 2502,
-			'mexican'                       => 2461,
-			'bacon'                         => 4142,
-			'kebab'                         => 2501,
-			'pavo cebolla'                  => 34470,
-			'pavo con cebolla caramelizada' => 34470,
-			'pavo'                          => 2463,
-			'chicken mango'                 => 45578,
-			'satay'                         => 2498,
-			'parrilla'                      => 2460,
-			'pepinillo con queso cheddar'   => 42057,
-		)
+	$base = array(
+		'chorizo'                       => 2499,
+		'barbacoa'                      => 5098,
+		'potro trufa'                   => 13621,
+		'potro'                         => 2458,
+		'espinacas y queso'             => 2427,
+		'albondigas'                    => 2500,
+		'pollo de corral'               => 2497,
+		'miel y tomate'                 => 43882,
+		'miel con tomate'               => 43882,
+		'miel y mostaza'                => 43882,
+		'ternera a la parrilla'         => 2460,
+		'pollo con miel y mostaza'      => 43882,
+		'mango protein chicken'         => 45578,
+		'pollo con pepinillos y queso cheddar' => 42057,
+		'pollo con rulo de cabra'       => 2459,
+		'pizza'                         => 2455,
+		'pechuga con puerro y calabaza' => 34859,
+		'pollo'                         => 2462,
+		'chees bacon'                   => 2457,
+		'cheese bacon'                  => 2457,
+		'rulo de cabra'                 => 2459,
+		'ternera queso'                 => 2450,
+		'ternera queso y trufa'         => 20065,
+		'ternera y queso trufa'         => 20065,
+		'ternera cebolla caramelizada'  => 36141,
+		'ternera cebolla'               => 36141,
+		'ternera'                       => 2502,
+		'mexican'                       => 2461,
+		'bacon'                         => 4142,
+		'kebab'                         => 2501,
+		'pavo cebolla'                  => 34470,
+		'pavo con cebolla caramelizada' => 34470,
+		'pavo'                          => 2463,
+		'chicken mango'                 => 45578,
+		'satay'                         => 2498,
+		'parrilla'                      => 2460,
+		'pepinillo con queso cheddar'   => 42057,
 	);
+	foreach ( function_exists( 'mpc_pack_names' ) ? mpc_pack_names() : array() as $pid => $pname ) {
+		$base[ mpc_flavour_key( $pname ) ] = (int) $pid;
+	}
+	return apply_filters( 'mpc_flavour_products', $base );
 }
 
 /**
@@ -69,17 +70,14 @@ function mpc_flavour_products() {
  * @return string Etiqueta del grupo o cadena vacía.
  */
 function mpc_flavour_group( $product_id ) {
-	$labels = array(
-		'hamburguesas-de-pollo'   => 'Pollo',
-		'hamburguesas-de-ternera' => 'Ternera',
-		'hamburguesas-de-pavo'    => 'Pavo',
-		'hamburguesas-de-potro'   => 'Potro',
-		'albondigas-proteicas'    => 'Albóndigas',
-	);
-	$slugs  = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'slugs' ) );
-	foreach ( (array) $slugs as $slug ) {
-		if ( isset( $labels[ $slug ] ) ) {
-			return $labels[ $slug ];
+	$parent = get_term_by( 'slug', 'hamburguesas', 'product_cat' );
+	if ( ! $parent ) {
+		return '';
+	}
+	foreach ( (array) wp_get_post_terms( $product_id, 'product_cat' ) as $t ) {
+		if ( (int) $t->parent === (int) $parent->term_id ) {
+			$label = trim( preg_replace( '/^Hamburguesas?\s+(de\s+)?/iu', '', $t->name ) );
+			return mb_strtoupper( mb_substr( $label, 0, 1 ) ) . mb_substr( $label, 1 );
 		}
 	}
 	return '';
@@ -125,6 +123,35 @@ function mpc_nutrition_data() {
 		$file = MPC_DIR . 'data/flavours.json';
 		$data = is_readable( $file ) ? wp_json_file_decode( $file, array( 'associative' => true ) ) : array();
 		$data = is_array( $data ) ? $data : array();
+		$live = get_transient( 'mpc_nutri_cache' );
+		if ( false === $live ) {
+			$live = array();
+			$ids  = get_posts( array( 'post_type' => 'product', 'post_status' => array( 'publish', 'draft' ), 'numberposts' => -1, 'fields' => 'ids', 'meta_key' => '_mp_nutrition', 'meta_compare' => 'EXISTS' ) ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			foreach ( $ids as $id ) {
+				$d = function_exists( 'mpc_get_label_data' ) ? mpc_get_label_data( $id ) : array();
+				if ( empty( $d['ingredientes'] ) || ! isset( $d['proteinas'] ) ) {
+					continue;
+				}
+				$pub = ! empty( $d['energia_publicable'] );
+				$f   = function ( $k ) use ( $d ) {
+					return isset( $d[ $k ] ) && null !== $d[ $k ] ? str_replace( '.', ',', (string) (float) $d[ $k ] ) : '';
+				};
+				$live[ (string) $id ] = array(
+					'ing'  => $d['ingredientes'] . ( ! empty( $d['trazas'] ) ? ' (Puede contener trazas de gluten)' : '' ),
+					'kj'   => $pub ? $f( 'kj' ) : '',
+					'kcal' => $pub ? $f( 'kcal' ) : '',
+					'fat'  => $f( 'grasas' ),
+					'sat'  => $f( 'saturadas' ),
+					'carb' => $f( 'hidratos' ),
+					'sug'  => $f( 'azucares' ),
+					'prot' => $f( 'proteinas' ),
+					'salt' => $f( 'sal' ),
+					'peso' => has_term( 'albondigas-proteicas', 'product_cat', $id ) ? '400 g/bandeja' : '100 g/unidad · 400 g/bandeja de 4 unidades',
+				);
+			}
+			set_transient( 'mpc_nutri_cache', $live, DAY_IN_SECONDS );
+		}
+		$data = array_replace( $data, $live );
 	}
 	return $data;
 }

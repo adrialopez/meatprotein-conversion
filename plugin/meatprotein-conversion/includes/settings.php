@@ -103,6 +103,9 @@ function mpc_settings_page() {
 	};
 	echo '<div class="wrap"><h1>Conversión</h1>';
 	mpc_layout_admin_box();
+	if ( function_exists( 'mpc_pack_admin_box' ) ) {
+		mpc_pack_admin_box();
+	}
 	echo '<form method="post" action="options.php">';
 	settings_fields( 'mpc' );
 	echo '<h2>Envío</h2><table class="form-table">';

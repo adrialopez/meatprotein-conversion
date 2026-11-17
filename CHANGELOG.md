@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.21.0
+- **Edición desde el administrador, sin scripts:** cada ficha de producto tiene el cuadro «Meatprotein: etiqueta y pack» con ingredientes, trazas de gluten, tabla nutricional, «Publicar la energía» y «Nombre en el pack». Al guardar se regenera sola la ficha (descripción, tabla, frase de calidad, sellos «Alto contenido en proteínas» / «Bajo en grasa» según los datos, meta descripción de Google, datos estructurados) y el archivo `llms.txt`. Los alérgenos se calculan de las palabras en MAYÚSCULAS de los ingredientes y se avisa si la etiqueta no cuadra (kcal frente a macros, saturadas > grasas...).
+- **Sabores del pack automáticos:** WooCommerce > Conversión > «Sabores del pack» lista las fichas con «Nombre en el pack» y el botón «Actualizar los desplegables del pack» los copia a «Bandeja 1…10». El grupo del selector (Pollo, Ternera, Pavo, Potro, Albóndigas...) sale de la subcategoría de la ficha, también para tipos de carne nuevos. Ya no hace falta tocar código para añadir un sabor.
+- El selector, la tabla y el cuadro «Info» leen los datos nutricionales de las fichas (`data/flavours.json` queda solo como respaldo).
+
 ## 0.20.1
 - **Pack:** la opción «Ternera a la parrilla» no tenía correspondencia con su producto (no se descontaba su stock ni salía su información); añadida al mapa. Los sabores se agrupan ahora por la subcategoría de su producto (Pollo, Ternera, Pavo, Potro, Albóndigas), no por palabras del nombre (antes «Bacon» y «Cheese bacon» caían en Ternera y varios sabores en «Otros sabores»).
 - Selector: nuevo grupo «Albóndigas» (sin él, las albóndigas no aparecían).
