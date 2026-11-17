@@ -66,3 +66,22 @@ add_filter(
 	20,
 	2
 );
+
+/**
+ * Título de Google de las fichas: con el nombre del producto ya normalizado («Deluxe 0% Azúcar 330 ml» en vez de «DELUXE 0% AZÚCAR 330ML»).
+ */
+add_filter(
+	'rank_math/frontend/title',
+	function ( $title ) {
+		if ( ! function_exists( 'is_product' ) || ! is_product() || ! function_exists( 'mpc_display_name' ) ) {
+			return $title;
+		}
+		$id  = get_queried_object_id();
+		$raw = (string) get_post_field( 'post_title', $id );
+		if ( '' !== $raw && false !== strpos( $title, $raw ) ) {
+			$title = str_replace( $raw, mpc_display_name( $raw ), $title );
+		}
+		return $title;
+	},
+	20
+);

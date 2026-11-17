@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.24.1
+- Título de Google (Rank Math) de las fichas con el nombre normalizado.
+
 ## 0.24.0
 - Listados: los productos agotados van al final de cada categoría, etiqueta, tienda y búsqueda.
 - Nombres de todo el catálogo sin mayúsculas gritadas ni «NEW» (antes solo hamburguesas y pack): «Grandmas BBQ Louisiana» en lugar de «GRANDMAS BBQ LOUISIANA».
