@@ -219,7 +219,7 @@ add_filter(
 		$blocks  = array();
 
 		$title_clean = mpc_clean_title( $product->get_name() );
-		$extras      = array_slice( array_map( 'trim', explode( '+', $title_clean ) ), 1 );
+		$extras      = mpc_pack_extras( $product->get_name() );
 		/* Si el contenido es solo el título repetido, no aporta nada. */
 		$norm = function ( $x ) {
 			return mb_strtolower( preg_replace( '/[^\p{L}\p{N}]+/u', '', html_entity_decode( wp_strip_all_tags( $x ) ) ), 'UTF-8' );

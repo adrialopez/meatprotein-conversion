@@ -148,11 +148,7 @@ add_shortcode(
 				$reg   = $vars ? (float) $vars[0]['display_regular_price'] : (float) $p->get_regular_price();
 				$sale  = $vars ? (float) $vars[0]['display_price'] : (float) $p->get_price();
 				$name  = mpc_clean_title( $p->get_name() );
-				$parts = array_map( 'trim', explode( '+', $name ) );
-				array_shift( $parts );
-				if ( mpc_gift_multi() ) {
-					$parts = array( '1 bandeja a tu elección' );
-				}
+				$parts = mpc_pack_extras( $p->get_name() );
 				$pct = $reg > $sale ? (int) round( ( $reg - $sale ) / $reg * 100 ) : 0;
 				?>
 				<article class="mpc-pack-card<?php echo 0 === $i ? ' is-top' : ''; ?>">

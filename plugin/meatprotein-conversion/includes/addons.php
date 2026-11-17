@@ -358,7 +358,7 @@ add_action(
 		}
 		$attrs = ' data-kind="' . ( $is_pack ? 'pack' : ( $is_basic ? 'basic' : 'single' ) ) . '" data-base="' . esc_attr( $base ) . '" data-product="' . (int) $product->get_id() . '"';
 		if ( $is_pack ) {
-			$gift_parts = array_slice( array_map( 'trim', explode( '+', mpc_clean_title( $product->get_name() ) ) ), 1 );
+			$gift_parts = mpc_pack_extras( $product->get_name() );
 			if ( $gift_parts || mpc_gift_multi() ) {
 				$attrs .= ' data-gift="' . esc_attr( mpc_gift_multi() ? 'una bandeja de regalo a tu elección' : ( $gift_parts[0] ?? '' ) ) . '"';
 			}
@@ -383,7 +383,7 @@ add_action(
 		/* Regalo del pack: tarjeta incluida. */
 		if ( $is_pack ) {
 			$title  = mpc_clean_title( $product->get_name() );
-			$extras = array_slice( array_map( 'trim', explode( '+', $title ) ), 1 );
+			$extras = mpc_pack_extras( $product->get_name() );
 			if ( mpc_gift_multi() ) {
 				$out .= mpc_gift_pick_html( mpc_gift_choices() );
 			} elseif ( $extras ) {

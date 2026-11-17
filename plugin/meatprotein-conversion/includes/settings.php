@@ -112,7 +112,7 @@ function mpc_settings_page() {
 	$f( 'ship_cost', 'Coste de envío a la Península (€)', 'Solo informativo, para los textos.', 'number' );
 	$f( 'holidays', 'Festivos y días sin envío', 'Una fecha por línea (AAAA-MM-DD), con un texto opcional detrás; un rango se escribe AAAA-MM-DD..AAAA-MM-DD (para vacaciones). Ni se envía ese día ni se envía el día antes (la entrega caería en festivo). Llevan los festivos nacionales; añade los locales de Bilbao o los de tu almacén si hace falta.', 'textarea' );
 	$f( 'ship_cost_pt', 'Coste de envío a Portugal (€)', 'Solo informativo, para los textos. Portugal siempre paga, también con el pack.', 'number' );
-	$f( 'gift_product', 'Regalos del pack (IDs de producto)', 'Si el pack incluye una bandeja de regalo que es un producto de la tienda, indica su ID y su stock se descontará con cada pack. Con varios IDs separados por comas el cliente elige uno al comprar (el primero con stock va marcado). Cámbialo cuando cambie el regalo de la promo.' );
+	$f( 'gift_product', 'Regalos del pack (IDs de producto)', 'Respaldo: el regalo se elige ahora en la ficha del propio pack (cuadro «Regalo del pack»). Si el pack incluye una bandeja de regalo que es un producto de la tienda, indica su ID y su stock se descontará con cada pack. Con varios IDs separados por comas el cliente elige uno al comprar (el primero con stock va marcado). Cámbialo cuando cambie el regalo de la promo.' );
 	$f( 'step_salsa', 'Bundle: salsas (IDs)', 'Vacío = automático: salsas más vendidas con stock.' );
 	$f( 'step_pan', 'Bundle: pan (IDs)', 'Vacío = automático.' );
 	$f( 'step_queso', 'Bundle: queso (IDs)', 'Vacío = automático.' );

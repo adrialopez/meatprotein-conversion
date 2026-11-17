@@ -522,3 +522,55 @@ add_action(
 	10,
 	3
 );
+
+/* ------------------------------------------------------------------ Regalo del pack */
+
+add_action(
+	'add_meta_boxes_product',
+	function ( $post ) {
+		$p = wc_get_product( $post->ID );
+		if ( $p && mpc_is_pack( $p ) ) {
+			add_meta_box( 'mpc_gift', 'Meatprotein: regalo del pack', 'mpc_gift_box', 'product', 'side', 'high' );
+		}
+	}
+);
+
+/**
+ * Cuadro «Regalo del pack»: se elige aquí (producto de la tienda) y el resto sale solo: hero, ficha, selector, carrito, pedidos y stock.
+ *
+ * @param WP_Post $post Pack.
+ */
+function mpc_gift_box( $post ) {
+	wp_nonce_field( 'mpc_gift_box', 'mpc_gift_nonce' );
+	$raw = trim( (string) get_post_meta( $post->ID, '_mpc_gift_ids', true ) );
+	if ( '' === $raw ) {
+		$raw = trim( (string) mpc_opt( 'gift_product' ) );
+	}
+	$ids = array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', $raw ) ) );
+	echo '<p class="description">Producto que se regala con cada pack. Su stock se descuenta solo. Con más de uno, el cliente elige.</p>';
+	echo '<select class="wc-product-search" multiple="multiple" style="width:100%" name="mpc_gift_ids[]" data-placeholder="Busca un producto…" data-action="woocommerce_json_search_products" data-exclude_type="variable">';
+	foreach ( $ids as $id ) {
+		$pr = wc_get_product( $id );
+		if ( $pr ) {
+			echo '<option value="' . esc_attr( $id ) . '" selected="selected">' . esc_html( wp_strip_all_tags( $pr->get_formatted_name() ) ) . '</option>';
+		}
+	}
+	echo '</select>';
+	echo '<p class="description" style="margin-top:8px">Qué se muestra: «Incluye 1 bandeja de <em>nombre del producto</em> de regalo» en la portada y la ficha, y «Regalo: <em>nombre</em>» en carrito, pedidos y correos. El título del pack ya no hace falta que lo nombre.</p>';
+}
+
+add_action(
+	'save_post_product',
+	function ( $post_id ) {
+		if ( ! isset( $_POST['mpc_gift_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mpc_gift_nonce'] ) ), 'mpc_gift_box' ) ) {
+			return;
+		}
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+		$ids = isset( $_POST['mpc_gift_ids'] ) ? array_filter( array_map( 'absint', (array) wp_unslash( $_POST['mpc_gift_ids'] ) ) ) : array();
+		update_post_meta( $post_id, '_mpc_gift_ids', implode( ',', $ids ) );
+		delete_transient( 'mpc_pack_ids' );
+	},
+	25
+);

@@ -43,8 +43,8 @@ function mpc_hero_html() {
 	$vars      = $pack->get_available_variations();
 	$reg       = $vars ? (float) $vars[0]['display_regular_price'] : (float) $pack->get_regular_price();
 	$sale      = $vars ? (float) $vars[0]['display_price'] : (float) $pack->get_price();
-	$parts     = array_map( 'trim', explode( '+', mpc_clean_title( $pack->get_name() ) ) );
-	$gift      = mpc_gift_text( isset( $parts[1] ) ? $parts[1] : '' );
+	$parts     = mpc_pack_extras( $pack->get_name() );
+	$gift      = isset( $parts[0] ) ? $parts[0] : '';
 	$favs      = mpc_fav_flavours( 8 );
 	$prot      = mpc_max_protein();
 	$photo     = apply_filters( 'mpc_hero_image', 'https://meatprotein.eu/wp-content/uploads/2024/06/meat-protein-home-scaled.jpg' );

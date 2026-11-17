@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.22.0
+- **El regalo se elige en la ficha del pack** (cuadro «Meatprotein: regalo del pack», buscador de productos; con varios, el cliente elige). Portada, ficha, selector, carrito, pedidos y stock salen de ese producto. El título del pack ya no necesita nombrar el regalo y puede ser solo «10 bandejas de hamburguesas Meatprotein». El ajuste de Conversión queda como respaldo.
+
 ## 0.21.6
 - El regalo del pack se muestra solo con el nombre del producto regalo («Regalo: Mango Protein Chicken»), tomado del ID de WooCommerce > Conversión, en carrito, pago, pedidos y correos.
 

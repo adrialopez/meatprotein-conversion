@@ -31,11 +31,25 @@ function mpc_flavour_key( $text ) {
  * @return int[]
  */
 function mpc_gift_ids() {
-	$raw = trim( (string) mpc_opt( 'gift_product' ) );
-	if ( '' === $raw ) {
-		return array();
+	static $cache = null;
+	if ( null !== $cache ) {
+		return $cache;
 	}
-	return array_values( array_unique( array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', $raw ) ) ) ) );
+	$raw = '';
+	// El regalo se elige en la propia ficha del pack (cuadro «Regalo del pack»); el ajuste de Conversión es solo el respaldo.
+	$packs = function_exists( 'mpc_get_packs' ) ? mpc_get_packs() : array();
+	if ( $packs ) {
+		$raw = trim( (string) get_post_meta( $packs[0]->get_id(), '_mpc_gift_ids', true ) );
+	}
+	if ( '' === $raw ) {
+		$raw = trim( (string) mpc_opt( 'gift_product' ) );
+	}
+	if ( '' === $raw ) {
+		$cache = array();
+		return $cache;
+	}
+	$cache = array_values( array_unique( array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', $raw ) ) ) ) );
+	return $cache;
 }
 
 /**
@@ -95,6 +109,25 @@ function mpc_pick_gift( $requested = 0 ) {
 function mpc_requested_gift() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- Ver el comentario de la función.
 	return isset( $_REQUEST['mpc_gift'] ) ? absint( wp_unslash( $_REQUEST['mpc_gift'] ) ) : 0;
+}
+
+/**
+ * Lo que incluye el pack además de las 10 bandejas, para ficha, portada y selector: sale del producto regalo
+ * configurado (WooCommerce > Conversión), no del título. Sin regalo configurado se usa lo que haya tras el «+» del título.
+ *
+ * @param string $title Título del pack (solo como respaldo).
+ * @return string[] Frases como «1 bandeja de Mango Protein Chicken de regalo».
+ */
+function mpc_pack_extras( $title = '' ) {
+	$ids = mpc_gift_ids();
+	if ( $ids ) {
+		if ( count( $ids ) > 1 ) {
+			return array( '1 bandeja de regalo a tu elección' );
+		}
+		$name = mpc_nice_name( get_the_title( $ids[0] ) );
+		return $name ? array( '1 bandeja de ' . $name . ' de regalo' ) : array();
+	}
+	return array_slice( array_map( 'trim', explode( '+', mpc_clean_title( $title ) ) ), 1 );
 }
 
 /**
