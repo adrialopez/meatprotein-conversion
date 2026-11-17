@@ -733,3 +733,7 @@ table.mp-nutri tbody th { width: auto; font-weight: 600; text-align: left; color
 table.mp-nutri td { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 table.mp-nutri tr.sub th { padding-left: 1.1rem; font-weight: 400; color: var(--mpc-soft); }
 table.mp-nutri tr:last-child th, table.mp-nutri tr:last-child td { border-bottom: 0; }
+
+/* Portada: aire sobre «Nuestras burgers» y botones de los listados alineados (títulos de dos líneas reservadas) */
+body.home h2.title { margin-top: 3rem !important; }
+li.product .mfn-woo-product-title { min-height: 2.6em; }

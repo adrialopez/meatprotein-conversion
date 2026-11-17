@@ -1,5 +1,11 @@
 # Cambios
 
+## Tema 1.0.57
+- Portada: más aire sobre «Nuestras burgers»; listados con los botones de añadir alineados (título reserva dos líneas).
+
+## 0.27.7
+- El spinner de añadir al carrito va en línea y sin optimizar: funciona desde el primer toque (antes LiteSpeed retrasaba el script).
+
 ## 0.27.6 + tema 1.0.56
 - Detalles de las burgers: títulos de sección discretos, tabla nutricional estándar (Por 100 g, filas «de las cuales» sangradas) y sin la imagen de etiqueta al final.
 

@@ -137,3 +137,47 @@ add_action(
 	},
 	1
 );
+
+
+/**
+ * Indicador de carga al añadir al carrito. Va en línea y sin optimizar para que funcione desde el primer toque
+ * (LiteSpeed retrasa los scripts externos hasta la primera interacción).
+ */
+add_action(
+	'wp_footer',
+	function () {
+		echo "<script data-no-optimize=\"1\" data-no-defer=\"1\" data-cfasync=\"false\" nowrap>\n" . <<<'JS'
+(function () {
+	'use strict';
+	var timer = 0;
+	function stop() {
+		document.documentElement.classList.remove('mpc-busy');
+		document.querySelectorAll('.mpc-loading').forEach(function (b) { b.classList.remove('mpc-loading'); });
+		clearTimeout(timer);
+	}
+	function start(btn) {
+		document.documentElement.classList.add('mpc-busy');
+		if (btn) { btn.classList.add('mpc-loading'); }
+		clearTimeout(timer);
+		timer = setTimeout(stop, 25000);
+	}
+	document.addEventListener('submit', function (e) {
+		var f = e.target;
+		if (!f || !f.classList || !f.classList.contains('cart')) { return; }
+		setTimeout(function () {
+			if (e.defaultPrevented) { return; }
+			start(f.querySelector('.single_add_to_cart_button'));
+		}, 0);
+	});
+	/* Enlaces de compra directa (?add-to-cart=) */
+	document.addEventListener('click', function (e) {
+		var a = e.target.closest ? e.target.closest('a[href*="add-to-cart="]') : null;
+		if (a && !a.classList.contains('ajax_add_to_cart') && !e.defaultPrevented) { start(a); }
+	});
+	window.addEventListener('pageshow', function (e) { if (e.persisted) { stop(); } });
+})();
+JS
+		. "\n</script>\n";
+	},
+	99
+);
