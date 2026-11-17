@@ -576,3 +576,8 @@ li.product .desc .mpc-chip { align-self: stretch; }
 li.product .mfn-li-product-row-button { justify-content: flex-start; margin-top: auto; width: 100%; }
 li.product .mfn-li-product-row-button a.button { width: 100% !important; text-align: center; }
 li.product .onsale, li.product .mfn-product-badges-left .onsale { text-align: left; }
+
+/* Ficha: no se avisa de que hay existencias (solo cuando no hay stock o quedan pocas); sellos más pequeños. */
+.single-product p.stock.in-stock, .single-product .stock.in-stock { display: none !important; }
+.mp-sellos { margin: .5rem 0 !important; }
+.mp-sellos img { height: 48px !important; width: auto !important; margin-right: 12px !important; }
