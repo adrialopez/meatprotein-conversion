@@ -426,3 +426,6 @@ body.mpc-text-page .the_content_wrapper figure.wp-block-table { overflow-x: auto
 }
 /* Imagen principal de la ficha sin bordes redondeados (las miniaturas sí los conservan). */
 body.single-product .woocommerce-product-gallery .woocommerce-product-gallery__image img { border-radius: 0; }
+/* Portada: aire entre el texto del hero y la caja «Tu pack». */
+.mpc-hero__lead { margin-bottom: 0; }
+.mpc-hero .mpc-hero__builder { margin-top: 1.7rem; }
