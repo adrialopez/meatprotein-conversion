@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.26.0
+- **Fichas de producto sin «/producto/»** (`/mango-protein-chicken/`): Rank Math quita la base y el plugin redirige con 301 `/producto/<slug>/` a `/<slug>/`. Enlaces internos y llms.txt actualizados.
+
 ## 0.25.0
 - **URLs de categoría cortas:** sin «categoria-producto» ni la categoría padre (`/pan/`, `/saladas/`, `/hamburguesas-de-pollo/`; Rank Math: quitar base y slugs de padres). «Suplantacion» pasa a `/suplementacion/`. Las direcciones antiguas redirigen con 301 a la nueva (también las de categorías anidadas y los slugs renombrados).
 

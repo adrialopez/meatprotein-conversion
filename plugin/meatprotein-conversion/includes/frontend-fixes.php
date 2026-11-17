@@ -106,6 +106,12 @@ add_action(
 			'snacks-dulces' => 'snacks-y-bebidas',
 		);
 		$parts = explode( '/', $path );
+		// Fichas sin «/producto/»: /producto/mango-protein-chicken/ → /mango-protein-chicken/.
+		if ( 'producto' === $parts[0] && isset( $parts[1] ) && '' !== $parts[1] ) {
+			$q = isset( $_SERVER['QUERY_STRING'] ) && '' !== $_SERVER['QUERY_STRING'] ? '?' . wp_unslash( $_SERVER['QUERY_STRING'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			wp_safe_redirect( home_url( '/' . implode( '/', array_slice( $parts, 1 ) ) . '/' ) . $q, 301 );
+			exit;
+		}
 		$base  = 'categoria-producto' === $parts[0];
 		if ( $base ) {
 			array_shift( $parts );

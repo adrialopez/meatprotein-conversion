@@ -184,7 +184,7 @@ function mpc_render_burger( $post, $d ) {
 	$html .= "<h2>Información nutricional por 100 g</h2>\n<table class=\"mp-nutri\"><tbody>" . $rows . "</tbody></table>\n";
 	$html .= '<p>Peso neto: ' . ( $is_alb ? '400 g por bandeja.' : '100 g por unidad, 400 g por bandeja (4 unidades).' ) . "</p>\n";
 	$html .= "<h2>Cómo la recibes</h2>\n<ul>\n<li>Producto fresco, enviado con transporte refrigerado (SEUR).</li>\n<li>Entrega antes de las 14:00 en Península y Portugal. Haz tu pedido antes de las 13:00 para el envío según el calendario habitual.</li>\n";
-	$html .= '<li>Envío gratis a la Península con el <a href="' . esc_url( $base . '/producto/pack-10-bandejas-hamburguesas/' ) . "\">pack de 10 bandejas</a>.</li>\n</ul>\n";
+	$html .= '<li>Envío gratis a la Península con el <a href="' . esc_url( $base . '/pack-10-bandejas-hamburguesas/' ) . "\">pack de 10 bandejas</a>.</li>\n</ul>\n";
 	$html .= '<p>Más detalles en <a href="' . esc_url( $base . '/envios-y-devoluciones/' ) . '">Envíos y devoluciones</a> y en <a href="' . esc_url( $base . '/controles-de-calidad/' ) . '">Controles de calidad</a>.</p>' . "\n" . $imgs;
 
 	$core    = $pub ? mpc_fmt( $d['proteinas'] ) . ' g de proteína y ' . mpc_fmt( $d['kcal'] ) . ' kcal por 100 g' : mpc_fmt( $d['proteinas'] ) . ' g de proteína por 100 g';
@@ -400,7 +400,7 @@ function mpc_write_llms() {
 	$L   .= "- Envío: transporte refrigerado con SEUR. Entrega antes de las 14:00 en Península y Portugal; pedidos antes de las 13:00 para el envío según el calendario habitual. No se envía a Baleares, Canarias, Ceuta ni Melilla.\n- Envío gratis a la Península con el pack de 10 bandejas.\n- Pago con tarjeta, Bizum, Apple Pay, Google Pay y PayPal.\n- Formato de las hamburguesas: bandeja de 400 g con 4 hamburguesas de 100 g.\n";
 	$L   .= "- Calidad: todas las hamburguesas y albóndigas son de alto contenido en proteínas (más del 20 % de la energía procede de las proteínas) y las que llevan el sello \"Bajo en grasa\" tienen 3 g de grasa o menos por 100 g. Sin sulfitos, colorantes ni conservantes añadidos, salvo indicación en la ficha.\n";
 	$L   .= "- Cada ficha de producto incluye ingredientes, alérgenos e información nutricional por 100 g, tal como figura en la etiqueta.\n\n";
-	$L   .= "## Packs\n\n- [Pack de 10 bandejas de hamburguesas, envío gratis](" . $base . "/producto/pack-10-bandejas-hamburguesas/): elige 10 bandejas entre todos los sabores y recibe una de regalo.\n\n## Hamburguesas y albóndigas por tipo de carne (proteína y energía por 100 g)\n";
+	$L   .= "## Packs\n\n- [Pack de 10 bandejas de hamburguesas, envío gratis](" . $base . "/pack-10-bandejas-hamburguesas/): elige 10 bandejas entre todos los sabores y recibe una de regalo.\n\n## Hamburguesas y albóndigas por tipo de carne (proteína y energía por 100 g)\n";
 	$parent = get_term_by( 'slug', 'hamburguesas', 'product_cat' );
 	$kids   = $parent ? get_terms( array( 'taxonomy' => 'product_cat', 'parent' => $parent->term_id, 'hide_empty' => true ) ) : array();
 	foreach ( (array) $kids as $term ) {
