@@ -1,5 +1,8 @@
 # Cambios
 
+## Tema 1.0.54
+- Iconos de la cabecera sin fondo al pasar el ratón o pulsar.
+
 ## 0.27.4
 - «Información nutricional y alérgenos» solo en hamburguesas. En el resto de productos hay un cuadro opcional en la ficha (admin) que, si se rellena, muestra el desplegable; vacío no muestra nada.
 

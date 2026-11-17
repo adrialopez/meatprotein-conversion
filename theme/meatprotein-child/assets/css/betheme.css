@@ -713,3 +713,5 @@ ul.products li.product .mfn-li-product-row-title .title, ul.products li.product 
 @media (min-width: 768px) {
 	.mfn-looped-items-slider-wrapper .swiper { padding: 18px 14px 26px !important; margin: -18px -14px -26px !important; }
 }
+/* Iconos de la cabecera: sin fondo al pasar el ratón, enfocar o pulsar */
+.mfn-header-tmpl .mfn-header-icon-box, .mfn-header-tmpl .mfn-header-icon-box:hover, .mfn-header-tmpl .mfn-header-icon-box:focus, .mfn-header-tmpl .mfn-header-icon-box:focus-visible, .mfn-header-tmpl .mfn-header-icon-box:active { background: transparent !important; box-shadow: none !important; outline: 0; -webkit-tap-highlight-color: transparent; }
