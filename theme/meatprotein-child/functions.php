@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MPC_CHILD_VERSION', '1.0.37' );
+define( 'MPC_CHILD_VERSION', '1.0.38' );
 
 /**
  * Hoja de estilos de la adaptación a Betheme. Va después de la del plugin (que define las variables --mpc-*)
@@ -39,6 +39,7 @@ function mpc_child_enqueue_gallery() {
 		return;
 	}
 	wp_enqueue_script( 'mpc-child-gallery', get_stylesheet_directory_uri() . '/assets/js/gallery.js', array(), MPC_CHILD_VERSION, true );
+	wp_enqueue_script( 'mpc-child-cartbtn', get_stylesheet_directory_uri() . '/assets/js/cartbtn.js', array(), MPC_CHILD_VERSION, true );
 }
 add_action( 'wp_enqueue_scripts', 'mpc_child_enqueue_gallery', 21 );
 
