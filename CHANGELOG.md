@@ -1,5 +1,8 @@
 # Cambios
 
+## Tema 1.0.53
+- Carrusel de categorías en escritorio: margen arriba y abajo para que la tarjeta elevada con sombra no se corte.
+
 ## 0.27.3
 - «Quién lo fabrica» solo en hamburguesas y pack. Productos con variaciones (p. ej. Suplementación) usan la misma cabecera de ficha que el resto. Imagen de Suplementación en el menú lateral.
 

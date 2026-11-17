@@ -709,3 +709,7 @@ ul.products li.product .mfn-li-product-row-title .title, ul.products li.product 
 @media (max-width: 767px) {
 	.woocommerce-cart table.cart tr.cart_item td.product-subtotal { align-self: center; padding-bottom: 0 !important; }
 }
+/* Carrusel de categorías (escritorio): margen para que la tarjeta elevada y su sombra no se corten */
+@media (min-width: 768px) {
+	.mfn-looped-items-slider-wrapper .swiper { padding: 18px 14px 26px !important; margin: -18px -14px -26px !important; }
+}
