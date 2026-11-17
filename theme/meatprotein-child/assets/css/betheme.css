@@ -562,3 +562,6 @@ body.woocommerce-checkout .mpc-checkout-help { padding-bottom: 2rem; }
 	.mfn-footer-tmpl { background: var(--mpc-sky, #cde6f2); }
 	html:has(.mpc-cta) { background: var(--mpc-sky, #cde6f2); }
 }
+
+/* Listados: un solo botón «Añadir al carrito» por producto (el de la plantilla de Betheme); el duplicado del gancho de WooCommerce y el de la imagen se ocultan. */
+ul.products li.product .mfn-after-shop-loop-item, ul.products li.product .image_links { display: none !important; }
