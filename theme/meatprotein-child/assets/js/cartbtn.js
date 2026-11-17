@@ -13,14 +13,14 @@
 		var a = document.createElement('button');
 		a.type = 'button';
 		a.className = 'mpc-cta__cart';
-		a.setAttribute('aria-label', 'Ver el carrito');
+		a.setAttribute('aria-label', 'Ir al carrito');
 		a.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span class="mpc-cta__badge" hidden></span>';
 		var badge = a.querySelector('.mpc-cta__badge');
 		function upd() { var n = count(); badge.textContent = n; badge.hidden = !n; }
 		a.addEventListener('click', function (e) {
 			e.preventDefault();
-			var t = document.querySelector('a.toggle-mfn-cart:not(.close-mfn-cart)');
-			if (t) { t.click(); } else { window.location.href = '/carrito/'; }
+			var h = document.querySelector('a.mfn-header-cart-link');
+			window.location.href = (h && h.getAttribute('href') && h.getAttribute('href') !== '#') ? h.getAttribute('href') : '/carrito/';
 		});
 		bar.insertBefore(a, bar.firstChild);
 		upd();
