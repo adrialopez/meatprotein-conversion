@@ -611,3 +611,8 @@ li.product .onsale, li.product .mfn-product-badges-left .onsale { text-align: le
 @media (hover: none) {
 	.mfn-header-icon-box:hover, .mfn-header-icon-box:focus, .mfn-header-icon-box:active { background: transparent !important; box-shadow: none !important; }
 }
+
+/* Listados: todas las imágenes de producto en un marco cuadrado del mismo tamaño, sin deformar ni recortar. */
+ul.products li.product .image_frame, ul.products li.product .image_wrapper { aspect-ratio: 1 / 1; height: auto !important; overflow: hidden; background: #fff; position: relative; }
+ul.products li.product .image_wrapper a { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
+ul.products li.product .image_wrapper a img, ul.products li.product .image_frame img.wp-post-image { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; max-width: none !important; object-fit: contain !important; object-position: center; padding: 6%; box-sizing: border-box; }
