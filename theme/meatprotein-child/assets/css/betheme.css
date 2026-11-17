@@ -424,3 +424,5 @@ body.mpc-text-page .the_content_wrapper figure.wp-block-table { overflow-x: auto
 	.mfn-cart-holder .mfn-chp-info, .mfn-cart-holder .mfn-chp-price { align-self: start; height: auto !important; min-height: 0 !important; }
 	.mfn-cart-holder .mfn-chp-image { align-self: center; }
 }
+/* Imagen principal de la ficha sin bordes redondeados (las miniaturas sí los conservan). */
+body.single-product .woocommerce-product-gallery .woocommerce-product-gallery__image img { border-radius: 0; }
