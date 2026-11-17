@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.24.4
+- Categoría «Snacks y bebidas» con URL nueva (`/categoria-producto/snacks-y-bebidas/`, la antigua redirige con 301); los snacks sugeridos del carrito y llms.txt usan el slug nuevo.
+
 ## 0.24.3
 - Al guardar el pack aparece un aviso verde con el regalo, las salsas, el pan y el queso que han quedado guardados («automático» si están vacíos).
 

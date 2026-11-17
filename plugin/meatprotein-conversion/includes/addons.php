@@ -560,7 +560,7 @@ function mpc_snack_ids() {
 			function ( $p ) {
 				return $p->get_id();
 			},
-			mpc_step_products( 'snacks', array( 'snacks-dulces' ), '', '', 8 )
+			mpc_step_products( 'snacks', array( 'snacks-y-bebidas', 'snacks-dulces' ), '', '', 8 )
 		);
 		set_transient( 'mpc_snack_ids', $ids, 6 * HOUR_IN_SECONDS );
 	}
