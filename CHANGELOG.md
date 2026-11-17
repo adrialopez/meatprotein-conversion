@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.27.5 + tema 1.0.55
+- Indicador de carga (spinner y velo suave) al añadir al carrito, y en los botones de añadir de los listados.
+
 ## Tema 1.0.54
 - Iconos de la cabecera sin fondo al pasar el ratón o pulsar.
 
