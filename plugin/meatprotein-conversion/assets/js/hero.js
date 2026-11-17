@@ -66,3 +66,18 @@
 		requestAnimationFrame(step);
 	}
 })();
+
+/* Aviso de que las burgers de la portada se deslizan: se apaga al desplazarlas o al llegar al final. */
+(function () {
+	'use strict';
+	var r = document.querySelector('[data-mpc-rail]');
+	var t = r && r.querySelector('.mpc-hero__tiles');
+	if (!t) { return; }
+	function upd() {
+		r.classList.toggle('is-scrolled', t.scrollLeft > 8);
+		r.classList.toggle('is-end', t.scrollLeft + t.clientWidth >= t.scrollWidth - 8);
+	}
+	t.addEventListener('scroll', upd, { passive: true });
+	window.addEventListener('resize', upd);
+	upd();
+})();

@@ -62,6 +62,7 @@ function mpc_hero_html() {
 				<div class="mpc-hero__builder" data-mpc-hero data-url="<?php echo esc_url( $pack->get_permalink() ); ?>" data-size="10" data-price="<?php echo esc_attr( $price ); ?>">
 					<div class="mpc-hero__bhead"><b>Tu pack</b><span data-mpc-hcount aria-live="polite">0 de 10</span><button type="button" class="mpc-hero__clear" data-mpc-hclear hidden>Vaciar</button></div>
 					<div class="mpc-hero__bar" role="presentation"><i></i></div>
+					<div class="mpc-hero__rail" data-mpc-rail>
 					<ul class="mpc-hero__tiles">
 						<?php foreach ( $favs as $f ) : ?>
 							<li class="mpc-tile" data-key="<?php echo esc_attr( $f['key'] ); ?>">
@@ -81,6 +82,8 @@ function mpc_hero_html() {
 							</li>
 						<?php endforeach; ?>
 					</ul>
+					<span class="mpc-hero__hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+					</div>
 					<a class="mpc-hero__cta" href="<?php echo esc_url( $pack->get_permalink() ); ?>"><span data-mpc-hcta>Elegir mis sabores</span><b data-mpc-hprice>· <?php echo esc_html( $price ); ?></b></a>
 					<?php
 					if ( $packs_url ) :

@@ -499,3 +499,8 @@ body.single-product .woocommerce-product-gallery .woocommerce-product-gallery__i
 	.mpc-cartbar .amount, .mpc-cartbar .amount * { white-space: nowrap; }
 	.mpc-cartbar > span { display: flex; flex-direction: column; flex: 0 0 auto; line-height: 1.15; }
 }
+
+/* Portada y listados: nombre de categoría que no se corta y botones «Añadir al carrito» más pequeños. */
+.mfn-looped-items-slider-wrapper .mfn-banner-box .banner-desc { padding-inline: 6px !important; }
+.mfn-looped-items-slider-wrapper .mfn-banner-box h4.title { font-size: .8rem !important; line-height: 1.2 !important; letter-spacing: 0 !important; overflow-wrap: break-word; hyphens: none; text-wrap: balance; text-align: center; }
+.woocommerce ul.products li.product a.button.add_to_cart_button, ul.products li.product .add_to_cart_button, .mfn-li-product-row-button a.button { padding: .62rem .6rem !important; font-size: .82rem !important; line-height: 1.2 !important; letter-spacing: 0 !important; white-space: nowrap; min-height: 0 !important; border-radius: 12px; display: block; width: 100%; text-align: center; }

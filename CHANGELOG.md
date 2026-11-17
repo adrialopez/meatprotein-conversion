@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.21.4
+- Portada: las burgers del «Tu pack» dejan aire respecto a la caja (padding y `scroll-padding`), se difuminan por la derecha y llevan una flecha que avisa de que se deslizan (desaparece al desplazar). Tema 1.0.21: nombre de categoría de la portada que no se corta y botones «Añadir al carrito» más pequeños.
+
 ## 0.21.3
 - Portada: la rejilla de categorías solo muestra las principales (ya no «Hamburguesas de pollo»).
 - Parte pública: se evita que YITH Order Tracking cargue el selector de medios de WordPress para visitantes (quitaba velocidad y daba un error de JavaScript en «Mi cuenta»).
