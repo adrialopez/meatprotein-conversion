@@ -590,3 +590,16 @@ li.product .onsale, li.product .mfn-product-badges-left .onsale { text-align: le
 .mfn-cart-holder .mpc-sc-flavours dt { float: none !important; width: 100% !important; display: block !important; margin: .5rem 0 .1rem; font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mpc-soft, #5b6670); }
 .mfn-cart-holder .mpc-sc-flavours dt:first-of-type { display: none !important; }
 .mfn-cart-holder .mpc-sc-flavours dd, .mfn-cart-holder .mpc-sc-flavours dd p { width: auto !important; max-width: none !important; margin: 0 !important; overflow-wrap: break-word; }
+
+/* Carrito lateral: el número de la cantidad se ve (Betheme le daba 30 px de relleno a cada lado y lo dejaba sin hueco) y la fila de cantidad respira. */
+.mfn-cart-holder .mfn-chp-quantity .quantity { min-width: 132px; }
+.mfn-cart-holder .mfn-ch-content .mfn-ch-product .mfn-chp-footer .mfn-chpf-col .quantity input.qty, .mfn-cart-holder .mfn-chp-quantity .quantity input.qty { width: 44px !important; min-width: 0 !important; height: 100% !important; padding: 0 !important; margin: 0 !important; border: 0 !important; background: none !important; text-align: center !important; font: 700 1rem var(--mpc-sans) !important; color: var(--mpc-ink, #111) !important; -webkit-appearance: none; appearance: textfield; }
+.mfn-cart-holder .mfn-chp-quantity .quantity-change { flex: 0 0 44px; }
+.mfn-cart-holder .mfn-ch-product .mfn-chp-footer { margin-top: .6rem !important; }
+.mfn-cart-holder .mfn-ch-product:has(.mpc-sc-flavours) .mfn-chp-footer { margin-top: .8rem !important; }
+.mfn-cart-holder .mfn-chp-quantity .quantity { display: inline-flex !important; align-items: stretch; justify-content: space-between; }
+.mfn-cart-holder .mfn-chp-quantity .quantity .quantity-change { position: static !important; display: grid !important; place-items: center; width: 44px !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
+.mfn-cart-holder .mfn-chp-quantity .quantity .quantity-change.minus { order: 1; }
+.mfn-cart-holder .mfn-chp-quantity .quantity input.qty { order: 2; position: static !important; }
+.mfn-cart-holder .mfn-chp-quantity .quantity .quantity-change.plus { order: 3; }
+.mfn-cart-holder .mfn-chp-quantity .quantity .screen-reader-text { position: absolute; }
