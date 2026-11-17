@@ -504,3 +504,13 @@ body.single-product .woocommerce-product-gallery .woocommerce-product-gallery__i
 .mfn-looped-items-slider-wrapper .mfn-banner-box .banner-desc { padding-inline: 6px !important; }
 .mfn-looped-items-slider-wrapper .mfn-banner-box h4.title { font-size: .8rem !important; line-height: 1.2 !important; letter-spacing: 0 !important; overflow-wrap: break-word; hyphens: none; text-wrap: balance; text-align: center; }
 .woocommerce ul.products li.product a.button.add_to_cart_button, ul.products li.product .add_to_cart_button, .mfn-li-product-row-button a.button { padding: .62rem .6rem !important; font-size: .82rem !important; line-height: 1.2 !important; letter-spacing: 0 !important; white-space: nowrap; min-height: 0 !important; border-radius: 12px; display: block; width: 100%; text-align: center; }
+
+/* Carrusel de categorías (móvil): desplazamiento nativo con imán. */
+@media (max-width: 767px) {
+	.mfn-looped-items-slider-wrapper .swiper.mp-native-scroll { overflow-x: auto !important; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; scrollbar-width: none; padding-inline: 0; scroll-padding-inline: 0; }
+	.mfn-looped-items-slider-wrapper .swiper.mp-native-scroll::-webkit-scrollbar { display: none; }
+	.mfn-looped-items-slider-wrapper .mp-native-scroll .swiper-wrapper { display: flex !important; transform: none !important; width: max-content !important; gap: 12px; }
+	.mfn-looped-items-slider-wrapper .mp-native-scroll .swiper-slide { width: 140px !important; margin: 0 !important; flex: 0 0 140px; scroll-snap-align: start; }
+	.mfn-looped-items-slider-wrapper .mp-native-scroll .swiper-slide-duplicate { display: none !important; }
+	.mfn-looped-items-slider-wrapper .swiper-pagination, .mfn-looped-items-slider-wrapper .mfn-swiper-arrow { display: none !important; }
+}
