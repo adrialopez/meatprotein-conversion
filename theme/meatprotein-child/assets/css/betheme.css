@@ -603,10 +603,7 @@ li.product .onsale, li.product .mfn-product-badges-left .onsale { text-align: le
 .mfn-cart-holder .mfn-chp-quantity .quantity .quantity-change.plus { order: 3; }
 .mfn-cart-holder .mfn-chp-quantity .quantity .screen-reader-text { position: absolute; }
 
-/* Acceso al carrito dentro del botón fijo de las fichas (móvil) y sin el fondo rosa «pegado» al tocar los iconos de la cabecera. */
-.mpc-cta__cart { position: relative; flex: 0 0 52px; display: grid; place-items: center; width: 52px; height: 52px; align-self: center; padding: 0; border: 1.5px solid var(--mpc-ink, #111); border-radius: 14px; background: #fff; color: var(--mpc-ink, #111); cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.mpc-cta__badge { position: absolute; top: -7px; right: -7px; min-width: 22px; height: 22px; padding: 0 5px; display: grid; place-items: center; border-radius: 99px; background: var(--mpc-pink, #c23a7a); color: #fff; font: 700 .75rem/1 var(--mpc-sans, sans-serif); }
-.mpc-cta__badge[hidden] { display: none; }
+/* Sin fondo «pegado» al tocar los iconos de la cabecera en pantallas táctiles. */
 @media (hover: none) {
 	.mfn-header-icon-box:hover, .mfn-header-icon-box:focus, .mfn-header-icon-box:active { background: transparent !important; box-shadow: none !important; }
 }
@@ -627,14 +624,9 @@ ul.products li.product .mfn-li-product-row-title .title, ul.products li.product 
 
 /* Barra fija de compra (móvil): bolsa del carrito, cantidad y botón caben en una línea y el contador de la bolsa no se corta. */
 .mpc-cta { gap: .5rem; padding-left: .7rem; padding-right: .7rem; }
-.mpc-cta__cart { flex: 0 0 48px !important; width: 48px !important; height: auto !important; min-height: 54px; align-self: stretch !important; overflow: visible !important; }
-.mpc-cta__cart svg { width: 22px; height: 22px; }
-.mpc-cta__badge { top: 5px !important; right: 5px !important; min-width: 17px !important; height: 17px !important; padding: 0 4px !important; font-size: .66rem !important; }
 .mpc-cta__qty button { width: 36px !important; }
 .mpc-cta__qty output { min-width: 1.3rem !important; }
 .mpc-cta__btn { padding: 0 .6rem !important; font-size: .95rem !important; white-space: nowrap; }
-.mpc-cta__cart svg { transform: translate(-3px, 3px); }
-.mpc-cta__badge { top: 4px !important; right: 4px !important; }
 
 /* Carrito lateral: «Ver carrito» (lleva a la página del carrito) como botón secundario bajo «Finalizar compra». */
 .mfn-cart-holder .mfn-ch-footer-buttons a:not(.button) { display: block; margin: .5rem 0 0; padding: .7rem 1rem; border: 1.5px solid var(--mpc-ink, #111); border-radius: 14px; background: #fff; color: var(--mpc-ink, #111) !important; font: 700 .95rem/1.2 var(--mpc-sans, sans-serif); text-align: center; text-decoration: none; }
