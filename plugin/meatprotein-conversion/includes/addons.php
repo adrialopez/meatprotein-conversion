@@ -148,13 +148,20 @@ function mpc_is_basic( $product ) {
  * @return string
  */
 function mpc_short_name( $name ) {
-	$n = mpc_nice_name( $name );
+	$n   = mpc_nice_name( $name );
+	$cnt = 0;
+	// «3 x Pan Cosa Nostra»: el número de unidades se conserva al final.
+	if ( preg_match( '/^(\d+)\s*x\s*(pan\b.*)$/iu', $n, $m ) ) {
+		$cnt = (int) $m[1];
+		$n   = $m[2];
+	}
 	$n = preg_replace( '/\s*[-–]\s*\d+\s?(g|gr|ml)\b/iu', '', $n );
 	$n = preg_replace( '/\s*\(\s*\d+\s?(g|gr|ml)\s*\)/iu', '', $n );
 	$n = preg_replace( '/\s+\d+\s?(g|gr|ml)\b/iu', '', $n );
 	$n = preg_replace( '/^Pan de hamburguesas\s+/iu', 'Pan ', $n );
 	$n = preg_replace( '/\s+Meatprotein\b/iu', '', $n );
-	return trim( $n );
+	$n = trim( $n );
+	return $cnt > 1 ? $n . ' (' . $cnt . ' panes)' : $n;
 }
 
 /**
@@ -248,7 +255,7 @@ function mpc_bundle_steps( $product = null ) {
 	$pan   = array(
 		'title' => '¿Añades pan?',
 		'hint'  => 'Para tus hamburguesas',
-		'items' => mpc_step_products( 'step_pan', array( 'pan' ), '/^pan\b/i', '', 3 ),
+		'items' => mpc_step_products( 'step_pan', array( 'pan' ), '/^(\d+\s*x\s*)?pan\b/iu', '', 3 ),
 	);
 	$queso = array(
 		'title' => '¿Y queso?',

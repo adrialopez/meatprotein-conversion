@@ -1,5 +1,11 @@
 # Cambios
 
+## Tema 1.0.64
+- Miniaturas de la galería con aire (12 px entre ellas y 16 px bajo la foto), esquinas redondeadas y borde en la activa.
+
+## 0.27.16
+- Corrige que el pan desaparecía de los extras del pack y de las burgers cuando el título empieza por «3 x»; el nombre corto lo muestra como «Pan Cosa Nostra (3 panes)».
+
 ## 0.27.15
 - Pan Cosa Nostra: el nombre indica que son 3 panes (255 g) y las tarjetas de extras no pierden esa indicación.
 

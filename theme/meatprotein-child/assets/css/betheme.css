@@ -790,3 +790,10 @@ li.product .mfn-woo-product-title { min-height: 2.6em; }
 #Content:has(+ .mfn-footer-tmpl), #Content { padding-bottom: 0 !important; margin-bottom: 0 !important; }
 body.single-product #Content .mcb-section:last-child, body.single-product .sections_group > .entry-content > .mfn-builder-content > .mcb-section:last-child { padding-bottom: 1.5rem !important; margin-bottom: 0 !important; }
 .mfn-footer-tmpl .column_footer_logo .logo-wrapper { display: block; margin: 0 !important; text-align: left; }
+
+/* Miniaturas de la galería: aire entre ellas y respecto a la foto, esquinas redondeadas y la activa marcada */
+.single-product .woocommerce-product-gallery .flex-control-thumbs { display: flex !important; flex-wrap: wrap; gap: 12px; margin: 16px 0 0 !important; padding: 0 !important; list-style: none; }
+.single-product .woocommerce-product-gallery .flex-control-thumbs li { float: none !important; width: 84px !important; margin: 0 !important; padding: 0 !important; }
+.single-product .woocommerce-product-gallery .flex-control-thumbs li img { display: block; width: 100% !important; aspect-ratio: 1; height: auto; object-fit: cover; border-radius: 14px !important; border: 2px solid transparent; background: #fff; opacity: .7; cursor: pointer; transition: opacity .15s, border-color .15s; }
+.single-product .woocommerce-product-gallery .flex-control-thumbs li img:hover, .single-product .woocommerce-product-gallery .flex-control-thumbs li img.flex-active { opacity: 1; border-color: var(--mpc-ink); }
+@media (max-width: 767px) { .single-product .woocommerce-product-gallery .flex-control-thumbs { display: none !important; } }
