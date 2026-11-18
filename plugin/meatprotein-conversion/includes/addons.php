@@ -150,6 +150,7 @@ function mpc_is_basic( $product ) {
 function mpc_short_name( $name ) {
 	$n = mpc_nice_name( $name );
 	$n = preg_replace( '/\s*[-–]\s*\d+\s?(g|gr|ml)\b/iu', '', $n );
+	$n = preg_replace( '/\s*\(\s*\d+\s?(g|gr|ml)\s*\)/iu', '', $n );
 	$n = preg_replace( '/\s+\d+\s?(g|gr|ml)\b/iu', '', $n );
 	$n = preg_replace( '/^Pan de hamburguesas\s+/iu', 'Pan ', $n );
 	$n = preg_replace( '/\s+Meatprotein\b/iu', '', $n );

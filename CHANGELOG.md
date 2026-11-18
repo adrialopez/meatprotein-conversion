@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.27.15
+- Pan Cosa Nostra: el nombre indica que son 3 panes (255 g) y las tarjetas de extras no pierden esa indicación.
+
 ## 0.27.14
 - La regeneración masiva de imágenes para compartir cubre todos los productos publicados.
 
