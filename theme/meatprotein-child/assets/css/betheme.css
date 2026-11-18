@@ -797,3 +797,6 @@ body.single-product #Content .mcb-section:last-child, body.single-product .secti
 .single-product .woocommerce-product-gallery .flex-control-thumbs li img { display: block; width: 100% !important; aspect-ratio: 1; height: auto; object-fit: cover; border-radius: 14px !important; border: 2px solid transparent; background: #fff; opacity: .7; cursor: pointer; transition: opacity .15s, border-color .15s; }
 .single-product .woocommerce-product-gallery .flex-control-thumbs li img:hover, .single-product .woocommerce-product-gallery .flex-control-thumbs li img.flex-active { opacity: 1; border-color: var(--mpc-ink); }
 @media (max-width: 767px) { .single-product .woocommerce-product-gallery .flex-control-thumbs { display: none !important; } }
+
+/* Avisos del carrito: siempre a todo el ancho (el contenedor de WooCommerce es flex y los encogía) */
+.woocommerce > .woocommerce-message, .woocommerce > .woocommerce-info, .woocommerce > .woocommerce-error, .woocommerce > .woocommerce-notices-wrapper, .woocommerce > .woocommerce-NoticeGroup, .woocommerce-cart .woocommerce-message, .woocommerce-cart .woocommerce-info { flex: 0 0 100% !important; width: 100% !important; max-width: 100% !important; box-sizing: border-box; }

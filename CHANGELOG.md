@@ -1,5 +1,8 @@
 # Cambios
 
+## 0.27.17 + tema 1.0.65
+- Avisos del carrito a todo el ancho; miniaturas del carrito en tamaño pequeño en vez de la de 800 px.
+
 ## Tema 1.0.64
 - Miniaturas de la galería con aire (12 px entre ellas y 16 px bajo la foto), esquinas redondeadas y borde en la activa.
 

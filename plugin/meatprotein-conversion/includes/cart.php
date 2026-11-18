@@ -300,3 +300,22 @@ function mpc_is_gift_meta( $meta ) {
 	$val = trim( preg_replace( '/[\x{1F000}-\x{1FFFF}\x{2600}-\x{27BF}\x{FE0F}]/u', '', $val ) );
 	return 0 === strcasecmp( $val, 'regalo' );
 }
+
+/* Miniaturas del carrito y del pago: tamaño pequeño (antes cargaba la imagen de 800 px para mostrarla a 76 px). */
+add_filter(
+	'woocommerce_cart_item_thumbnail',
+	function ( $html, $item ) {
+		$p = $item['data'] ?? null;
+		if ( ! $p instanceof WC_Product ) {
+			return $html;
+		}
+		$id = $p->get_image_id();
+		if ( ! $id && $p->get_parent_id() ) {
+			$parent = wc_get_product( $p->get_parent_id() );
+			$id     = $parent ? $parent->get_image_id() : 0;
+		}
+		return $id ? wp_get_attachment_image( $id, 'woocommerce_thumbnail', false, array( 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '76px' ) ) : $html;
+	},
+	20,
+	2
+);
