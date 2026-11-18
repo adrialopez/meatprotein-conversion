@@ -1,5 +1,11 @@
 # Cambios
 
+## 0.27.14
+- La regeneración masiva de imágenes para compartir cubre todos los productos publicados.
+
+## 0.27.13
+- Imágenes para compartir: la línea de envío ya no llega a la tarjeta de la foto (se reduce la letra hasta caber en la columna).
+
 ## 0.27.12 + tema 1.0.63
 - Carrito lateral, carrito y pago: el tachado del pack usa el precio de referencia (bandejas + regalo), también por encima de Advanced Dynamic Pricing.
 - Pie: columnas alineadas a la izquierda en cualquier ancho, cabeceras con más peso y subrayado rosa, menos hueco blanco encima.

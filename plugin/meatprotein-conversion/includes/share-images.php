@@ -92,7 +92,7 @@ function mpc_share_data( $type, $id ) {
 /** Huella de lo que se dibuja: si cambia, se regenera. */
 function mpc_share_hash( array $d ) {
 	$f = get_attached_file( $d['img'] );
-	return substr( md5( wp_json_encode( array( $d['title'], $d['price'], $d['old'], $d['pill'], $d['foot'], $d['img'], $f && file_exists( $f ) ? filemtime( $f ) : 0, 5 ) ) ), 0, 10 );
+	return substr( md5( wp_json_encode( array( $d['title'], $d['price'], $d['old'], $d['pill'], $d['foot'], $d['img'], $f && file_exists( $f ) ? filemtime( $f ) : 0, 6 ) ) ), 0, 10 );
 }
 
 /** Rectángulo redondeado relleno. */
@@ -239,7 +239,16 @@ function mpc_share_build( $type, $id, $force = false ) {
 		mpc_share_rrect( $im, $x, $y, $x + $pw, $y + 54 * $S, 27 * $S, $white );
 		imagettftext( $im, $ps, 0, $x + 22 * $S, $y + 36 * $S, $green, $sans, $d['pill'] );
 	}
-	imagettftext( $im, 22 * $S, 0, $x, 580 * $S, $grey, $sans, $d['foot'] );
+	// La línea inferior no debe llegar a la tarjeta de la foto: se reduce la letra hasta que cabe en la columna de texto.
+	$fs = 22 * $S;
+	while ( $fs > 15 * $S ) {
+		$bb = imagettfbbox( $fs, 0, $sans, $d['foot'] );
+		if ( ( $bb[2] - $bb[0] ) <= 530 * $S ) {
+			break;
+		}
+		$fs -= 1 * $S;
+	}
+	imagettftext( $im, $fs, 0, $x, 580 * $S, $grey, $sans, $d['foot'] );
 	// Reducir y guardar.
 	$out = imagecreatetruecolor( 1200, 630 );
 	imagecopyresampled( $out, $im, 0, 0, 0, 0, 1200, 630, $W, $H );
@@ -324,7 +333,7 @@ add_action(
  */
 function mpc_share_build_all( $force = false ) {
 	$n   = 0;
-	$ids = get_posts( array( 'post_type' => 'product', 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids', 'tax_query' => array( array( 'taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => array( 'hamburguesas' ) ) ) ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
+	$ids = get_posts( array( 'post_type' => 'product', 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids', ) );
 	foreach ( mpc_get_packs() as $pk ) {
 		$ids[] = $pk->get_id();
 	}
