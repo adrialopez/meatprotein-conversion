@@ -1,5 +1,11 @@
 # Cambios
 
+## 0.27.18
+
+- Medicion: las etiquetas de Google (Site Kit y Google Listings & Ads) ya no las retrasa LiteSpeed hasta la primera interaccion. Antes el evento purchase se perdia en la pagina de pedido recibido (sin interaccion tras volver de la pasarela) y Analytics contaba solo unas 3 de cada 5 compras. Verificado: ahora GA4 envia la peticion a los 2 s sin tocar nada.
+- Pendiente: la etiqueta de Google Ads (AW-) la imprime Google Listings & Ads a pelo y sigue retrasada; no afecta a GA4.
+- Servidor: se anadieron las etiquetas de Google a la lista de exclusiones de JS diferido de LiteSpeed (copia previa en ~/backups/litespeed-options-before-gtag-fix-2026-11-19.txt).
+
 ## 0.27.17 + tema 1.0.65
 - Avisos del carrito a todo el ancho; miniaturas del carrito en tamaño pequeño en vez de la de 800 px.
 

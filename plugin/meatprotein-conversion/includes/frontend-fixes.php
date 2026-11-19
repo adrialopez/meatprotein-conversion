@@ -193,3 +193,85 @@ JS
 	},
 	99
 );
+
+/**
+ * Medicion: que las etiquetas de Google no las retrase LiteSpeed.
+ *
+ * En la version para visitantes nuevos LiteSpeed retrasa todo el JS hasta la
+ * primera interaccion. Tras pagar, la pasarela devuelve al cliente a "pedido
+ * recibido" sin que toque nada, asi que el evento purchase no llegaba a salir.
+ * Marcamos las etiquetas de Google con los atributos que LiteSpeed respeta.
+ */
+function mpc_gtag_is_google_tag( $id, $src = '' ) {
+	return 0 === strpos( (string) $id, 'google_gtagjs' )
+		|| 0 === strpos( (string) $id, 'gla-gtag' )
+		|| 0 === strpos( (string) $id, 'google-tag' )
+		|| ( $src && preg_match( '#googletagmanager\.com|google-listings-and-ads|google-site-kit#', $src ) );
+}
+add_filter(
+	'script_loader_tag',
+	function ( $tag, $handle, $src ) {
+		if ( mpc_gtag_is_google_tag( $handle, $src ) && false === strpos( $tag, 'data-no-defer' ) ) {
+			$tag = preg_replace( '/<script\b/', '<script data-no-defer="1" data-no-optimize="1" data-cfasync="false"', $tag, 1 );
+		}
+		return $tag;
+	},
+	20,
+	3
+);
+add_filter(
+	'wp_inline_script_attributes',
+	function ( $attrs ) {
+		if ( is_array( $attrs ) && mpc_gtag_is_google_tag( isset( $attrs['id'] ) ? $attrs['id'] : '' ) ) {
+			$attrs['data-no-defer']    = '1';
+			$attrs['data-no-optimize'] = '1';
+			$attrs['data-cfasync']     = 'false';
+		}
+		return $attrs;
+	}
+);
+add_filter(
+	'wp_script_attributes',
+	function ( $attrs ) {
+		if ( is_array( $attrs ) && mpc_gtag_is_google_tag( isset( $attrs['id'] ) ? $attrs['id'] : '', isset( $attrs['src'] ) ? $attrs['src'] : '' ) ) {
+			$attrs['data-no-defer']    = '1';
+			$attrs['data-no-optimize'] = '1';
+			$attrs['data-cfasync']     = 'false';
+		}
+		return $attrs;
+	}
+);
+add_filter(
+	'litespeed_optm_js_defer_exc',
+	function ( $list ) {
+		return array_merge( (array) $list, array( 'googletagmanager.com/gtag/js' ) );
+	},
+	20
+);
+
+/**
+ * Google Listings & Ads imprime su etiqueta de Ads a pelo, sin filtro: la
+ * interceptamos en la cabecera para marcarla igual que las demas.
+ */
+add_action(
+	'wp_head',
+	function () {
+		ob_start(
+			function ( $html ) {
+				$attrs = ' data-no-defer="1" data-no-optimize="1" data-cfasync="false"';
+				$html  = str_replace( '<script async src="https://www.googletagmanager.com/gtag/js?id=AW-', '<script' . $attrs . ' async src="https://www.googletagmanager.com/gtag/js?id=AW-', $html );
+				return preg_replace( '/<script>(\s*window\.dataLayer\s*=\s*window\.dataLayer\s*\|\|\s*\[\];\s*function gtag\(\))/', '<script' . $attrs . '>$1', $html );
+			}
+		);
+	},
+	0
+);
+add_action(
+	'wp_head',
+	function () {
+		if ( ob_get_level() ) {
+			ob_end_flush();
+		}
+	},
+	9999
+);
