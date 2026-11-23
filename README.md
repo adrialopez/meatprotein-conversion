@@ -38,7 +38,6 @@ docker compose up -d      # http://localhost:8095
 
 La base de datos local se exporta **sin clientes ni pedidos** (solo productos, páginas, plantillas de Betheme y ajustes) y con
 `--default-character-set=utf8mb4` (si no, los emojis pasan a `?` y WooCommerce no puede leer los atributos del pack).
-`site-copy/` y `backup/` no se versionan. `local/local-safety.php` es el mu-plugin que bloquea el correo y sirve las imágenes desde producción.
 
 ## Despliegue
 
