@@ -400,12 +400,19 @@ add_action(
 		if ( $is_pack ) {
 			$title  = mpc_clean_title( $product->get_name() );
 			$extras = mpc_pack_extras( $product->get_name() );
+			// En la tarjeta del regalo fijo no se repite el regalo extra: tiene su propio selector debajo.
+			if ( $extras && mpc_bonus_pick( 0 ) ) {
+				$extras[0] = str_replace( ' + 1 ' . mpc_bonus_cfg()['label'], '', $extras[0] );
+			}
 			if ( mpc_gift_multi() ) {
 				$out .= mpc_gift_pick_html( mpc_gift_choices() );
 			} elseif ( $extras ) {
 				$gp   = (int) mpc_opt( 'gift_product' ) ? wc_get_product( (int) mpc_opt( 'gift_product' ) ) : null;
 				$out .= '<section class="mpc-q mpc-q--gift"><h3 class="mpc-q__t">Tu regalo <small>Incluido en el pack</small></h3><div class="mpc-cards"><div class="mpc-card mpc-card--gift"><span class="mpc-card__img">' . ( $gp ? wp_kses_post( $gp->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ) : '<span class="mpc-gift__ico">' . mpc_icon( 'ship' ) . '</span>' ) . '<span class="mpc-card__ribbon">Gratis</span></span><span class="mpc-card__name">' . esc_html( mb_strtoupper( mb_substr( $extras[0], 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $extras[0], 1, null, 'UTF-8' ) ) . '</span><span class="mpc-card__price is-free">Incluido</span></div></div></section>';
 			}
+		}
+		if ( $is_pack ) {
+			$out .= mpc_bonus_pick_html();
 		}
 		foreach ( mpc_bundle_steps( $product ) as $key => $st ) {
 			$out .= '<section class="mpc-q mpc-q--' . esc_attr( $key ) . '"><h3 class="mpc-q__t">' . esc_html( $st['title'] ) . ' <small>' . esc_html( $st['hint'] ) . '</small></h3><div class="mpc-cards">';

@@ -124,7 +124,7 @@ add_action(
 				$pv   = $pk->get_available_variations();
 				$pp   = $pv ? (float) $pv[0]['display_price'] : (float) $pk->get_price();
 				$pimg = wp_get_attachment_image_url( $pk->get_image_id(), 'woocommerce_thumbnail' );
-				echo '<a class="mpc-packban" href="' . esc_url( $pk->get_permalink() ) . '">' . ( $pimg ? '<img src="' . esc_url( $pimg ) . '" alt="" loading="lazy" width="300" height="300">' : '' ) . '<span><b>¿Hamburguesas? Pack de 10 + 1 de regalo</b><span>Desde ' . wp_kses_post( wc_price( $pp ) ) . ' · envío gratis</span></span></a>'; // phpcs:ignore WordPress.Security.EscapeOutput
+				echo '<a class="mpc-packban" href="' . esc_url( $pk->get_permalink() ) . '">' . ( $pimg ? '<img src="' . esc_url( $pimg ) . '" alt="" loading="lazy" width="300" height="300">' : '' ) . '<span><b>¿Hamburguesas? Pack de 10 + ' . ( mpc_bonus_pick( 0 ) ? 'regalos' : '1 de regalo' ) . '</b><span>Desde ' . wp_kses_post( wc_price( $pp ) ) . ' · envío gratis</span></span></a>'; // phpcs:ignore WordPress.Security.EscapeOutput
 			}
 		}
 		?>

@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.28.0
+
+- Promo con regalo extra en el pack (Black Friday: bandeja de mango + 1 bollo sin azucar a elegir). Nuevo modulo `includes/bonus.php`: selector en la ficha, linea «Regalo extra» en carrito y pedido, descuento de stock, precio de referencia con el bollo e imagen del pack durante la promo.
+- Se configura en la ficha del pack (cuadro «Meatprotein: promo con regalo extra»): productos, nombre, fecha de inicio y fin, imagen y enlace de vista previa privada. Sin fecha de inicio no se publica; la cache se vacia sola al empezar y terminar.
+
 ## 0.27.18
 
 - Medicion: las etiquetas de Google (Site Kit y Google Listings & Ads) ya no las retrasa LiteSpeed hasta la primera interaccion. Antes el evento purchase se perdia en la pagina de pedido recibido (sin interaccion tras volver de la pasarela) y Analytics contaba solo unas 3 de cada 5 compras. Verificado: ahora GA4 envia la peticion a los 2 s sin tocar nada.
