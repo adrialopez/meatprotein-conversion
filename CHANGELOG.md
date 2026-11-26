@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.29.0
+
+- Cuadro «Regalos y extras del pack»: hasta tres regalos, cada uno con texto propio y hasta 5 opciones (una = incluida; dos o mas = el cliente elige). Los regalos 2 y 3 y la imagen temporal tienen «Publicado», desde y hasta, y hay vista previa privada. Sustituye al cuadro separado de la 0.28.0.
+- Las fechas son siempre hora de Espana (Europe/Madrid); el ajuste de WordPress esta fijo en +02:00 y en invierno adelantaba una hora.
+
 ## 0.28.0
 
 - Promo con regalo extra en el pack (Black Friday: bandeja de mango + 1 bollo sin azucar a elegir). Nuevo modulo `includes/bonus.php`: selector en la ficha, linea «Regalo extra» en carrito y pedido, descuento de stock, precio de referencia con el bollo e imagen del pack durante la promo.

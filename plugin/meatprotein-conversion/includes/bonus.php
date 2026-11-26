@@ -68,7 +68,7 @@ function mpc_bonus_ts( $v ) {
 		return 0;
 	}
 	try {
-		return ( new DateTimeImmutable( $v, wp_timezone() ) )->getTimestamp();
+		return ( new DateTimeImmutable( $v, new DateTimeZone( 'Europe/Madrid' ) ) )->getTimestamp();
 	} catch ( Exception $e ) {
 		return 0;
 	}
@@ -381,7 +381,7 @@ function mpc_bonus_product_select( $name, $csv ) {
 function mpc_bonus_date_fields( $name, $x ) {
 	echo '<p style="display:flex;gap:16px;flex-wrap:wrap;align-items:center"><label><input type="checkbox" name="' . esc_attr( $name ) . '[pub]" value="1"' . checked( ! empty( $x['pub'] ), true, false ) . '> <strong>Publicado</strong></label>';
 	foreach ( array(
-		'from'  => 'Desde',
+		'from'  => 'Desde (hora de España)',
 		'until' => 'Hasta',
 	) as $k => $l ) {
 		echo '<label>' . esc_html( $l ) . ' <input type="datetime-local" name="' . esc_attr( $name . '[' . $k . ']' ) . '" value="' . esc_attr( str_replace( ' ', 'T', $x[ $k ] ) ) . '"></label>';
