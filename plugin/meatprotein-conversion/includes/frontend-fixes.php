@@ -203,6 +203,10 @@ JS
  * Marcamos las etiquetas de Google con los atributos que LiteSpeed respeta.
  */
 function mpc_gtag_is_google_tag( $id, $src = '' ) {
+	// El script de eventos de GLA necesita wp.hooks, que carga retrasado: debe retrasarse con el.
+	if ( 0 === strpos( (string) $id, 'gla-gtag-events' ) || false !== strpos( (string) $src, 'gtag-events' ) ) {
+		return false;
+	}
 	return 0 === strpos( (string) $id, 'google_gtagjs' )
 		|| 0 === strpos( (string) $id, 'gla-gtag' )
 		|| 0 === strpos( (string) $id, 'google-tag' )

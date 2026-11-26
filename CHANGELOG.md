@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.30.0
+
+- Medicion (nuevo modulo `includes/analytics.php`): quien ya eligio en el aviso de cookies se mide con su consentimiento desde la primera carga; «pedido recibido» sin optimizacion de JavaScript para que salga el evento de compra; eventos add_to_cart (boton de la ficha, con extras) y begin_checkout.
+- El script de eventos de Google Listings & Ads vuelve a retrasarse: sin retraso fallaba porque necesita wp.hooks.
+
 ## 0.29.0
 
 - Cuadro «Regalos y extras del pack»: hasta tres regalos, cada uno con texto propio y hasta 5 opciones (una = incluida; dos o mas = el cliente elige). Los regalos 2 y 3 y la imagen temporal tienen «Publicado», desde y hasta, y hay vista previa privada. Sustituye al cuadro separado de la 0.28.0.
