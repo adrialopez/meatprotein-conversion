@@ -101,7 +101,7 @@ function mpc_hero_html() {
 					if ( $pimg ) :
 						?>
 						<img src="<?php echo esc_url( $pimg ); ?>" alt="" loading="lazy" width="300" height="300"><?php endif; ?>
-					<span><b>Pack de 10 + <?php echo mpc_bonus_pick( 0 ) ? 'regalos' : '1 de regalo'; ?></b><?php echo $reg > $sale ? '<del>' . esc_html( wp_strip_all_tags( wc_price( $reg ) ) ) . '</del> ' : ''; ?><strong><?php echo esc_html( $price ); ?></strong></span>
+					<span><b>Pack de 10 + <?php echo mpc_bonus_picks() ? 'regalos' : '1 de regalo'; ?></b><?php echo $reg > $sale ? '<del>' . esc_html( wp_strip_all_tags( wc_price( $reg ) ) ) . '</del> ' : ''; ?><strong><?php echo esc_html( $price ); ?></strong></span>
 				</a>
 			</div>
 		</div>

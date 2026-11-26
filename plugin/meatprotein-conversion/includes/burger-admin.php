@@ -543,7 +543,7 @@ add_action(
 	function ( $post ) {
 		$p = wc_get_product( $post->ID );
 		if ( $p && mpc_is_pack( $p ) ) {
-			add_meta_box( 'mpc_gift', 'Meatprotein: regalo y extras del pack', 'mpc_gift_box', 'product', 'normal', 'high' );
+			add_meta_box( 'mpc_gift', 'Meatprotein: regalos y extras del pack', 'mpc_gift_box', 'product', 'normal', 'high' );
 		}
 	}
 );
@@ -560,8 +560,9 @@ function mpc_gift_box( $post ) {
 		$raw = trim( (string) mpc_opt( 'gift_product' ) );
 	}
 	$ids = array_filter( array_map( 'intval', preg_split( '/[\s,;]+/', $raw ) ) );
-	echo '<p class="description">Producto que se regala con cada pack. Su stock se descuenta solo. Con más de uno, el cliente elige.</p>';
-	echo '<select class="wc-product-search" multiple="multiple" style="width:100%" name="mpc_gift_ids[]" data-placeholder="Busca un producto…" data-action="woocommerce_json_search_products" data-exclude_type="variable">';
+	echo '<h4 style="margin:4px 0">Regalo 1</h4><p class="description">Producto que se regala con cada pack. Su stock se descuenta solo. Con una opción va incluido; con dos o más (hasta 5), el cliente elige.</p>';
+	echo '<p><label>Qué es (texto que ve el cliente)<br><input type="text" name="mpc_gift_label" value="' . esc_attr( mpc_bonus_cfg()['label1'] ) . '" placeholder="bandeja" style="width:100%;max-width:420px"></label></p>';
+	echo '<select class="wc-product-search" multiple="multiple" style="width:100%" name="mpc_gift_ids[]" data-maximum-selection-length="5" data-placeholder="Busca un producto…" data-action="woocommerce_json_search_products" data-exclude_type="variable">';
 	foreach ( $ids as $id ) {
 		$pr = wc_get_product( $id );
 		if ( $pr ) {
@@ -569,6 +570,7 @@ function mpc_gift_box( $post ) {
 		}
 	}
 	echo '</select>';
+	mpc_bonus_box_fields( $post );
 	echo '<hr><p><strong>Extras que se ofrecen al comprar el pack</strong><br><span class="description">Elige qué productos salen en cada pregunta, en el orden que los selecciones. Si dejas uno vacío, se eligen solos los más vendidos de su categoría.</span></p>';
 	foreach ( array(
 		'step_salsa' => '¿Quieres salsa?',
@@ -594,7 +596,6 @@ function mpc_gift_box( $post ) {
 			echo '<p class="description" style="margin:2px 0 0">Ahora salen (automático): ' . esc_html( $names ? implode( ', ', $names ) : 'ninguno' ) . '.</p>';
 		}
 	}
-	echo '<p class="description" style="margin-top:8px">Qué se muestra: «Incluye 1 bandeja de <em>nombre del producto</em> de regalo» en la portada y la ficha, y «Regalo: <em>nombre</em>» en carrito, pedidos y correos. El título del pack ya no hace falta que lo nombre.</p>';
 }
 
 add_action(
@@ -606,7 +607,7 @@ add_action(
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
-		$ids = isset( $_POST['mpc_gift_ids'] ) ? array_filter( array_map( 'absint', (array) wp_unslash( $_POST['mpc_gift_ids'] ) ) ) : array();
+		$ids = isset( $_POST['mpc_gift_ids'] ) ? array_slice( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['mpc_gift_ids'] ) ) ), 0, 5 ) : array();
 		update_post_meta( $post_id, '_mpc_gift_ids', implode( ',', $ids ) );
 		foreach ( array( 'step_salsa', 'step_pan', 'step_queso' ) as $k ) {
 			$sel = isset( $_POST[ 'mpc_' . $k ] ) ? array_filter( array_map( 'absint', (array) wp_unslash( $_POST[ 'mpc_' . $k ] ) ) ) : array();

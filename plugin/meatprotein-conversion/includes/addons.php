@@ -343,7 +343,7 @@ function mpc_card_html( $p ) {
  */
 function mpc_gift_pick_html( $choices ) {
 	$default = mpc_pick_gift( 0 );
-	$h       = '<section class="mpc-q mpc-q--gift mpc-q--giftpick"><h3 class="mpc-q__t">Elige tu regalo <small>1 bandeja incluida en el pack</small></h3><div class="mpc-giftpick" role="radiogroup">';
+	$h       = '<section class="mpc-q mpc-q--gift mpc-q--giftpick"><h3 class="mpc-q__t">Elige tu ' . esc_html( mpc_gift_label() ) . ' <small>De regalo con tu pack</small></h3><div class="mpc-giftpick" role="radiogroup">';
 	foreach ( $choices as $p ) {
 		$id    = $p->get_id();
 		$avail = mpc_available_trays( $id );
@@ -376,7 +376,7 @@ add_action(
 		if ( $is_pack ) {
 			$gift_parts = mpc_pack_extras( $product->get_name() );
 			if ( $gift_parts || mpc_gift_multi() ) {
-				$attrs .= ' data-gift="' . esc_attr( mpc_gift_multi() ? 'una bandeja de regalo a tu elección' : ( $gift_parts[0] ?? '' ) ) . '"';
+				$attrs .= ' data-gift="' . esc_attr( $gift_parts[0] ?? '' ) . '"';
 			}
 			$all_packs = mpc_get_packs();
 			if ( $all_packs && (int) $all_packs[0]->get_id() === (int) $product->get_id() && $product->get_total_sales() > 0 ) {
@@ -400,14 +400,15 @@ add_action(
 		if ( $is_pack ) {
 			$title  = mpc_clean_title( $product->get_name() );
 			$extras = mpc_pack_extras( $product->get_name() );
-			// En la tarjeta del regalo fijo no se repite el regalo extra: tiene su propio selector debajo.
-			if ( $extras && mpc_bonus_pick( 0 ) ) {
-				$extras[0] = str_replace( ' + 1 ' . mpc_bonus_cfg()['label'], '', $extras[0] );
+			// La tarjeta del regalo 1 solo nombra ese regalo: los demás tienen la suya debajo.
+			$gids = mpc_gift_ids();
+			if ( count( $gids ) === 1 ) {
+				$extras = array( '1 ' . mpc_gift_label() . ' de ' . mpc_nice_name( get_the_title( $gids[0] ) ) . ' de regalo' );
 			}
 			if ( mpc_gift_multi() ) {
 				$out .= mpc_gift_pick_html( mpc_gift_choices() );
 			} elseif ( $extras ) {
-				$gp   = (int) mpc_opt( 'gift_product' ) ? wc_get_product( (int) mpc_opt( 'gift_product' ) ) : null;
+				$gp   = $gids ? wc_get_product( (int) $gids[0] ) : null;
 				$out .= '<section class="mpc-q mpc-q--gift"><h3 class="mpc-q__t">Tu regalo <small>Incluido en el pack</small></h3><div class="mpc-cards"><div class="mpc-card mpc-card--gift"><span class="mpc-card__img">' . ( $gp ? wp_kses_post( $gp->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ) ) : '<span class="mpc-gift__ico">' . mpc_icon( 'ship' ) . '</span>' ) . '<span class="mpc-card__ribbon">Gratis</span></span><span class="mpc-card__name">' . esc_html( mb_strtoupper( mb_substr( $extras[0], 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $extras[0], 1, null, 'UTF-8' ) ) . '</span><span class="mpc-card__price is-free">Incluido</span></div></div></section>';
 			}
 		}

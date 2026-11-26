@@ -119,14 +119,21 @@ function mpc_requested_gift() {
  * @return string[] Frases como «1 bandeja de Mango Protein Chicken de regalo».
  */
 function mpc_pack_extras( $title = '' ) {
-	$ids = mpc_gift_ids();
-	if ( $ids ) {
-		if ( count( $ids ) > 1 ) {
-			return array( '1 bandeja de regalo a tu elección' );
+	$parts = array();
+	$ids   = mpc_gift_ids();
+	if ( count( $ids ) > 1 ) {
+		$parts[] = '1 ' . mpc_gift_label() . ' a tu elección';
+	} elseif ( $ids ) {
+		$name = mpc_nice_name( get_the_title( $ids[0] ) );
+		if ( $name ) {
+			$parts[] = '1 ' . mpc_gift_label() . ' de ' . $name;
 		}
-		$name  = mpc_nice_name( get_the_title( $ids[0] ) );
-		$extra = function_exists( 'mpc_bonus_pick' ) && mpc_bonus_pick( 0 ) ? ' + 1 ' . mpc_bonus_cfg()['label'] : '';
-		return $name ? array( '1 bandeja de ' . $name . $extra . ' de regalo' ) : array();
+	}
+	foreach ( array_keys( mpc_bonus_picks() ) as $slot ) {
+		$parts[] = '1 ' . mpc_bonus_label( $slot );
+	}
+	if ( $parts ) {
+		return array( implode( ' + ', $parts ) . ' de regalo' );
 	}
 	return array_slice( array_map( 'trim', explode( '+', mpc_clean_title( $title ) ) ), 1 );
 }
@@ -138,7 +145,7 @@ function mpc_pack_extras( $title = '' ) {
  * @return string
  */
 function mpc_gift_text( $named ) {
-	return mpc_gift_multi() ? '1 bandeja de regalo a tu elección' : $named;
+	return mpc_gift_multi() ? '1 ' . mpc_gift_label() . ' de regalo a tu elección' : $named;
 }
 
 /**
@@ -148,7 +155,7 @@ function mpc_gift_text( $named ) {
  * @param int   $gift_id Regalo elegido (0 = el primero con stock).
  * @return mixed Resultado.
  */
-function mpc_components_from_attributes( $attrs, $gift_id = 0, $bonus_id = 0 ) {
+function mpc_components_from_attributes( $attrs, $gift_id = 0, $bonus_ids = array() ) {
 	$map  = mpc_flavour_products();
 	$out  = array();
 	$miss = array();
@@ -168,8 +175,10 @@ function mpc_components_from_attributes( $attrs, $gift_id = 0, $bonus_id = 0 ) {
 	if ( $gift && $out ) {
 		$out[ $gift ] = ( $out[ $gift ] ?? 0 ) + 1;
 	}
-	if ( $bonus_id && $out ) {
-		$out[ (int) $bonus_id ] = ( $out[ (int) $bonus_id ] ?? 0 ) + 1;
+	if ( $out ) {
+		foreach ( (array) $bonus_ids as $bid ) {
+			$out[ (int) $bid ] = ( $out[ (int) $bid ] ?? 0 ) + 1;
+		}
 	}
 	return array( $out, $miss );
 }
@@ -256,7 +265,7 @@ add_filter(
 		if ( ! $p || ! mpc_is_pack( $p ) ) {
 			return $ok;
 		}
-		list( $comp ) = mpc_components_from_attributes( $variation, mpc_requested_gift(), mpc_bonus_pick( mpc_bonus_requested() ) );
+		list( $comp ) = mpc_components_from_attributes( $variation, mpc_requested_gift(), mpc_bonus_picks( mpc_bonus_requested() ) );
 		$msg          = mpc_check_components( $comp, max( 1, (int) $qty ), mpc_cart_tray_demand() );
 		if ( $msg ) {
 			wc_add_notice( $msg, 'error' );

@@ -124,7 +124,7 @@ add_action(
 				$pv   = $pk->get_available_variations();
 				$pp   = $pv ? (float) $pv[0]['display_price'] : (float) $pk->get_price();
 				$pimg = wp_get_attachment_image_url( $pk->get_image_id(), 'woocommerce_thumbnail' );
-				echo '<a class="mpc-packban" href="' . esc_url( $pk->get_permalink() ) . '">' . ( $pimg ? '<img src="' . esc_url( $pimg ) . '" alt="" loading="lazy" width="300" height="300">' : '' ) . '<span><b>¿Hamburguesas? Pack de 10 + ' . ( mpc_bonus_pick( 0 ) ? 'regalos' : '1 de regalo' ) . '</b><span>Desde ' . wp_kses_post( wc_price( $pp ) ) . ' · envío gratis</span></span></a>'; // phpcs:ignore WordPress.Security.EscapeOutput
+				echo '<a class="mpc-packban" href="' . esc_url( $pk->get_permalink() ) . '">' . ( $pimg ? '<img src="' . esc_url( $pimg ) . '" alt="" loading="lazy" width="300" height="300">' : '' ) . '<span><b>¿Hamburguesas? Pack de 10 + ' . ( mpc_bonus_picks() ? 'regalos' : '1 de regalo' ) . '</b><span>Desde ' . wp_kses_post( wc_price( $pp ) ) . ' · envío gratis</span></span></a>'; // phpcs:ignore WordPress.Security.EscapeOutput
 			}
 		}
 		?>
@@ -235,9 +235,6 @@ add_filter(
 		}
 		if ( $is_pack ) {
 			$gift_one = $extras ? preg_replace( '/\s+de regalo$/iu', '', $extras[0] ) : '';
-			if ( mpc_gift_multi() ) {
-				$gift_one = 'bandeja a tu elección';
-			}
 			$prot  = mpc_max_protein();
 			$tiles = array(
 				array( 'check', '10', 'bandejas a tu elección, puedes repetir sabores' ),
@@ -247,11 +244,11 @@ add_filter(
 				$tiles[] = array( 'lab', (int) $prot . ' g', 'de proteína como máximo en cada hamburguesa' );
 			}
 			if ( $gift_one ) {
-				$tiles[] = array( 'ship', '+1', $gift_one . ' de regalo' );
+				$tiles[] = array( 'ship', '+' . ( ( mpc_gift_ids() ? 1 : 0 ) + count( mpc_bonus_picks() ) ), preg_replace( '/^1 /', '', $gift_one ) . ' de regalo' );
 			}
 			$grid = '<ul class="mpc-incl">';
 			foreach ( $tiles as $t ) {
-				$grid .= '<li' . ( '+1' === $t[1] ? ' class="is-gift"' : '' ) . '>' . mpc_icon( $t[0] ) . '<strong>' . esc_html( $t[1] ) . '</strong><span>' . esc_html( $t[2] ) . '</span></li>';
+				$grid .= '<li' . ( '+' === substr( $t[1], 0, 1 ) ? ' class="is-gift"' : '' ) . '>' . mpc_icon( $t[0] ) . '<strong>' . esc_html( $t[1] ) . '</strong><span>' . esc_html( $t[2] ) . '</span></li>';
 			}
 			$grid    .= '</ul>';
 			$blocks[] = array(
