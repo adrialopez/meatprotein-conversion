@@ -36,6 +36,7 @@ function mpc_defaults() {
 		'phone'        => '944 999 194',
 		'whatsapp'     => '',
 		'hero'         => '1',
+		'ga_api_secret' => '',
 	);
 }
 
@@ -131,6 +132,8 @@ function mpc_settings_page() {
 	$f( 'nutrition', 'Información nutricional y alérgenos', 'Aparece en la ficha de cada pack. Si está vacío, el bloque no se muestra.', 'textarea' );
 	$f( 'origin', 'Origen y fabricación', 'Quién fabrica, de dónde viene la carne.', 'textarea' );
 	$f( 'certs', 'Certificaciones', 'Por ejemplo: IFS Food, BRC, registro sanitario.', 'textarea' );
+	echo '</table><h2>Medición</h2><table class="form-table">';
+	$f( 'ga_api_secret', 'Google Analytics: secreto de la API (Measurement Protocol)', 'En Google Analytics: Administrar > Flujos de datos > la web > Secretos de la API de Measurement Protocol > Crear. Con la clave puesta, cada compra pagada se envía también desde el servidor, solo si el cliente aceptó las cookies de analítica; Google no la cuenta dos veces. ' . mpc_ga_status_text() );
 	echo '</table><h2>Contacto</h2><table class="form-table">';
 	$f( 'phone', 'Teléfono' );
 	$f( 'whatsapp', 'WhatsApp (solo números, con prefijo)', 'Ejemplo: 34600000000. Si lo rellenas se añade el enlace.' );

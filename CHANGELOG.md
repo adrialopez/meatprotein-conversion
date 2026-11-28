@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.31.0
+
+- Nuevo `includes/analytics-server.php`: la compra se envia tambien a GA4 desde el servidor (Measurement Protocol) 10 minutos despues del pago, solo con consentimiento de analitica y respetando a quien excluye Site Kit. Mismo transaction_id, GA4 descarta la repetida. Secreto de la API en WooCommerce > Conversion > Medicion; sin el no se envia nada.
+
 ## 0.30.0
 
 - Medicion (nuevo modulo `includes/analytics.php`): quien ya eligio en el aviso de cookies se mide con su consentimiento desde la primera carga; «pedido recibido» sin optimizacion de JavaScript para que salga el evento de compra; eventos add_to_cart (boton de la ficha, con extras) y begin_checkout.
